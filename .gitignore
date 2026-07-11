@@ -10,8 +10,6 @@ desktop.ini
 # Temp / backup
 *.bak
 *.tmp
-*_clean.jpg
-*_clean.png
 
 # Node (if ever used)
 node_modules/
