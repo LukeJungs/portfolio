@@ -211,6 +211,35 @@
       text-align: left;
     }
     .stat-cell:last-child { border-right: none; }
+
+    /* ── Outcome Stat Strip ──────────────────────────────────── */
+    .outcome-stat-row {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      border: 1px solid var(--light);
+      border-radius: 2px;
+      margin: 40px 0 48px;
+      background: #f8f8f6;
+    }
+    .outcome-stat-cell {
+      padding: 36px 32px;
+      border-right: 1px solid var(--light);
+    }
+    .outcome-stat-cell:last-child { border-right: none; }
+    .outcome-stat-number {
+      font-size: clamp(28px, 3.5vw, 44px); font-weight: 300;
+      letter-spacing: -0.03em; line-height: 1.0;
+      color: var(--black); margin-bottom: 6px;
+    }
+    .outcome-stat-label {
+      font-size: 11px; font-weight: 600;
+      letter-spacing: 0.1em; text-transform: uppercase;
+      color: var(--black); margin-bottom: 10px;
+    }
+    .outcome-stat-desc {
+      font-size: 13px; line-height: 1.6;
+      color: var(--grey);
+    }
+
     .stat-number {
       font-size: clamp(36px, 4vw, 56px); font-weight: 300;
       letter-spacing: -0.03em; line-height: 1.0;
@@ -383,6 +412,8 @@
       .screen-item { border-right: none; border-bottom: 1px solid var(--light); }
       .stat-row { grid-template-columns: 1fr; }
       .stat-cell { border-right: none; border-bottom: 1px solid var(--light); }
+      .outcome-stat-row { grid-template-columns: 1fr; }
+      .outcome-stat-cell { border-right: none; border-bottom: 1px solid var(--light); }
       .photo-pair { grid-template-columns: 1fr; }
       .photo-pair-item { border-right: none; border-bottom: 1px solid var(--light); }
       .hero-content { left: 24px; right: 24px; bottom: 48px; }
@@ -637,6 +668,25 @@
 
             <p>The project demonstrated that the most effective design research is not always conducted in a studio. Proximity to the problem — and to the people living it daily — shaped every decision from structure to interaction detail.</p>
           </section>
+
+          <!-- Outcome Stats Strip -->
+          <div class="outcome-stat-row">
+            <div class="outcome-stat-cell">
+              <p class="outcome-stat-number">2 mo.</p>
+              <p class="outcome-stat-label">Field Research</p>
+              <p class="outcome-stat-desc">Worked as a school bus aide before any wireframe was drawn — direct immersion in the operational problem</p>
+            </div>
+            <div class="outcome-stat-cell">
+              <p class="outcome-stat-number">86%</p>
+              <p class="outcome-stat-label">Re-visit Rate</p>
+              <p class="outcome-stat-desc">Daily active return rate across teachers, drivers, and administrators after v1 deployment</p>
+            </div>
+            <div class="outcome-stat-cell">
+              <p class="outcome-stat-number">v1.12</p>
+              <p class="outcome-stat-label">Live in Production</p>
+              <p class="outcome-stat-desc">Currently deployed across two kindergartens — real users, real routes, real daily operations</p>
+            </div>
+          </div>
 
           <!-- Process Note -->
           <section class="section" id="process">
