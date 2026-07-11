@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reasonab Design Academy — Luke Heesun Jung</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:  #0a0a0a;
+      --white:  #f8f7f4;
+      --grey:   #6b6b6b;
+      --light:  #e8e6e1;
+      --font:   'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--white); color: var(--black); overflow-x: hidden; }
+
+    /* ── Nav ─────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 24px 48px;
+      background: transparent;
+      transition: background 0.35s ease, padding 0.35s ease;
+    }
+    nav.scrolled {
+      background: var(--white);
+      padding: 16px 48px;
+      border-bottom: 1px solid var(--light);
+    }
+    .nav-logo {
+      font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--white); text-decoration: none;
+      transition: color 0.35s ease;
+    }
+    nav.scrolled .nav-logo { color: var(--black); }
+    .nav-back {
+      font-size: 12px; font-weight: 400; letter-spacing: 0.06em; text-transform: uppercase;
+      color: rgba(255,255,255,0.80); text-decoration: none;
+      transition: color 0.35s ease, opacity .2s;
+    }
+    nav.scrolled .nav-back { color: var(--grey); }
+    .nav-back:hover { opacity: 1; }
+    nav.scrolled .nav-back:hover { color: var(--black); }
+
+    /* ── Hero ────────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      width: 100%; height: 100vh; min-height: 640px;
+      overflow: hidden; background: var(--black);
+      display: flex; align-items: flex-end;
+    }
+    .hero-logo-bg {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0.12;
+    }
+    .hero-logo-bg img {
+      width: 60%; max-width: 600px;
+      filter: invert(1);
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.0) 0%, rgba(0,0,0,0.75) 100%);
+    }
+    .hero-content {
+      position: relative; z-index: 10;
+      padding: 0 48px 72px;
+    }
+    .hero-tags {
+      font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+      color: rgba(255,255,255,0.55); margin-bottom: 20px;
+    }
+    .hero-title {
+      font-size: clamp(42px, 6vw, 88px); font-weight: 300; letter-spacing: -0.02em;
+      color: var(--white); line-height: 1.0; margin-bottom: 24px;
+    }
+    .hero-title span { font-weight: 600; }
+    .hero-descriptor {
+      font-size: clamp(14px, 1.5vw, 18px); font-weight: 300; line-height: 1.55;
+      color: rgba(255,255,255,0.75); max-width: 640px;
+    }
+
+    .hero-name-note {
+      display: block;
+      margin-top: 20px;
+      font-size: clamp(11px, 1.1vw, 13px);
+      font-weight: 400;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.38);
+      border-left: 1px solid rgba(255,255,255,0.2);
+      padding-left: 14px;
+      max-width: 480px;
+      line-height: 1.6;
+    }
+
+    /* ── Meta strip ──────────────────────────────────────────── */
+    .meta-strip {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid var(--light);
+    }
+    .meta-cell {
+      padding: 40px; border-right: 1px solid var(--light);
+    }
+    .meta-cell:last-child { border-right: none; }
+    .meta-label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey); margin-bottom: 10px; }
+    .meta-value { font-size: 14px; font-weight: 400; line-height: 1.6; color: var(--black); }
+    .meta-value strong { font-weight: 600; }
+
+    /* ── Body layout ─────────────────────────────────────────── */
+    .page-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      align-items: start;
+    }
+    .sidebar-fixed {
+      position: sticky; top: 72px; align-self: start;
+      padding: 80px 40px 80px 48px;
+      border-right: 1px solid var(--light);
+    }
+    .sidebar-label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey); margin-bottom: 16px; }
+    .sidebar-nav { list-style: none; }
+    .sidebar-nav li { margin-bottom: 4px; }
+    .sidebar-nav a {
+      font-size: 13px; font-weight: 400; color: var(--grey);
+      text-decoration: none; letter-spacing: 0.02em;
+      display: block; padding: 6px 0;
+      border-left: 2px solid transparent;
+      padding-left: 12px;
+      transition: color .2s, border-color .2s;
+    }
+    .sidebar-nav a:hover, .sidebar-nav a.active {
+      color: var(--black); border-left-color: var(--black);
+    }
+
+    /* ── Content column ──────────────────────────────────────── */
+    .content-col { min-width: 0; }
+
+    /* ── Section ─────────────────────────────────────────────── */
+    .cs-section {
+      padding: 80px 64px;
+      border-bottom: 1px solid var(--light);
+    }
+    .section-label {
+      font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--grey); margin-bottom: 32px;
+    }
+    .section-title {
+      font-size: clamp(22px, 2.8vw, 36px); font-weight: 300; letter-spacing: -0.01em;
+      line-height: 1.25; margin-bottom: 28px; color: var(--black);
+    }
+    .section-body {
+      font-size: 15px; font-weight: 300; line-height: 1.75;
+      color: #3a3a3a; max-width: 680px;
+    }
+    .section-body p { margin-bottom: 18px; }
+    .section-body p:last-child { margin-bottom: 0; }
+
+    /* ── Image grids ─────────────────────────────────────────── */
+    .img-2col {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+    }
+    .img-2col img { width: 100%; display: block; object-fit: cover; aspect-ratio: 4/3; }
+
+    .img-3col {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+    }
+    .img-3col img { width: 100%; display: block; object-fit: cover; aspect-ratio: 1/1; }
+
+    .img-4col {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+    }
+    .img-4col img { width: 100%; display: block; object-fit: cover; aspect-ratio: 1/1; }
+
+    .img-fullbleed img {
+      width: 100%; display: block; object-fit: cover;
+      max-height: 70vh;
+    }
+
+    /* App sketch → XD → mockup flow */
+    .app-flow {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0;
+      border-top: 1px solid var(--light);
+    }
+    .app-flow-item { border-right: 1px solid var(--light); }
+    .app-flow-item:last-child { border-right: none; }
+    .app-flow-item img { width: 100%; display: block; object-fit: cover; aspect-ratio: 3/4; }
+    .app-flow-label {
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--grey); padding: 16px 20px;
+      border-bottom: 1px solid var(--light);
+    }
+
+    /* Business card pairs */
+    .bc-pair {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+      border-top: 1px solid var(--light);
+      margin-bottom: 0;
+    }
+    .bc-pair + .bc-pair { border-top: 1px solid var(--light); }
+    .bc-pair img { width: 100%; display: block; object-fit: cover; aspect-ratio: 16/9; }
+
+    /* Art grid — mixed */
+    .art-4col {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 0;
+    }
+    .art-4col img { width: 100%; display: block; object-fit: cover; aspect-ratio: 1/1; }
+
+    .art-3col {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+    }
+    .art-3col img { width: 100%; display: block; object-fit: cover; aspect-ratio: 1/1; }
+
+    /* Art 2-col grid */
+    .art-2col {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+      border-top: 1px solid var(--light);
+    }
+    .art-2col img { width: 100%; display: block; object-fit: cover; aspect-ratio: 3/4; }
+
+    /* Art quote block */
+    .art-quote-block {
+      padding: 64px 64px 56px;
+      border-top: 1px solid var(--light);
+      max-width: 820px;
+    }
+    .art-quote-text {
+      font-size: clamp(17px, 1.8vw, 22px);
+      font-weight: 300;
+      line-height: 1.65;
+      letter-spacing: -0.01em;
+      color: var(--black);
+      margin-bottom: 20px;
+    }
+    .art-quote-source {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--grey);
+    }
+
+    /* Education section extras */
+    .edu-video-block {
+      border-top: 1px solid var(--light);
+    }
+    .edu-video-block video {
+      width: 100%; display: block;
+      height: auto;
+      max-height: none;
+      background: #000;
+    }
+    .edu-stats-row {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 0;
+      border-top: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+    }
+    .edu-stat-cell {
+      padding: 48px 40px;
+      border-right: 1px solid var(--light);
+    }
+    .edu-stat-cell:last-child { border-right: none; }
+    .edu-stat-num {
+      font-size: clamp(36px, 4vw, 56px);
+      font-weight: 300;
+      letter-spacing: -0.03em;
+      line-height: 1;
+      color: var(--black);
+      margin-bottom: 10px;
+    }
+    .edu-stat-label {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--grey);
+      line-height: 1.55;
+    }
+    .edu-photo-grid {
+      display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 0;
+      border-top: 1px solid var(--light);
+    }
+    .edu-photo-grid img {
+      width: 100%; display: block;
+      object-fit: cover; aspect-ratio: 4/3;
+    }
+    .edu-doc-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 0;
+      border-top: 1px solid var(--light);
+    }
+    .edu-doc-grid img {
+      width: 100%; display: block;
+      object-fit: contain;
+      background: #f5f5f5;
+      padding: 24px;
+      border-right: 1px solid var(--light);
+    }
+    .edu-doc-grid img:last-child { border-right: none; }
+    .edu-doc-caption {
+      padding: 16px 24px;
+      font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--grey);
+      border-top: 1px solid var(--light);
+    }
+    .edu-doc-item { display: flex; flex-direction: column; }
+
+    /* Stream label */
+    .stream-label {
+      padding: 40px 64px 20px;
+      font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--grey); border-top: 1px solid var(--light);
+    }
+
+    /* Dark block */
+    .dark-block {
+      background: var(--black); color: var(--white);
+      padding: 80px 64px;
+    }
+    .dark-block .section-label { color: rgba(255,255,255,0.45); }
+    .dark-block .section-title { color: var(--white); }
+    .dark-block .section-body { color: rgba(255,255,255,0.72); }
+
+    /* ── Next project ─────────────────────────────────────────── */
+    .next-project {
+      display: block; padding: 80px 48px;
+      border-top: 1px solid var(--light);
+      text-decoration: none; color: var(--black);
+      transition: background .2s;
+    }
+    .next-project:hover { background: var(--light); }
+    .next-label { font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--grey); margin-bottom: 16px; }
+    .next-title { font-size: clamp(28px, 4vw, 52px); font-weight: 300; letter-spacing: -0.02em; }
+    .next-tags { font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey); margin-top: 12px; }
+
+    /* ── Footer ───────────────────────────────────────────────── */
+    footer {
+      padding: 40px 48px; border-top: 1px solid var(--light);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    footer p { font-size: 12px; color: var(--grey); letter-spacing: 0.04em; }
+
+    /* ── Responsive ───────────────────────────────────────────── */
+    @media (max-width: 960px) {
+      .page-layout { grid-template-columns: 1fr; }
+      .sidebar-fixed { display: none; }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 20px 24px; }
+      .hero-content { padding: 0 24px 56px; }
+      .meta-strip { grid-template-columns: 1fr 1fr; }
+      .cs-section { padding: 56px 24px; }
+      .stream-label { padding: 32px 24px 16px; }
+      .dark-block { padding: 56px 24px; }
+      .img-2col { grid-template-columns: 1fr; }
+      .img-3col { grid-template-columns: 1fr 1fr; }
+      .img-4col { grid-template-columns: 1fr 1fr; }
+      .app-flow { grid-template-columns: 1fr; }
+      .bc-pair { grid-template-columns: 1fr; }
+      .art-4col { grid-template-columns: 1fr 1fr; }
+      .art-3col { grid-template-columns: 1fr 1fr; }
+      .next-project { padding: 56px 24px; }
+      footer { padding: 32px 24px; flex-direction: column; gap: 12px; text-align: center; }
+    }
+
+    /* ── Skip Navigation (Accessibility) ─────────────────────────── */
+    .skip-nav {
+      position: absolute;
+      top: -100%;
+      left: 0;
+      background: var(--black);
+      color: var(--white);
+      padding: 12px 24px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      z-index: 9999;
+      transition: top 0.2s;
+    }
+    .skip-nav:focus {
+      top: 0;
+    }
+
+    /* ── Focus Visible (Keyboard Navigation) ─────────────────────── */
+    :focus-visible {
+      outline: 2px solid var(--black);
+      outline-offset: 3px;
+    }
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid var(--black);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+  </style>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+</head>
+<body>
+  <a href="#main-content" class="skip-nav">Skip to main content</a>
+
+<!-- Nav -->
+<nav id="main-nav">
+  <a href="../index.html" class="nav-logo">Luke Heesun Jung</a>
+  <a href="../index.html" class="nav-back">← All Work</a>
+</nav>
+
+<!-- Hero — dark background, RDA logo watermark -->
+<section class="hero">
+  <div class="hero-logo-bg">
+    <img src="rda_logo.png" alt="RDA Logo" />
+  </div>
+  <div class="hero-overlay"></div>
+  <div class="hero-content">
+    <p class="hero-tags">Education · Freelance · Entrepreneurship · Art</p>
+    <h1 class="hero-title"><span style="font-weight:600">R</span><span style="font-weight:300">easonab</span><br><span style="font-weight:300"><span style="font-weight:600">D</span>esign <span style="font-weight:600">A</span>cademy</span></h1>
+    <p class="hero-descriptor">Ten years of teaching, making, and building — a record of practice that began as a classroom and became a way of seeing.
+    <span class="hero-name-note">Reasonab — REASON + NAB. To borrow a reason. A name that earns its own meaning.</span></p>
+  </div>
+</section>
+
+<!-- Meta strip -->
+<div class="meta-strip" id="main-content">
+  <div class="meta-cell">
+    <p class="meta-label">Studio</p>
+    <p class="meta-value"><strong>Reasonab Design Academy</strong><br>Toronto, Canada</p>
+  </div>
+  <div class="meta-cell">
+    <p class="meta-label">Duration</p>
+    <p class="meta-value"><strong>2016 – 2026</strong><br>10 Years</p>
+  </div>
+  <div class="meta-cell">
+    <p class="meta-label">Scope</p>
+    <p class="meta-value">Education · Consulting<br>Brand Identity · UI/UX<br>Freelance · Art Practice</p>
+  </div>
+  <div class="meta-cell">
+    <p class="meta-label">Role</p>
+    <p class="meta-value"><strong>Founder & Lead Designer</strong><br>Art Director · Educator<br>Visual Communication</p>
+  </div>
+</div>
+
+<!-- Page layout: sidebar + content -->
+<div class="page-layout">
+
+  <!-- Sidebar -->
+  <aside class="sidebar-fixed">
+    <p class="sidebar-label">Contents</p>
+    <ul class="sidebar-nav">
+      <li><a href="#education">01 — Education</a></li>
+      <li><a href="#self-promo">02 — Self-Promotion</a></li>
+      <li><a href="#freelance">03 — Freelance</a></li>
+      <li><a href="#art">04 — Art Practice</a></li>
+    </ul>
+  </aside>
+
+  <!-- Content column -->
+  <div class="content-col">
+
+    <!-- 01 — Education -->
+    <section class="cs-section" id="education">
+      <p class="section-label">01 — Education</p>
+      <h2 class="section-title">Personal Art & Design Portfolio<br>Consulting</h2>
+      <div class="section-body">
+        <p>"For about ten years, I ran a small studio that helped students build their portfolios for art and design schools — mainly the top seven in the US, Canada, and the UK. Every year, around five to six students were actively working with me, and twenty to thirty people came in for consultations. It wasn't just teaching. I managed schedules, stayed in daily contact with parents, handled all the paperwork for international applications, and built relationships with schools abroad. About ten teachers passed through over the years — including graduate students from the University of Toronto and working designers from the UK and the US."</p>
+        <p>"When COVID hit, the number of students gradually declined. In June 2026, I closed the chapter after ten years. It wasn't easy to let go of something I had built from scratch. But I think everything I learned — about communication, about patience, about designing systems for people — that stays with me."</p>
+      </div>
+    </section>
+
+  </div><!-- /content-col -->
+</div><!-- /page-layout -->
+
+<!-- Education — Video -->
+<div class="stream-label">RDA in the Classroom — Teaching, Mentoring &amp; Community</div>
+
+<!-- Video context note -->
+<div style="padding: 64px 64px 56px; border-top: 1px solid var(--light);">
+  <p style="font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--grey); margin-bottom: 24px;">About This Video</p>
+
+  <p style="font-size: clamp(17px, 1.8vw, 22px); font-weight: 300; line-height: 1.6; letter-spacing: -0.01em; color: var(--black); margin-bottom: 32px; max-width: 820px;">“This is not a great piece of content, and it’s certainly not a reel. It’s simply a recording of an ordinary session — a teacher passing information to students in the most straightforward way possible. Senior practitioners and teachers need to lower themselves in order to stay flexible. That posture gives learners the time and space to grow, to push past their limits, and to find the courage to attempt the next hurdle.”</p>
+
+  <p style="font-size: 15px; font-weight: 300; line-height: 1.8; color: #4a4a4a; max-width: 820px; margin-bottom: 24px;">“Through my students, I learned how to become the background: sometimes the hurdle itself, sometimes the starting gun, sometimes the referee calling a fault, and sometimes the roar of the crowd. That kind of experience is not easily come by — and I know it. In real professional work, if the client is the protagonist, I need to be able to become the background. And for that to happen, the client must also come prepared with what they truly need — because no amount of objective language, however rich or precise, can be persuasive without the creative experience of the person delivering it. Without that subjective depth, even the most articulate argument fails to land beautifully.”</p>
+
+  <p style="font-size: 15px; font-weight: 300; line-height: 1.8; color: #4a4a4a; max-width: 820px; margin-bottom: 40px;">“This is not merely philosophical. If you need someone who can see both sides of what exists — or of what remains unseen — and who can go further still, to see the concrete details that form each side and the background that surrounds the whole: <strong>you may be satisfying.</strong>”</p>
+</div>
+
+<div class="edu-video-block">
+  <video controls preload="metadata" poster="">
+    <source src="edu_video.mp4" type="video/mp4" />
+    Your browser does not support the video tag.
+  </video>
+</div>
+
+<!-- Education — Stats -->
+<div class="edu-stats-row">
+  <div class="edu-stat-cell">
+    <p class="edu-stat-num">~100K</p>
+    <p class="edu-stat-label">CAD in annual tuition revenue<br />from founding through 2020</p>
+  </div>
+  <div class="edu-stat-cell">
+    <p class="edu-stat-num">33K+</p>
+    <p class="edu-stat-label">CAD in additional income<br />generated per year</p>
+  </div>
+  <div class="edu-stat-cell">
+    <p class="edu-stat-num">5+</p>
+    <p class="edu-stat-label">Jobs created in the<br />local design labour market</p>
+  </div>
+</div>
+
+<!-- Education — Photos -->
+<div class="edu-photo-grid">
+  <img src="edu_poster.webp" alt="RDA 2019 call for portfolio academy poster" loading="lazy" />
+  <img src="edu_class1.jpg" alt="RDA students and teachers gathering" loading="lazy" />
+  <img src="edu_review.webp" alt="Portfolio review session at RDA" loading="lazy" />
+</div>
+
+<!-- Education — Community photo -->
+<div class="stream-label">Student Community &amp; Mentoring Network</div>
+<div class="img-fullbleed">
+  <img src="edu_class2.png" alt="RDA student community gathering" loading="lazy" style="max-height:55vh; object-fit:cover; object-position:center;" />
+</div>
+
+<!-- Education — Curriculum docs -->
+<div class="stream-label">Curriculum Development — OKR-Based Teaching Framework &amp; Session Structure</div>
+<div class="edu-doc-grid">
+  <div class="edu-doc-item">
+    <img src="edu_teachhowto.webp" alt="RDA OKR-based teaching framework diagram" loading="lazy" />
+    <p class="edu-doc-caption">OKR Framework — Observation → Objectives → Re-evaluation cycle</p>
+  </div>
+  <div class="edu-doc-item">
+    <img src="edu_frame.webp" alt="RDA session structure template — Give a Tool or Set a Frame" loading="lazy" />
+    <p class="edu-doc-caption">Session Template — RDA 3rd iteration, Notion-based delivery</p>
+  </div>
+</div>
+
+<!-- Education — Key contributions note -->
+<div class="dark-block" style="padding: 56px 64px;">
+  <p class="section-label">Education — Key Contributions</p>
+  <div class="section-body" style="display:grid; grid-template-columns:1fr 1fr; gap:40px 64px; margin-top:32px;">
+    <div>
+      <p style="font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.45); margin-bottom:10px;">Curriculum &amp; Materials</p>
+      <p style="font-size:15px; font-weight:300; line-height:1.7; color:rgba(255,255,255,0.80);">Developed and continuously refined the full teaching curriculum and all instructional materials. Was an early adopter of Notion when it first launched — using it as a student management hub and shared resource platform before it became mainstream.</p>
+    </div>
+    <div>
+      <p style="font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.45); margin-bottom:10px;">Admissions &amp; Mentoring</p>
+      <p style="font-size:15px; font-weight:300; line-height:1.7; color:rgba(255,255,255,0.80);">Guided students to successful admissions at top art and design schools across Canada, the US, and the UK. Provided ongoing mentoring and built lasting professional connections that extended well beyond graduation.</p>
+    </div>
+    <div>
+      <p style="font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.45); margin-bottom:10px;">Economic Impact</p>
+      <p style="font-size:15px; font-weight:300; line-height:1.7; color:rgba(255,255,255,0.80);">Generated approximately 100,000 CAD in annual tuition revenue and 33,000 CAD in additional income from founding through 2020. Created employment for 5+ design professionals in the local market.</p>
+    </div>
+    <div>
+      <p style="font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.45); margin-bottom:10px;">Community</p>
+      <p style="font-size:15px; font-weight:300; line-height:1.7; color:rgba(255,255,255,0.80);">Built a close-knit studio community where students, teachers, and alumni stayed connected. The network continues to this day — a quiet proof that the work was about more than portfolios.</p>
+    </div>
+  </div>
+</div>
+
+<!-- Following the Guidelines -->
+<div class="stream-label">Following the Guidelines — Sources, References &amp; Inspirations</div>
+
+<div style="padding: 64px 64px 56px; border-top: 1px solid var(--light);">
+  <p style="font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--grey); margin-bottom: 24px;">Curriculum Philosophy</p>
+
+  <p style="font-size: clamp(17px, 1.8vw, 22px); font-weight: 300; line-height: 1.6; letter-spacing: -0.01em; color: var(--black); margin-bottom: 28px; max-width: 820px;">“At RDA, we follow the official Toronto graphic design guidelines — and we also steal, carefully, from the best sources we can find. We always credit what we borrow. The core philosophy and teaching principles are fixed; but the methods, the tools, and the way we teach must keep pace with the times — and with the technology each era produces.”</p>
+
+  <p style="font-size: 15px; font-weight: 300; line-height: 1.8; color: #4a4a4a; max-width: 820px; margin-bottom: 28px;">“In the age of AI, the moment you stop and declare yourself done, you risk being left far behind. And yet, you cannot afford to never pause — to look back, to sit with an idea, to go deep. Both are necessary. That tension is the work.”</p>
+
+  <p style="font-size: 15px; font-weight: 300; line-height: 1.8; color: #4a4a4a; max-width: 820px; margin-bottom: 40px;">“That’s why I love what Picasso said: <em>“Good artists borrow; great artists steal.”</em> It’s not about taking without thought — it’s about absorbing something so fully that it becomes yours, transformed.”</p>
+</div>
+
+<!-- Credit images: 2+2 grid -->
+<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2px; border-top: 1px solid var(--light);">
+  <img src="edu_credit_3.png" alt="RDA curriculum reference materials — Workshop Tactics and RDA Yellow card" loading="lazy" style="width:100%; display:block; object-fit:cover; aspect-ratio:4/3;" />
+  <img src="edu_credit_1.png" alt="AccessAbility 2 — A Practical Handbook on Accessible Graphic Design (RGD)" loading="lazy" style="width:100%; display:block; object-fit:cover; aspect-ratio:4/3;" />
+  <img src="edu_credit_2.png" alt="AccessAbility handbook interior — contents and introduction spread" loading="lazy" style="width:100%; display:block; object-fit:cover; aspect-ratio:4/3;" />
+  <img src="edu_credit_4.png" alt="AccessAbility 2 — copyright and credits page (RGD / Government of Ontario)" loading="lazy" style="width:100%; display:block; object-fit:cover; aspect-ratio:4/3;" />
+</div>
+<p style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey); padding: 16px 64px 48px; border-bottom: 1px solid var(--light);">Credit: <em>AccessAbility 2 — A Practical Handbook on Accessible Graphic Design</em>, RGD (Association of Registered Graphic Designers), 2019. Supported by the Government of Ontario. &nbsp;&nbsp;/&nbsp;&nbsp; Workshop Tactics®, Charles Ltd, 2020.</p>
+
+<!-- Hoodies — full bleed outside layout -->
+<div class="stream-label">RDA Branded Apparel — Designed &amp; Distributed to Students &amp; Teachers</div>
+<div class="img-3col">
+  <img src="hoodies_1.webp" alt="RDA Hoodie — front view" loading="lazy" />
+  <img src="hoodies_2.webp" alt="RDA Hoodie — back view" loading="lazy" />
+  <img src="hoodies_3.webp" alt="RDA Hoodie — group" loading="lazy" />
+</div>
+
+<!-- Back in layout for Self-Promo -->
+<div class="page-layout">
+  <aside class="sidebar-fixed" style="border-right:1px solid var(--light);"></aside>
+  <div class="content-col">
+
+    <!-- 02 — Self-Promotion -->
+    <section class="cs-section" id="self-promo">
+      <p class="section-label">02 — Self-Promotion &amp; Entrepreneurship</p>
+      <h2 class="section-title">RDA Mobile &amp; Desktop App<br>Sketch → Adobe XD → Mockup</h2>
+      <div class="section-body">
+        <p>"I don't think of what I did as a side job. For me, RDA was a way of practising creative confidence — the same thing I was trying to teach. I wanted to build something that was entirely mine, from the brand to the tools we used. So I designed an app for the studio: starting from hand-drawn sketches, moving into Adobe XD, and finishing with a working mockup for both mobile and desktop."</p>
+        <p>"RDA is done now, but the thinking behind it isn't. The ten years of quietly holding it together, keeping it going — that was also a test of my own endurance. Everything in this studio carried my values. It wasn't just design work. It was a way of showing who I am."</p>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<!-- App flow — outside layout -->
+<div class="app-flow">
+  <div class="app-flow-item">
+    <p class="app-flow-label">Sketch — Hand-drawn</p>
+    <img src="app_sketch.png" alt="RDA App — hand-drawn sketch" loading="lazy" />
+  </div>
+  <div class="app-flow-item">
+    <p class="app-flow-label">Wireframe — Adobe XD</p>
+    <img src="app_xd.webp" alt="RDA App — Adobe XD wireframe process" loading="lazy" />
+  </div>
+  <div class="app-flow-item">
+    <p class="app-flow-label">Mockup — Mobile &amp; Desktop</p>
+    <img src="app_mockup.webp" alt="RDA App — final mockup" loading="lazy" />
+  </div>
+</div>
+
+<!-- Back in layout for Freelance -->
+<div class="page-layout">
+  <aside class="sidebar-fixed" style="border-right:1px solid var(--light);"></aside>
+  <div class="content-col">
+
+    <!-- 03 — Freelance -->
+    <section class="cs-section" id="freelance">
+      <p class="section-label">03 — Freelance</p>
+      <h2 class="section-title">Selected Client Work<br>Business Card Design</h2>
+      <div class="section-body">
+        <p>"Every month, at least one project came in. Some were confidential, some were non-profit, some were just for friends — things I did because I wanted to, not because I was paid. I can't show everything here, but what I'm sharing are the ones I'm most proud of."</p>
+        <p>"A lot of these were collaborations with students. The credit belongs to both of us, and everything shown here has been shared with their permission. I also want to be honest — not every project was a success. There were ones that didn't land the way I hoped. But I think those failures are already inside the work that did succeed. I can't throw away what I learned from them. They're mine to keep."</p>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<!-- Business cards — outside layout -->
+<div class="stream-label">Business Card Design — Client Projects</div>
+
+<!-- Student collaboration note -->
+<div style="padding: 56px 64px 48px; border-top: 1px solid var(--light); max-width: 880px;">
+  <p style="font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--grey); margin-bottom: 20px;">Student Collaboration &amp; Real-World Practice</p>
+  <p style="font-size: clamp(17px, 1.8vw, 22px); font-weight: 300; line-height: 1.6; letter-spacing: -0.01em; color: var(--black); margin-bottom: 24px;">“These projects were built together with students — from ideation through to final delivery. Clients were satisfied. Revenue was real. And every student who participated experienced the full A-to-Z of a live brief: the conversations, the revisions, the decisions that aren’t in any textbook.”</p>
+  <p style="font-size: 15px; font-weight: 300; line-height: 1.75; color: #4a4a4a;">“None of it was easy. Bringing students into real client work means carrying more responsibility, not less — you have to protect them while also holding them to a real standard. But what I found, every time, was that the teachers learned more than anyone. That’s not a lesson you can plan for. It just happens, when you’re honest about what you don’t know.”</p>
+</div>
+
+<div class="bc-pair">
+  <img src="bc_lb_07.webp" alt="LB Business Card — front" loading="lazy" />
+  <img src="bc_lb_08.webp" alt="LB Business Card — back" loading="lazy" />
+</div>
+<div class="bc-pair">
+  <img src="bc_exito_3.png" alt="The Exito — Business Card front" loading="lazy" />
+  <img src="bc_exito_4.png" alt="The Exito — Business Card back" loading="lazy" />
+</div>
+
+<!-- Back in layout for Art -->
+<div class="page-layout">
+  <aside class="sidebar-fixed" style="border-right:1px solid var(--light);"></aside>
+  <div class="content-col">
+
+    <!-- 04 — Art Practice -->
+    <section class="cs-section" id="art">
+      <p class="section-label">04 — Art Practice</p>
+      <h2 class="section-title">Making by Hand,<br>Thinking by Eye</h2>
+      <div class="section-body">
+        <p>"I like making things with my hands. I also like moving ideas onto a screen, and lately I've been spending time with AI as a kind of new communication. But beyond all of that, there's something I keep coming back to — shining a light on problems that don't seem like problems yet. That, to me, is what art does."</p>
+        <p>"I don't think design can solve problems it hasn't first learned to see. Art is how I train that seeing. When I asked to ride the kindergarten bus for two months before designing the app — that came from this. From the habit of looking before drawing. Sometimes that makes me a troublemaker. I turn things that weren't problems into problems, and problems into solutions. The means become the end, and the end becomes the means. That's not always comfortable. But it's honest."</p>
+        <p>"These works aren't here to prove anything. They're here because they're part of the same practice — the same hand, the same eye, the same person."</p>
+      </div>
+    </section>
+
+  </div>
+</div>
+
+<!-- Art — Music album covers -->
+<div class="stream-label">Music Album Cover &amp; Poster Design — Adobe Photoshop, Illustrator</div>
+<div class="art-4col">
+  <img src="art_album_critical_act.jpg" alt="Critical Act — HANS ;ORACLE, album cover design" loading="lazy" />
+  <img src="art_album_2.jpg" alt="Music album cover design 2" loading="lazy" />
+  <img src="art_album_3.jpg" alt="Music album cover design 3" loading="lazy" />
+  <img src="art_album_4.jpg" alt="Music album cover design 4" loading="lazy" />
+</div>
+
+<!-- Art — Line drawing -->
+<div class="stream-label">Wheel-Thrown Ceramics — Espresso &amp; Tea Cups, Hand-Made</div>
+<div style="padding: 40px 64px 32px; border-top: 1px solid var(--light); max-width: 820px;">
+  <p style="font-size: 15px; font-weight: 300; line-height: 1.8; color: #4a4a4a;">“I believe in the beauty of things made exactly as they are. On the spinning wheel, where my hands meet the clay, I love making small espresso cups — or tea cups — that keep the texture of that encounter just as it happened.”</p>
+</div>
+<div class="img-fullbleed">
+  <img src="art_linedrawing.jpg" alt="Wheel-thrown ceramic cups — espresso and tea cups, hand-made" loading="lazy" />
+</div>
+
+<!-- Art — Line-hand drawing -->
+<div class="stream-label">Line-Hand Drawing — Line Drawing Ink on Hard Paper</div>
+<div class="art-quote-block">
+  <p class="art-quote-text">“It may be a matter of how we see. When we look at complex, unsolvable problems through a beautiful lens — measuring their depth, their length, their breadth — they can become something like a great work of art, discovered only now.”</p>
+  <p class="art-quote-source">Luke Heesun Jung</p>
+</div>
+<div class="art-2col">
+  <img src="art_line_1.webp" alt="Line-hand drawing — ink on hard paper, complexity in lines" loading="lazy" />
+  <img src="art_line_2.webp" alt="Line-hand drawing — ink on hard paper, dark field" loading="lazy" />
+</div>
+
+<!-- Art — Life drawing -->
+<div class="stream-label">Life Drawing — Figure Study, Ongoing Practice</div>
+<div class="art-3col">
+  <img src="art_life_1_clean.jpg" alt="Life drawing — figure study 1" loading="lazy" />
+  <img src="art_life_2_clean.jpg" alt="Life drawing — figure study 2" loading="lazy" />
+  <img src="art_life_3_clean.jpg" alt="Life drawing — figure study 3" loading="lazy" />
+</div>
+
+<!-- Dark block — Printmaking + Visual Language -->
+<div class="dark-block">
+  <p class="section-label">Printmaking &amp; Visual Language</p>
+  <h2 class="section-title" style="color:var(--white); font-size:clamp(20px,2.5vw,32px); font-weight:300; margin-bottom:24px;">"Same conditions.<br>Completely different stories."</h2>
+  <div class="section-body">
+    <p>"Printmaking taught me something I keep using in every project. We set up the same plate, the same ink, the same pressure — and something unexpected comes out every time. In life and in work, those variables show up occasionally. When they do, I reach for this kind of experience to find my way through."</p>
+    <p>"The visual language diagram below is something I made to explain how a conversation, a project, or a problem changes depending on the angle we look at it from — and how sharing and dialogue can turn all of that into a single coherent story."</p>
+  </div>
+</div>
+
+<!-- Visual language screenshot -->
+<div class="stream-label">Visual Language — Diagram for Communication &amp; Perspective</div>
+<div class="img-fullbleed">
+  <img src="art_visual_language.webp" alt="Visual language — communication and perspective diagram" loading="lazy" />
+</div>
+
+<!-- Next project -->
+<a href="../case_study_00/index.html" class="next-project">
+  <p class="next-label">Next Project</p>
+  <p class="next-title">Process as Form</p>
+  <p class="next-tags">Art &amp; Design Practice · V-TAG</p>
+</a>
+
+<!-- Footer -->
+<footer>
+  <p>© 2026 Luke Heesun Jung</p>
+  <p>Portfolio — Graphic Design &amp; Brand Identity</p>
+</footer>
+
+<script>
+  const nav = document.getElementById('main-nav');
+  window.addEventListener('scroll', () => {
+    nav.classList.toggle('scrolled', window.scrollY > 60);
+  });
+
+  // Sidebar active link
+  const sections = document.querySelectorAll('[id]');
+  const navLinks = document.querySelectorAll('.sidebar-nav a');
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        navLinks.forEach(a => {
+          a.classList.toggle('active', a.getAttribute('href') === '#' + entry.target.id);
+        });
+      }
+    });
+  }, { rootMargin: '-30% 0px -60% 0px' });
+  sections.forEach(s => observer.observe(s));
+</script>
+</body>
+</html>

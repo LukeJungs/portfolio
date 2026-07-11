@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AZOTO — Luke Heesun Jung</title>
+  <meta name="description" content="Total brand identity for AZOTO Liquid Nitrogen Ice Cream — from trademark to spatial design. UKIN, Seoul, 2014–2015." />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:  #0a0a0a;
+      --white:  #f8f7f4;
+      --grey:   #6b6b6b;
+      --light:  #e8e6e1;
+      --dark:   #111111;
+      --font:   'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--white); color: var(--black); overflow-x: hidden; }
+
+    /* ── Nav ─────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 24px 48px;
+      background: transparent;
+      transition: background 0.35s ease, padding 0.35s ease;
+    }
+    nav.scrolled {
+      background: var(--white);
+      padding: 16px 48px;
+      border-bottom: 1px solid var(--light);
+    }
+    .nav-logo {
+      font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--white); text-decoration: none;
+      transition: color 0.35s ease;
+    }
+    nav.scrolled .nav-logo { color: var(--black); }
+    .nav-back {
+      font-size: 12px; font-weight: 400; letter-spacing: 0.06em; text-transform: uppercase;
+      color: rgba(255,255,255,0.80); text-decoration: none;
+      transition: color 0.35s ease;
+    }
+    nav.scrolled .nav-back { color: var(--grey); }
+    .nav-back:hover { opacity: 0.7; }
+
+    /* ── Hero ────────────────────────────────────────────────── */
+    .hero {
+      position: relative; width: 100%; height: 100vh; min-height: 640px;
+      overflow: hidden; background: var(--dark);
+    }
+    .hero-img {
+      width: 100%; height: 100%; object-fit: cover; object-position: center;
+      display: block; filter: brightness(0.65);
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.70) 100%);
+      pointer-events: none;
+    }
+    .hero-content {
+      position: absolute; bottom: 72px; left: 48px; right: 48px; z-index: 10;
+    }
+    .hero-tags {
+      font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+      color: rgba(255,255,255,0.50); margin-bottom: 20px;
+    }
+    .hero-title {
+      font-size: clamp(48px, 7vw, 96px); font-weight: 300; letter-spacing: -0.02em;
+      color: var(--white); line-height: 1.0; margin-bottom: 24px;
+    }
+    .hero-title span { font-weight: 600; }
+    .hero-descriptor {
+      font-size: clamp(14px, 1.5vw, 18px); font-weight: 300; line-height: 1.55;
+      color: rgba(255,255,255,0.72); max-width: 600px;
+    }
+
+    /* ── Meta strip ──────────────────────────────────────────── */
+    .meta-strip {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid var(--light);
+    }
+    .meta-cell { padding: 40px; border-right: 1px solid var(--light); }
+    .meta-cell:last-child { border-right: none; }
+    .meta-label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey); margin-bottom: 10px; }
+    .meta-value { font-size: 14px; font-weight: 400; line-height: 1.6; color: var(--black); }
+    .meta-value strong { font-weight: 600; }
+
+    /* ── Page layout ─────────────────────────────────────────── */
+    .page-layout {
+      display: grid; grid-template-columns: 280px 1fr; align-items: start;
+    }
+    /* Sidebar — sticky inside page-layout */
+    .sidebar-overlay { display: none; }
+    .sidebar-fixed {
+      position: sticky;
+      top: 72px;
+      align-self: start;
+      padding: 80px 40px 80px 48px;
+      border-right: 1px solid var(--light);
+    }
+    .sidebar-label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey); margin-bottom: 16px; }
+    .sidebar-nav { list-style: none; }
+    .sidebar-nav li { margin-bottom: 10px; }
+    .sidebar-nav a {
+      font-size: 13px; color: var(--grey); text-decoration: none;
+      letter-spacing: 0.02em; transition: color .2s;
+    }
+    .sidebar-nav a:hover { color: var(--black); }
+    .sidebar-nav a.active { color: var(--black); font-weight: 500; }
+    .sidebar-divider { border: none; border-top: 1px solid var(--light); margin: 20px 0; }
+    .sidebar-side-label {
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--grey); opacity: 0.6; margin-bottom: 10px;
+    }
+
+    .content-col { overflow: hidden; }
+    .body-wrap { border-bottom: 1px solid var(--light); }
+    .body-content { padding: 80px 64px 80px 56px; }
+
+    /* ── Sections ────────────────────────────────────────────── */
+    .section { margin-bottom: 72px; }
+    .section:last-child { margin-bottom: 0; }
+    .section-label {
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--grey); margin-bottom: 28px;
+      padding-bottom: 16px; border-bottom: 1px solid var(--light);
+    }
+    .section p {
+      font-size: 17px; font-weight: 300; line-height: 1.75;
+      color: var(--black); margin-bottom: 28px;
+    }
+    .section p:last-child { margin-bottom: 0; }
+    .section p strong { font-weight: 500; }
+
+    /* ── Pull quote ──────────────────────────────────────────── */
+    .pull-quote {
+      border-left: 2px solid var(--black);
+      padding: 4px 0 4px 28px; margin: 48px 0;
+    }
+    .pull-quote p {
+      font-size: clamp(20px, 2.2vw, 28px) !important;
+      font-weight: 300 !important; line-height: 1.45 !important;
+      letter-spacing: -0.01em; color: var(--black) !important;
+      margin-bottom: 0 !important;
+    }
+
+    /* ── Tab list ────────────────────────────────────────────── */
+    .tab-list { list-style: none; }
+    .tab-item {
+      display: flex; align-items: baseline; gap: 20px;
+      padding: 20px 0; border-bottom: 1px solid var(--light);
+    }
+    .tab-item:first-child { border-top: 1px solid var(--light); }
+    .tab-num { font-size: 11px; letter-spacing: 0.10em; color: var(--grey); min-width: 28px; }
+    .tab-name { font-size: 15px; font-weight: 500; color: var(--black); min-width: 180px; }
+    .tab-desc { font-size: 14px; font-weight: 300; color: var(--grey); line-height: 1.5; }
+
+    /* ── Full-bleed ──────────────────────────────────────────── */
+    .full-bleed { width: 100%; margin: 0; }
+    .full-bleed img {
+      width: 100%; display: block;
+      border-top: 1px solid var(--light); border-bottom: 1px solid var(--light);
+    }
+    .full-bleed figcaption {
+      padding: 16px 48px;
+      font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--grey); border-bottom: 1px solid var(--light);
+    }
+
+    /* ── Screen grid ─────────────────────────────────────────── */
+    .screen-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 0; border-top: 1px solid var(--light); border-bottom: 1px solid var(--light);
+    }
+    .screen-grid-3 {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 0; border-top: 1px solid var(--light); border-bottom: 1px solid var(--light);
+    }
+    .screen-item { overflow: hidden; border-right: 1px solid var(--light); }
+    .screen-item:last-child { border-right: none; }
+    .screen-item img { width: 100%; display: block; aspect-ratio: 3/2; object-fit: cover; object-position: center; }
+    .screen-item-caption {
+      padding: 16px 24px; border-top: 1px solid var(--light);
+      font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey);
+    }
+
+    /* ── Stat row ────────────────────────────────────────────── */
+    .stat-row {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--light); border-bottom: 1px solid var(--light);
+    }
+    .stat-cell { padding: 48px 40px; border-right: 1px solid var(--light); }
+    .stat-cell:last-child { border-right: none; }
+    .stat-number {
+      font-size: clamp(32px, 4vw, 52px); font-weight: 300;
+      letter-spacing: -0.03em; line-height: 1.0; color: var(--black); margin-bottom: 10px;
+    }
+    .stat-desc { font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey); line-height: 1.5; }
+
+    /* ── Vimeo embed ─────────────────────────────────────────── */
+    .video-section {
+      border-top: 1px solid var(--light); border-bottom: 1px solid var(--light);
+      background: var(--dark);
+    }
+    .video-wrap {
+      position: relative; padding-bottom: 56.25%; height: 0; overflow: hidden;
+    }
+    .video-wrap iframe {
+      position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+      border: none;
+    }
+    .video-caption {
+      padding: 20px 48px;
+      font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: rgba(255,255,255,0.40);
+      background: var(--dark);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .video-link-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 48px; background: var(--dark);
+    }
+    .video-link-bar p {
+      font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+    }
+    .video-link-bar a {
+      font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase;
+      color: rgba(255,255,255,0.60); text-decoration: none;
+      border-bottom: 1px solid rgba(255,255,255,0.20);
+      padding-bottom: 2px; transition: color .2s;
+    }
+    .video-link-bar a:hover { color: var(--white); }
+
+    /* ── Side projects dark section ──────────────────────────── */
+    .side-section {
+      background: var(--dark); color: var(--white);
+    }
+    .side-header {
+      padding: 80px 48px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .side-header-label {
+      font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: rgba(255,255,255,0.30); margin-bottom: 24px;
+    }
+    .side-header-title {
+      font-size: clamp(28px, 3.5vw, 44px); font-weight: 300; line-height: 1.2;
+      color: var(--white); margin-bottom: 20px;
+    }
+    .side-header-desc {
+      font-size: 16px; font-weight: 300; line-height: 1.7;
+      color: rgba(255,255,255,0.55); max-width: 680px; padding-bottom: 56px;
+    }
+
+    /* Side project cards */
+    .side-cards {
+      display: grid; grid-template-columns: 1fr 1fr;
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .side-card {
+      padding: 64px 48px; border-right: 1px solid rgba(255,255,255,0.08);
+    }
+    .side-card:last-child { border-right: none; }
+    .side-card-tag {
+      display: inline-block;
+      font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+      color: rgba(255,255,255,0.30);
+      border: 1px solid rgba(255,255,255,0.10);
+      padding: 5px 12px; border-radius: 2px; margin-bottom: 32px;
+    }
+    .side-card-num {
+      font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: rgba(255,255,255,0.20); margin-bottom: 16px;
+    }
+    .side-card-title {
+      font-size: clamp(22px, 2.5vw, 32px); font-weight: 300; line-height: 1.2;
+      color: var(--white); margin-bottom: 24px;
+    }
+    .side-card-title em { font-style: italic; color: rgba(255,255,255,0.50); }
+    .side-card-body p {
+      font-size: 14px; line-height: 1.75; color: rgba(255,255,255,0.55);
+      margin-bottom: 16px;
+    }
+    .side-card-body p:last-child { margin-bottom: 0; }
+    .side-card-body strong { color: rgba(255,255,255,0.85); font-weight: 500; }
+    .side-card-divider {
+      width: 32px; height: 1px; background: rgba(255,255,255,0.12); margin: 32px 0;
+    }
+    .side-card-pull {
+      border-left: 1px solid rgba(255,255,255,0.18);
+      padding: 4px 0 4px 20px; margin: 32px 0;
+    }
+    .side-card-pull p {
+      font-size: clamp(15px, 1.6vw, 20px) !important;
+      font-weight: 300 !important; line-height: 1.5 !important;
+      color: rgba(255,255,255,0.65) !important;
+      letter-spacing: -0.01em; margin-bottom: 0 !important;
+    }
+
+    /* Side project images */
+    .side-images {
+      border-top: 1px solid rgba(255,255,255,0.08);
+    }
+    .side-images-row {
+      display: grid; border-bottom: 1px solid rgba(255,255,255,0.08);
+    }
+    .side-images-row.cols-3 { grid-template-columns: 1fr 1fr 1fr; }
+    .side-images-row.cols-2 { grid-template-columns: 1fr 1fr; }
+    .side-images-row.cols-4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+    .side-img-item {
+      position: relative; overflow: hidden;
+      border-right: 1px solid rgba(255,255,255,0.08);
+      background: #1a1a1a;
+    }
+    .side-img-item:last-child { border-right: none; }
+    .side-img-item img { width: 100%; display: block; opacity: 0.80; transition: opacity .4s; }
+    .side-img-item:hover img { opacity: 1; }
+    .side-img-caption {
+      position: absolute; bottom: 14px; left: 16px;
+      font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: rgba(255,255,255,0.30);
+    }
+    .side-images-divider {
+      border: none; border-top: 1px solid rgba(255,255,255,0.08);
+    }
+
+    /* ── Next project ────────────────────────────────────────── */
+    .next-project {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 56px 48px; border-top: 1px solid var(--light);
+      text-decoration: none; color: var(--black); transition: background .2s;
+    }
+    .next-project:hover { background: var(--light); }
+    .next-label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey); margin-bottom: 10px; }
+    .next-title { font-size: 24px; font-weight: 300; color: var(--black); }
+    .next-arrow { font-size: 28px; font-weight: 200; color: var(--grey); }
+
+    /* ── Footer ──────────────────────────────────────────────── */
+    footer {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 28px 48px; border-top: 1px solid var(--light);
+    }
+    .footer-left { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey); }
+    .footer-right { display: flex; gap: 28px; }
+    .footer-right a { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey); text-decoration: none; transition: color .2s; }
+    .footer-right a:hover { color: var(--black); }
+
+    /* ── Responsive ──────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      nav, nav.scrolled { padding: 18px 24px; }
+      .meta-strip { grid-template-columns: 1fr 1fr; }
+      .meta-cell:nth-child(2) { border-right: none; }
+      .meta-cell:nth-child(3) { border-right: 1px solid var(--light); }
+      .page-layout { grid-template-columns: 1fr; }
+      .sidebar-fixed { display: none; }
+      .sidebar-overlay { display: none; }
+      .body-content { padding: 48px 24px; }
+      .screen-grid, .screen-grid-3 { grid-template-columns: 1fr; }
+      .screen-item { border-right: none; border-bottom: 1px solid var(--light); }
+      .stat-row { grid-template-columns: 1fr; }
+      .stat-cell { border-right: none; border-bottom: 1px solid var(--light); }
+      .hero-content { left: 24px; right: 24px; bottom: 48px; }
+      .side-cards { grid-template-columns: 1fr; }
+      .side-card { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
+      .side-images-row.cols-3, .side-images-row.cols-4 { grid-template-columns: 1fr 1fr; }
+      .side-images-row.cols-2 { grid-template-columns: 1fr; }
+      .side-header { padding: 48px 24px 0; }
+      .side-card { padding: 48px 24px; }
+      .video-caption, .video-link-bar { padding: 16px 24px; }
+      footer { flex-direction: column; gap: 16px; }
+      .next-project { padding: 40px 24px; }
+    }
+
+    /* ── Skip Navigation (Accessibility) ─────────────────────────── */
+    .skip-nav {
+      position: absolute;
+      top: -100%;
+      left: 0;
+      background: var(--black);
+      color: var(--white);
+      padding: 12px 24px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      z-index: 9999;
+      transition: top 0.2s;
+    }
+    .skip-nav:focus {
+      top: 0;
+    }
+
+    /* ── Focus Visible (Keyboard Navigation) ─────────────────────── */
+    :focus-visible {
+      outline: 2px solid var(--black);
+      outline-offset: 3px;
+    }
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid var(--black);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 20px 24px; }
+      .hero-content { padding: 0 24px 56px; }
+      .meta-strip { grid-template-columns: 1fr 1fr; }
+      .cs-section { padding: 56px 24px; }
+      .stream-label { padding: 32px 24px 16px; }
+      .dark-block { padding: 56px 24px; }
+      .img-2col { grid-template-columns: 1fr; }
+      .img-3col { grid-template-columns: 1fr 1fr; }
+      .img-4col { grid-template-columns: 1fr 1fr; }
+      .app-flow { grid-template-columns: 1fr; }
+      .bc-pair { grid-template-columns: 1fr; }
+      .art-4col { grid-template-columns: 1fr 1fr; }
+      .art-3col { grid-template-columns: 1fr 1fr; }
+      .next-project { padding: 56px 24px; }
+      footer { padding: 32px 24px; flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+</head>
+<body>
+  <a href="#main-content" class="skip-nav">Skip to main content</a>
+
+  <!-- ── Nav ──────────────────────────────────────────────────── -->
+  <nav>
+    <a href="../index.html" class="nav-logo">Luke Heesun Jung</a>
+    <a href="../index.html#work" class="nav-back">← All Work</a>
+  </nav>
+
+  <!-- ── Hero ─────────────────────────────────────────────────── -->
+  <section class="hero">
+    <img class="hero-img" src="azoto_sign_glow.png" alt="AZOTO — Illuminated logo signage, Liquid Nitrogen Ice Cream" />
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-tags">Brand Identity &nbsp;·&nbsp; Trademark &nbsp;·&nbsp; Packaging &nbsp;·&nbsp; Environmental Design</p>
+      <h1 class="hero-title"><span>AZOTO</span></h1>
+      <p class="hero-descriptor">A total brand identity for Korea's first liquid nitrogen ice cream concept — from trademark registration to spatial design, built from zero as a founding design member of UKIN.</p>
+    </div>
+  </section>
+
+  <!-- ── Meta strip ────────────────────────────────────────────── -->
+  <div class="meta-strip" id="main-content">
+    <div class="meta-cell">
+      <p class="meta-label">Client</p>
+      <p class="meta-value">UKIN (주)유긴<br /><strong>Seoul, South Korea</strong></p>
+    </div>
+    <div class="meta-cell">
+      <p class="meta-label">Role</p>
+      <p class="meta-value">Design Lead<br />Founding Member<br /><strong>Total Brand Direction</strong></p>
+    </div>
+    <div class="meta-cell">
+      <p class="meta-label">Scope</p>
+      <p class="meta-value">Logo · Trademark<br />Packaging · Signage<br /><strong>Spatial Design</strong></p>
+    </div>
+    <div class="meta-cell">
+      <p class="meta-label">Year</p>
+      <p class="meta-value"><strong>2014–2015</strong><br />Seoul, Korea</p>
+    </div>
+  </div>
+
+  <!-- ── Body layout ───────────────────────────────────────────── -->
+  <div class="page-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar-fixed">
+      <p class="sidebar-label">Contents</p>
+      <ul class="sidebar-nav" id="sidebar-nav-main">
+        <li><a href="#context" class="active">Context</a></li>
+        <li><a href="#brand-identity">Brand Identity</a></li>
+        <li><a href="#brand-system">Brand System</a></li>
+        <li><a href="#environmental">Environmental</a></li>
+        <li><a href="#outcome">Outcome</a></li>
+      </ul>
+    </aside>
+
+    <!-- Content -->
+    <div class="content-col">
+
+      <!-- Context -->
+      <div class="body-wrap" id="context">
+        <div class="body-content">
+          <div class="section">
+            <p class="section-label">Context</p>
+            <p>UKIN was a food and beverage startup incubator that grew from seed funding to Series B — a company that built brands from the ground up. As a founding design member, the challenge was not to refine an existing identity, but to create one from nothing. The flagship project was <strong>AZOTO</strong>, a liquid nitrogen ice cream concept. There was no name, no logo, no packaging, and no physical space.</p>
+            <p>The concept was scientifically precise: ice cream made fresh at -196°C using liquid nitrogen, in full view of the customer. The brand needed to match that precision — sharp, technical, and theatrical — while remaining accessible enough to draw queues on the streets of Hongdae.</p>
+          </div>
+
+          <div class="pull-quote">
+            <p>The brand had to be as dramatic as the product itself — a performance of science and craft, visible from the street.</p>
+          </div>
+
+          <div class="section">
+            <p class="section-label">Scope</p>
+            <ul class="tab-list">
+              <li class="tab-item">
+                <span class="tab-num">01</span>
+                <span class="tab-name">Logo & Trademark</span>
+                <span class="tab-desc">Custom geometric mark, Korean/English wordmark, trademark registration (제 45-2014-0004374)</span>
+              </li>
+              <li class="tab-item">
+                <span class="tab-num">02</span>
+                <span class="tab-name">Brand System</span>
+                <span class="tab-desc">Colour palette, typography, brand language and tone across all touchpoints</span>
+              </li>
+              <li class="tab-item">
+                <span class="tab-num">03</span>
+                <span class="tab-name">Packaging</span>
+                <span class="tab-desc">Paper cups (BR150cc), tissue paper, takeaway packaging design</span>
+              </li>
+              <li class="tab-item">
+                <span class="tab-num">04</span>
+                <span class="tab-name">Environmental Design</span>
+                <span class="tab-desc">Store facade, illuminated 3D signage, interior wall graphics, menu boards</span>
+              </li>
+              <li class="tab-item">
+                <span class="tab-num">05</span>
+                <span class="tab-name">Multi-location Rollout</span>
+                <span class="tab-desc">Brand consistency across Hongdae, Anyang, and additional franchise locations</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content-col -->
+  </div><!-- /page-layout -->
+
+  <!-- ── Full-bleed: Design brief sheet ───────────────────────── -->
+  <figure class="full-bleed">
+    <img src="AZOTO_0.webp" alt="AZOTO Total Design brief — logo construction, concept sketches, paper cup, store signage" />
+    <figcaption>Design Brief — AZOTO Total Design Plan, 2014 &nbsp;·&nbsp; <span style="text-transform:none;">Ai / Ps</span> &nbsp;·&nbsp; (주)유긴 / UKIN, Ltd.</figcaption>
+  </figure>
+
+  <!-- ── Brand Identity ────────────────────────────────────────── -->
+  <div class="page-layout">
+    <aside class="sidebar-fixed" style="visibility:hidden; pointer-events:none;"></aside>
+    <div class="content-col">
+      <div class="body-wrap" id="identity">
+        <div class="body-content">
+          <div class="section">
+            <p class="section-label">Brand Identity</p>
+            <p>The logo was built from a single geometric insight: the ice cream cone. Starting with the most fundamental form — a circle resting on a triangle — the design evolved through three stages. First, the cone shape was abstracted into a letterform. Second, the triangle and inverted triangle were combined into a structural, architectural mark. Third, the outline was refined to create a sharp, non-decorative shape that would read clearly at any scale, from a paper cup to an illuminated 3D facade sign.</p>
+            <p>The result was a custom typographic mark that functions simultaneously as an abstract symbol and a legible wordmark. The geometric precision of the mark — registered as trademark 제 45-2014-0004374 — communicated the scientific rigour of the liquid nitrogen process while maintaining the visual drama needed to stop foot traffic on a busy Seoul street.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Logo clean ────────────────────────────────────────────── -->
+  <figure class="full-bleed">
+    <img src="azoto_logo_clean.webp" alt="AZOTO logo system — primary mark, Korean wordmark, concept sketches" />
+    <figcaption>Logo System — Primary Mark · Korean Wordmark (아조또) · Concept Development</figcaption>
+  </figure>
+
+  <!-- ── Space & Packaging ─────────────────────────────────────── -->
+  <div class="page-layout">
+    <aside class="sidebar-fixed" style="visibility:hidden; pointer-events:none;"></aside>
+    <div class="content-col">
+      <div class="body-wrap" id="environment">
+        <div class="body-content">
+          <div class="section">
+            <p class="section-label">Space & Packaging</p>
+            <p>The identity was not confined to paper. Every physical touchpoint — from the BR150cc paper cup to the architectural facade — was treated as an extension of the brand. The store exterior used the geometric language of the logo as a structural element: the facade itself became a large-scale interpretation of the mark, with LED-trimmed edges that echoed the logo's sharp outline.</p>
+            <p>Inside, the brand maintained its high-contrast aesthetic. The illuminated 3D logo sign became the centrepiece of the interior, creating a dramatic backdrop for the liquid nitrogen ice cream making process. The atmospheric lighting — deep blues and sharp whites — reinforced the scientific, theatrical quality of the brand.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Store: day + night ────────────────────────────────────── -->
+  <div class="screen-grid">
+    <div class="screen-item">
+      <img src="azoto_store_day.png" alt="AZOTO store exterior — daytime" />
+      <p class="screen-item-caption">Store Exterior — Daytime</p>
+    </div>
+    <div class="screen-item">
+      <img src="azoto_store_night.png" alt="AZOTO store exterior — night, illuminated facade" />
+      <p class="screen-item-caption">Store Exterior — Night, Illuminated Facade</p>
+    </div>
+  </div>
+
+  <!-- ── Interior ──────────────────────────────────────────────── -->
+  <div class="screen-grid">
+    <div class="screen-item">
+      <img src="azoto_interior.png" alt="AZOTO interior — wall signage" />
+      <p class="screen-item-caption">Interior — Wall Signage</p>
+    </div>
+    <div class="screen-item">
+      <img src="azoto_interior2.png" alt="AZOTO interior — event atmosphere" />
+      <p class="screen-item-caption">Interior — Event Atmosphere</p>
+    </div>
+  </div>
+
+  <!-- ── Outcome ───────────────────────────────────────────────── -->
+  <div class="page-layout">
+    <aside class="sidebar-fixed" style="visibility:hidden; pointer-events:none;"></aside>
+    <div class="content-col">
+      <div class="body-wrap" id="outcome">
+        <div class="body-content">
+          <div class="section">
+            <p class="section-label">Outcome</p>
+            <p>AZOTO launched and expanded to multiple franchise locations across Seoul, including Hongdae and Anyang. The brand's visual identity — sharp, scientific, and theatrical — proved immediately effective. Queues formed outside the Hongdae location from opening day, and the brand was featured on <strong>Olive TV's Tasty Road</strong>, one of Korea's most-watched food and lifestyle programs.</p>
+            <p>The project demonstrated that a cohesive brand identity, built with rigour from a single geometric concept, can drive tangible business outcomes. The trademark, the packaging, the spatial design — each element reinforced the others, creating a total brand experience that was unmistakable at every scale.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Stat row ───────────────────────────────────────────────── -->
+  <div class="stat-row">
+    <div class="stat-cell">
+      <p class="stat-number">Multi</p>
+      <p class="stat-desc">Franchise locations<br />across Seoul</p>
+    </div>
+    <div class="stat-cell">
+      <p class="stat-number">TV</p>
+      <p class="stat-desc">Featured on Olive TV<br />Tasty Road</p>
+    </div>
+    <div class="stat-cell">
+      <p class="stat-number">2014</p>
+      <p class="stat-desc">Trademark registered<br />제 45-2014-0004374</p>
+    </div>
+  </div>
+
+  <!-- ── Queue + TV ─────────────────────────────────────────────── -->
+  <div class="screen-grid">
+    <div class="screen-item">
+      <img src="azoto_queue.png" alt="AZOTO Hongdae — opening queue" />
+      <p class="screen-item-caption">Hongdae Location — Opening Queue</p>
+    </div>
+    <div class="screen-item">
+      <img src="azoto_tv.webp" alt="AZOTO featured on Olive TV Tasty Road" />
+      <p class="screen-item-caption">Olive TV Tasty Road — Media Feature</p>
+    </div>
+  </div>
+
+  <!-- ── Vimeo embed ────────────────────────────────────────────── -->
+  <div class="video-section">
+    <div class="video-wrap">
+      <iframe
+        src="https://player.vimeo.com/video/1207250464?badge=0&autopause=0&player_id=0&app_id=58479"
+        allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media"
+        title="AZOTO — Tasty Road Feature">
+      </iframe>
+    </div>
+    <p class="video-caption">Olive TV · Tasty Road — AZOTO Feature, 2014</p>
+    <div class="video-link-bar">
+      <p>Watch on Vimeo</p>
+      <a href="https://vimeo.com/share/3310eb92-e23d-4340-802d-c4b67bdbe86b?share=copy&fl=sv&fe=ci" target="_blank" rel="noopener">View Full Video →</a>
+    </div>
+  </div>
+
+  <!-- ── Side Projects: Pure6 + Sammontana ─────────────────────── -->
+  <div class="side-section">
+
+    <div class="side-header">
+      <p class="side-header-label">Side Projects within UKIN In-House Design</p>
+      <h2 class="side-header-title">Creative Work Beyond the Brief</h2>
+      <p class="side-header-desc">Within the intensity of a startup environment, maintaining creative balance is not a luxury — it is a discipline. These two side projects, both developed within UKIN's in-house design team, represent the space where risk was free and experimentation was the only rule. The energy cultivated here always found its way back into the main work.</p>
+    </div>
+
+    <!-- Two side project cards -->
+    <div class="side-cards">
+
+      <!-- Pure6 -->
+      <div class="side-card" id="pure6">
+        <p class="side-card-num">Side Project 01</p>
+        <span class="side-card-tag">Non-Profit · 2015</span>
+        <h3 class="side-card-title">Pure6 — <em>pH of Creative Confidence</em></h3>
+        <div class="side-card-body">
+          <p>A non-profit skincare concept centred around pH6 — the optimal level of healthy skin. Scientifically precise, clean, and purposeful. The project provided a space for free artwork exploration: posters, typographic experiments, visual systems — without the constraints of a client brief.</p>
+          <p>It was a deliberate act of <strong>creative confidence building</strong>. The philosophy: maintaining a balance between input and output inevitably leads to the next step.</p>
+        </div>
+        <div class="side-card-divider"></div>
+        <div class="side-card-pull">
+          <p>Every side project is an investment in the next main project. Pure6 was where risk was free — and that freedom always found its way back into the work.</p>
+        </div>
+        <div class="side-card-body">
+          <p>Though Pure6 no longer exists independently — it was eventually absorbed into a larger, now well-known brand — the experimental energy it fostered directly influenced the rigour and confidence brought to flagship projects like AZOTO.</p>
+        </div>
+      </div>
+
+      <!-- Sammontana Korea -->
+      <div class="side-card" id="sammontana">
+        <p class="side-card-num">Side Project 02</p>
+        <span class="side-card-tag">Artwork Collaboration · 2015</span>
+        <h3 class="side-card-title">Sammontana Korea — <em>Art Meets Brand</em></h3>
+        <div class="side-card-body">
+          <p>Sammontana is one of Italy's most iconic ice cream brands. The Korea launch, managed through UKIN, presented an opportunity to bridge two distinct visual cultures — Italian heritage and Korean contemporary design sensibility.</p>
+          <p>The project involved <strong>artwork collaboration with independent artists</strong>, creating a series of limited-edition visual identities and packaging concepts that brought Sammontana's playful, artisanal spirit into a Korean market context.</p>
+        </div>
+        <div class="side-card-divider"></div>
+        <div class="side-card-pull">
+          <p>Collaboration is a design tool. Working with artists outside the brief expanded what the brand could be — and what I could do as a designer.</p>
+        </div>
+        <div class="side-card-body">
+          <p>The Sammontana Korea project reinforced a core belief: the best brand work happens at the intersection of rigorous craft and genuine creative exchange. Every collaboration since has carried that lesson forward.</p>
+        </div>
+      </div>
+
+    </div><!-- /side-cards -->
+
+    <!-- Pure6 images -->
+    <div class="side-images">
+      <div class="side-images-row cols-4">
+        <div class="side-img-item">
+          <img src="pure6_2.png" alt="Pure6 artwork development" />
+          <span class="side-img-caption">Artwork Development</span>
+        </div>
+        <div class="side-img-item">
+          <img src="pure6_3.png" alt="Pure6 typography exploration" />
+          <span class="side-img-caption">Typography</span>
+        </div>
+        <div class="side-img-item">
+          <img src="pure6_4.png" alt="Pure6 visual system" />
+          <span class="side-img-caption">Visual System</span>
+        </div>
+        <div class="side-img-item">
+          <img src="pure6_poster.jpg" alt="Pure6 poster design" />
+          <span class="side-img-caption">Poster Design</span>
+        </div>
+      </div>
+      <div class="side-images-row cols-3">
+        <div class="side-img-item">
+          <img src="pure6_5.png" alt="Pure6 artwork" />
+          <span class="side-img-caption">Artwork</span>
+        </div>
+        <div class="side-img-item">
+          <img src="pure6_6.png" alt="Pure6 artwork" />
+          <span class="side-img-caption">Artwork</span>
+        </div>
+        <div class="side-img-item">
+          <img src="pure6_7.png" alt="Pure6 artwork" />
+          <span class="side-img-caption">Artwork</span>
+        </div>
+      </div>
+      <!-- Sammontana images -->
+      <div class="side-images-row cols-3">
+        <div class="side-img-item">
+          <img src="sam_1.webp" alt="Sammontana Korea artwork collaboration" />
+          <span class="side-img-caption">Sammontana Korea</span>
+        </div>
+        <div class="side-img-item">
+          <img src="sam_2.webp" alt="Sammontana Korea artwork" />
+          <span class="side-img-caption">Artwork Collaboration</span>
+        </div>
+        <div class="side-img-item">
+          <img src="sam_3.webp" alt="Sammontana Korea artwork" />
+          <span class="side-img-caption">Brand Identity</span>
+        </div>
+      </div>
+      <div class="side-images-row cols-2">
+        <div class="side-img-item">
+          <img src="sam_4.webp" alt="Sammontana Korea visual" />
+          <span class="side-img-caption">Visual Identity</span>
+        </div>
+        <div class="side-img-item">
+          <img src="sam_5.webp" alt="Sammontana Korea visual" />
+          <span class="side-img-caption">Brand Application</span>
+        </div>
+      </div>
+    </div><!-- /side-images -->
+
+  </div><!-- /side-section -->
+
+  <!-- ── Next project ──────────────────────────────────────────── -->
+  <a href="../case_study_01/index.html" class="next-project">
+    <div>
+      <p class="next-label">Next Project</p>
+      <p class="next-title">LittleN × Sandeul</p>
+    </div>
+    <span class="next-arrow">→</span>
+  </a>
+
+  <!-- ── Footer ───────────────────────────────────────────────── -->
+  <footer>
+    <p class="footer-left">© 2026 Luke Heesun Jung</p>
+    <div class="footer-right">
+      <a href="https://www.linkedin.com/in/lukeheesunjung/" target="_blank">LinkedIn</a>
+      <a href="mailto:lukeheesunjung@gmail.com">Email</a>
+      <a href="../resume.pdf" target="_blank">Resume</a>
+    </div>
+  </footer>
+
+<script>
+  // Nav scroll-aware
+  (function() {
+    var nav = document.querySelector('nav');
+    var heroH = window.innerHeight;
+    function onScroll() {
+      nav.classList.toggle('scrolled', window.scrollY > heroH * 0.85);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+
+  // Sidebar active link (targets fixed overlay)
+  (function() {
+    var links = document.querySelectorAll('#sidebar-nav-main a');
+    var sections = [];
+    links.forEach(function(a) {
+      var id = a.getAttribute('href').replace('#', '');
+      var el = document.getElementById(id);
+      if (el) sections.push({ id: id, el: el, a: a });
+    });
+    if (!sections.length) return;
+
+    var current = sections[0].id;
+    function setActive(id) {
+      if (id === current) return;
+      current = id;
+      links.forEach(function(a) { a.classList.remove('active'); });
+      var match = document.querySelector('#sidebar-nav-main a[href="#' + id + '"]');
+      if (match) match.classList.add('active');
+    }
+
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) setActive(entry.target.id);
+      });
+    }, { rootMargin: '-20% 0px -70% 0px' });
+
+    sections.forEach(function(s) { observer.observe(s.el); });
+  })();
+</script>
+</body>
+</html>

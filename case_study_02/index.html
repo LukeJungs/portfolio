@@ -1,0 +1,866 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Urban Dive Marketing — Luke Heesun Jung</title>
+  <meta name="description" content="Brand identity, editorial design, and design leadership for Urban Dive Marketing — Toronto, 2019." />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:  #0a0a0a;
+      --white:  #f8f7f4;
+      --grey:   #6b6b6b;
+      --light:  #e8e6e1;
+      --udm-blue:   #1e3a6e;
+      --udm-yellow: #e8d44d;
+      --font:   'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--white); color: var(--black); overflow-x: hidden; }
+
+    /* ── Nav ─────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 24px 48px;
+      background: transparent;
+      transition: background 0.35s ease, padding 0.35s ease;
+    }
+    nav.scrolled {
+      background: var(--white);
+      padding: 16px 48px;
+      border-bottom: 1px solid var(--light);
+    }
+    .nav-logo {
+      font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--white); text-decoration: none;
+      transition: color 0.35s ease;
+    }
+    nav.scrolled .nav-logo { color: var(--black); }
+    .nav-back {
+      font-size: 12px; font-weight: 400; letter-spacing: 0.06em; text-transform: uppercase;
+      color: rgba(255,255,255,0.80); text-decoration: none;
+      transition: color 0.35s ease, opacity .2s;
+    }
+    nav.scrolled .nav-back { color: var(--grey); }
+    .nav-back:hover { opacity: 1; }
+    nav.scrolled .nav-back:hover { color: var(--black); }
+
+    /* ── Hero ────────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      min-height: 640px;
+      overflow: hidden;
+      background: var(--udm-blue);
+    }
+    .hero-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      display: block;
+      filter: brightness(0.65);
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(10,20,50,0.20) 0%, rgba(10,20,50,0.70) 100%);
+      pointer-events: none;
+    }
+    .hero-content {
+      position: absolute;
+      bottom: 72px; left: 48px; right: 48px;
+      z-index: 10;
+    }
+    .hero-tags {
+      font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+      color: rgba(255,255,255,0.60); margin-bottom: 20px;
+    }
+    .hero-title {
+      font-size: clamp(42px, 6vw, 88px); font-weight: 300; letter-spacing: -0.02em;
+      color: var(--white); line-height: 1.0; margin-bottom: 24px;
+    }
+    .hero-title span { font-weight: 600; }
+    .hero-descriptor {
+      font-size: clamp(14px, 1.5vw, 18px); font-weight: 300; line-height: 1.55;
+      color: rgba(255,255,255,0.80); max-width: 640px;
+    }
+
+    /* ── Meta strip ──────────────────────────────────────────── */
+    .meta-strip {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid var(--light);
+    }
+    .meta-cell {
+      padding: 40px 40px; border-right: 1px solid var(--light);
+    }
+    .meta-cell:last-child { border-right: none; }
+    .meta-label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey); margin-bottom: 10px; }
+    .meta-value { font-size: 14px; font-weight: 400; line-height: 1.6; color: var(--black); }
+    .meta-value strong { font-weight: 600; }
+
+    /* ── Body layout ─────────────────────────────────────────── */
+    .page-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      align-items: start;
+    }
+    /* Sidebar — sticky inside page-layout */
+    .sidebar-overlay { display: none; }
+    .sidebar-fixed {
+      position: sticky;
+      top: 72px;
+      align-self: start;
+      padding: 80px 40px 80px 48px;
+      border-right: 1px solid var(--light);
+    }
+    .sidebar-label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey); margin-bottom: 16px; }
+    .sidebar-nav { list-style: none; }
+    .sidebar-nav li { margin-bottom: 10px; }
+    .sidebar-nav a {
+      font-size: 13px; color: var(--grey); text-decoration: none;
+      letter-spacing: 0.02em; transition: color .2s;
+    }
+    .sidebar-nav a:hover { color: var(--black); }
+    .sidebar-nav a.active { color: var(--black); font-weight: 500; }
+
+    .content-col { overflow: hidden; }
+    .body-wrap { border-bottom: 1px solid var(--light); }
+    .body-content { padding: 80px 64px 80px 56px; }
+
+    /* ── Section ─────────────────────────────────────────────── */
+    .section { margin-bottom: 80px; }
+    .section-label {
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--grey); margin-bottom: 28px;
+      padding-bottom: 16px; border-bottom: 1px solid var(--light);
+    }
+    .section p {
+      font-size: 17px; font-weight: 300; line-height: 1.75;
+      color: var(--black); margin-bottom: 28px;
+    }
+    .section p:last-child { margin-bottom: 0; }
+    .section p strong { font-weight: 500; }
+
+    /* ── Pull quote ──────────────────────────────────────────── */
+    .pull-quote {
+      border-left: 2px solid var(--black);
+      padding: 4px 0 4px 28px;
+      margin: 48px 0;
+    }
+    .pull-quote p {
+      font-size: clamp(20px, 2.2vw, 28px) !important;
+      font-weight: 300 !important;
+      line-height: 1.45 !important;
+      letter-spacing: -0.01em;
+      color: var(--black) !important;
+      margin-bottom: 0 !important;
+    }
+
+    /* ── Full-bleed image ────────────────────────────────────── */
+    .full-bleed {
+      width: 100%; margin: 0;
+    }
+    .full-bleed img {
+      width: 100%; display: block;
+      border-top: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+    }
+    .full-bleed figcaption {
+      padding: 16px 48px;
+      font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--grey);
+      border-bottom: 1px solid var(--light);
+    }
+
+    /* ── Screen grid ─────────────────────────────────────────── */
+    .screen-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-top: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+      margin-bottom: 80px;
+    }
+    .screen-item {
+      overflow: hidden; border-right: 1px solid var(--light);
+    }
+    .screen-item:last-child { border-right: none; }
+    .screen-item img { width: 100%; display: block; aspect-ratio: 3/2; object-fit: cover; object-position: center; }
+    .screen-item-caption {
+      padding: 20px 24px;
+      border-top: 1px solid var(--light);
+      font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey);
+    }
+
+    /* ── Stat row ────────────────────────────────────────────── */
+    .stat-row {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+      margin-bottom: 80px;
+    }
+    .stat-cell {
+      padding: 48px 40px; border-right: 1px solid var(--light);
+      text-align: left;
+    }
+    .stat-cell:last-child { border-right: none; }
+    .stat-number {
+      font-size: clamp(36px, 4vw, 56px); font-weight: 300;
+      letter-spacing: -0.03em; line-height: 1.0;
+      color: var(--black); margin-bottom: 10px;
+    }
+    .stat-desc {
+      font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--grey); line-height: 1.5;
+    }
+
+    /* ── Photo pair ──────────────────────────────────────────── */
+    .photo-pair {
+      display: grid; grid-template-columns: 1fr 1fr;
+      border-top: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+      margin-bottom: 80px;
+    }
+    .photo-pair-item { overflow: hidden; border-right: 1px solid var(--light); }
+    .photo-pair-item:last-child { border-right: none; }
+    .photo-pair-item img {
+      width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block;
+      filter: brightness(0.90);
+      transition: transform 0.6s ease;
+    }
+    .photo-pair-item:hover img { transform: scale(1.03); }
+
+    /* ── Tab overview ────────────────────────────────────────── */
+    .tab-list { list-style: none; margin-bottom: 0; }
+    .tab-item {
+      display: flex; align-items: baseline; gap: 20px;
+      padding: 20px 0; border-bottom: 1px solid var(--light);
+    }
+    .tab-item:first-child { border-top: 1px solid var(--light); }
+    .tab-num {
+      font-size: 11px; letter-spacing: 0.10em; color: var(--grey);
+      min-width: 28px; text-transform: uppercase;
+    }
+    .tab-name { font-size: 15px; font-weight: 500; color: var(--black); min-width: 180px; }
+    .tab-desc { font-size: 14px; font-weight: 300; color: var(--grey); line-height: 1.5; }
+
+    /* ── UDM Brand accent block ──────────────────────────────── */
+    .brand-block {
+      background: var(--udm-blue);
+      padding: 96px 56px;
+      border-bottom: 1px solid var(--light);
+    }
+    .brand-block-label {
+      font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: rgba(255,255,255,0.40); margin-bottom: 40px;
+    }
+    .brand-block-heading {
+      font-size: clamp(28px, 4vw, 48px); font-weight: 300; line-height: 1.2;
+      color: var(--white); margin-bottom: 32px; max-width: 720px;
+    }
+    .brand-block-heading em { font-style: italic; color: var(--udm-yellow); }
+    .brand-block-body {
+      max-width: 640px; margin-bottom: 64px;
+    }
+    .brand-block-body p {
+      font-size: 15px; line-height: 1.75; color: rgba(255,255,255,0.65);
+      margin-bottom: 20px;
+    }
+    .brand-block-body p:last-child { margin-bottom: 0; }
+    .brand-block-body strong { color: rgba(255,255,255,0.90); font-weight: 500; }
+
+    /* ── Brand grid (2-col image grid) ──────────────────────── */
+    .brand-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      margin-top: 64px;
+    }
+    .brand-grid-item {
+      position: relative; overflow: hidden; background: #0d1e3a;
+    }
+    .brand-grid-item.full {
+      grid-column: 1 / -1;
+    }
+    .brand-grid-item img {
+      width: 100%; display: block;
+      opacity: 0.88;
+      transition: opacity 0.4s ease;
+    }
+    .brand-grid-item:hover img { opacity: 1; }
+    .brand-grid-caption {
+      position: absolute; bottom: 16px; left: 20px;
+      font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: rgba(255,255,255,0.50);
+    }
+
+    /* ── Collaboration section ───────────────────────────────── */
+    .collab-strip {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      border-top: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+      margin-bottom: 80px;
+    }
+    .collab-item { overflow: hidden; border-right: 1px solid var(--light); }
+    .collab-item:last-child { border-right: none; }
+    .collab-item img {
+      width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block;
+      filter: brightness(0.92);
+      transition: transform 0.6s ease;
+    }
+    .collab-item:hover img { transform: scale(1.03); }
+    .collab-caption {
+      padding: 16px 20px;
+      border-top: 1px solid var(--light);
+      font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey);
+    }
+
+    /* ── Next project ────────────────────────────────────────── */
+    .next-project {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 56px 48px; border-top: 1px solid var(--light);
+      text-decoration: none; color: var(--black);
+      transition: background .2s;
+    }
+    .next-project:hover { background: var(--light); }
+    .next-label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey); margin-bottom: 10px; }
+    .next-title { font-size: 24px; font-weight: 300; color: var(--black); }
+    .next-arrow { font-size: 28px; font-weight: 200; color: var(--grey); }
+
+    /* ── Footer ──────────────────────────────────────────────── */
+    footer {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 28px 48px; border-top: 1px solid var(--light);
+    }
+    .footer-left { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey); }
+    .footer-right { display: flex; gap: 28px; }
+    .footer-right a { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey); text-decoration: none; transition: color .2s; }
+    .footer-right a:hover { color: var(--black); }
+
+    /* ── Marketing image grid (2-col, medium) ─────────────────── */
+    .mkt-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-top: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+      margin-bottom: 80px;
+    }
+    .mkt-grid-item {
+      overflow: hidden;
+      border-right: 1px solid var(--light);
+    }
+    .mkt-grid-item:last-child { border-right: none; }
+    .mkt-grid-item img {
+      width: 100%;
+      display: block;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      object-position: center top;
+    }
+    .mkt-grid-caption {
+      padding: 16px 20px;
+      border-top: 1px solid var(--light);
+      font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey);
+    }
+
+    /* ── Responsive ──────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      .mkt-grid { grid-template-columns: 1fr; }
+      .mkt-grid-item { border-right: none; border-bottom: 1px solid var(--light); }
+      nav { padding: 20px 24px; }
+      .meta-strip { grid-template-columns: 1fr 1fr; }
+      .meta-cell:nth-child(2) { border-right: none; }
+      .meta-cell:nth-child(3) { border-right: 1px solid var(--light); }
+      .page-layout { grid-template-columns: 1fr; }
+      .sidebar-fixed { display: none; }
+      .sidebar-overlay { display: none; }
+      .body-content { padding: 48px 24px; }
+      .screen-grid { grid-template-columns: 1fr; }
+      .screen-item { border-right: none; border-bottom: 1px solid var(--light); }
+      .stat-row { grid-template-columns: 1fr; }
+      .stat-cell { border-right: none; border-bottom: 1px solid var(--light); }
+      .photo-pair { grid-template-columns: 1fr; }
+      .photo-pair-item { border-right: none; border-bottom: 1px solid var(--light); }
+      .hero-content { left: 24px; right: 24px; bottom: 48px; }
+      footer { flex-direction: column; gap: 16px; }
+      .next-project { padding: 40px 24px; }
+      .brand-grid { grid-template-columns: 1fr; }
+      .collab-strip { grid-template-columns: 1fr; }
+      .collab-item { border-right: none; border-bottom: 1px solid var(--light); }
+      .brand-block { padding: 64px 24px; }
+    }
+
+    /* ── Skip Navigation (Accessibility) ─────────────────────────── */
+    .skip-nav {
+      position: absolute;
+      top: -100%;
+      left: 0;
+      background: var(--black);
+      color: var(--white);
+      padding: 12px 24px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      z-index: 9999;
+      transition: top 0.2s;
+    }
+    .skip-nav:focus {
+      top: 0;
+    }
+
+    /* ── Focus Visible (Keyboard Navigation) ─────────────────────── */
+    :focus-visible {
+      outline: 2px solid var(--black);
+      outline-offset: 3px;
+    }
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid var(--black);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 20px 24px; }
+      .hero-content { padding: 0 24px 56px; }
+      .meta-strip { grid-template-columns: 1fr 1fr; }
+      .cs-section { padding: 56px 24px; }
+      .stream-label { padding: 32px 24px 16px; }
+      .dark-block { padding: 56px 24px; }
+      .img-2col { grid-template-columns: 1fr; }
+      .img-3col { grid-template-columns: 1fr 1fr; }
+      .img-4col { grid-template-columns: 1fr 1fr; }
+      .app-flow { grid-template-columns: 1fr; }
+      .bc-pair { grid-template-columns: 1fr; }
+      .art-4col { grid-template-columns: 1fr 1fr; }
+      .art-3col { grid-template-columns: 1fr 1fr; }
+      .next-project { padding: 56px 24px; }
+      footer { padding: 32px 24px; flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+</head>
+<body>
+  <a href="#main-content" class="skip-nav">Skip to main content</a>
+
+  <!-- ── Nav ──────────────────────────────────────────────────── -->
+  <nav>
+    <a href="../index.html" class="nav-logo">Luke Heesun Jung</a>
+    <a href="../index.html#work" class="nav-back">← All Work</a>
+  </nav>
+
+  <!-- ── Hero ─────────────────────────────────────────────────── -->
+  <section class="hero">
+    <img class="hero-img" src="UDM_2.webp" alt="Urban Dive Marketing — Brand Identity and Editorial Design" />
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-tags">Brand Identity &nbsp;·&nbsp; Editorial &nbsp;·&nbsp; Design Leadership &nbsp;·&nbsp; BX</p>
+      <h1 class="hero-title"><span>Urban Dive</span> Marketing</h1>
+      <p class="hero-descriptor">Building a cohesive brand ecosystem for a Toronto-based digital marketing accelerator — from logo to booklet, from intern training to international team guidance.</p>
+    </div>
+  </section>
+
+  <!-- ── Meta strip ────────────────────────────────────────────── -->
+  <div class="meta-strip" id="main-content">
+    <div class="meta-cell">
+      <p class="meta-label">Client</p>
+      <p class="meta-value">Urban Dive Marketing<br /><strong>Toronto, Canada</strong></p>
+    </div>
+    <div class="meta-cell">
+      <p class="meta-label">Role</p>
+      <p class="meta-value">Lead Graphic Designer<br />Brand Direction<br /><strong>Design Lead</strong></p>
+    </div>
+    <div class="meta-cell">
+      <p class="meta-label">Scope</p>
+      <p class="meta-value">BI · BX · Editorial<br />Exhibition · Mentorship<br /><strong>Cross-Market</strong></p>
+    </div>
+    <div class="meta-cell">
+      <p class="meta-label">Year</p>
+      <p class="meta-value"><strong>2019</strong><br />Toronto · Pakistan · China</p>
+    </div>
+  </div>
+
+  <!-- ── Body ──────────────────────────────────────────────────── -->
+  <div class="page-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar-fixed">
+      <p class="sidebar-label">Contents</p>
+      <ul class="sidebar-nav" id="sidebar-nav-main">
+        <li><a href="#context" class="active">Context</a></li>
+        <li><a href="#scope">Scope &amp; Leadership</a></li>
+        <li><a href="#brand-identity">Brand Identity</a></li>
+        <li><a href="#brand-system">Brand System</a></li>
+        <li><a href="#marketing">Marketing Strategy</a></li>
+        <li><a href="#editorial">Editorial</a></li>
+        <li><a href="#client-work">Client Work</a></li>
+        <li><a href="#outcome">Outcome</a></li>
+      </ul>
+    </aside>
+
+    <!-- Content column -->
+    <div class="content-col">
+
+      <!-- ── Context ─────────────────────────────────────────── -->
+      <div class="body-wrap" id="context">
+        <div class="body-content">
+          <div class="section">
+            <p class="section-label">Context</p>
+            <p>Urban Dive Marketing positioned itself as a business accelerator and digital marketing agency at the heart of downtown Toronto — steps from Dundas Square in downtown Toronto. The company served a wide range of clients across Canada, with an international presence through design teams in Pakistan and China. The ambition was clear: help businesses grow through strategy, digital presence, and brand awareness.</p>
+            <p>Yet the internal visual language did not yet match that ambition. The challenge was not simply to redesign a logo or produce a brochure. It was to establish a <strong>comprehensive brand ecosystem</strong> — one that could be understood, applied, and maintained by teams across continents, interns in Toronto, and collaborators in Seoul.</p>
+          </div>
+
+          <div class="pull-quote">
+            <p>"Business is a human activity and not control+c control+v."</p>
+          </div>
+
+          <div class="section">
+            <p>This philosophy, printed on the cover of the 2019 UDM booklet, became the guiding principle for all design decisions. Every touchpoint — from the logo grid to the infographic typography — had to feel considered, not templated.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Scope & Leadership ──────────────────────────────── -->
+      <div class="body-wrap" id="scope">
+        <div class="body-content">
+          <div class="section">
+            <p class="section-label">Scope &amp; Leadership</p>
+            <p>As Lead Graphic Designer, the role extended far beyond individual deliverables. The mandate covered the full spectrum of brand expression: <strong>logo and identity system</strong>, brand colour and tone, document typography standards, exhibition banners, booth design and production oversight, and collaboration with real estate agents and artists. Alongside the creative work, a significant portion of the role was operational — training interns in the Toronto office and guiding a team of approximately <strong>20 designers</strong> near the capital of Pakistan to ensure global brand consistency.</p>
+          </div>
+
+          <div class="stat-row">
+            <div class="stat-cell">
+              <p class="stat-number">20+</p>
+              <p class="stat-desc">Designers guided<br />Pakistan team</p>
+            </div>
+            <div class="stat-cell">
+              <p class="stat-number">3</p>
+              <p class="stat-desc">Markets<br />Toronto · Pakistan · China</p>
+            </div>
+            <div class="stat-cell">
+              <p class="stat-number">360°</p>
+              <p class="stat-desc">Design scope<br />BI to BX to Exhibition</p>
+            </div>
+          </div>
+
+          <div class="section">
+            <p>The scope demanded a dual mode of working: <strong>creative direction</strong> at the concept level and <strong>hands-on execution</strong> at the production level. This meant writing design briefs, conducting intern critiques, reviewing print proofs, and simultaneously producing final artwork — all within the same week.</p>
+
+            <ul class="tab-list">
+              <li class="tab-item">
+                <span class="tab-num">01</span>
+                <span class="tab-name">Brand Identity</span>
+                <span class="tab-desc">Logo, symbol, font, colour system, grid, and 3D applications</span>
+              </li>
+              <li class="tab-item">
+                <span class="tab-num">02</span>
+                <span class="tab-name">Editorial Design</span>
+                <span class="tab-desc">Booklet cover, contents, infographics, printing inspection</span>
+              </li>
+              <li class="tab-item">
+                <span class="tab-num">03</span>
+                <span class="tab-name">Exhibition &amp; BX</span>
+                <span class="tab-desc">Banners, booth design, production oversight, physical touchpoints</span>
+              </li>
+              <li class="tab-item">
+                <span class="tab-num">04</span>
+                <span class="tab-name">Team Leadership</span>
+                <span class="tab-desc">Intern training (Toronto), remote design team guidance (Pakistan)</span>
+              </li>
+              <li class="tab-item">
+                <span class="tab-num">05</span>
+                <span class="tab-name">Collaboration</span>
+                <span class="tab-desc">Real estate agents, artists, cross-industry collaboration</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content-col -->
+  </div><!-- /page-layout -->
+
+  <!-- ── Brand Identity — full-width section ───────────────────── -->
+  <div id="identity">
+    <figure class="full-bleed">
+      <img src="UDM_4.webp" alt="Urban Dive Marketing brand identity grid — logo, symbol, colour, grid system" />
+      <figcaption>Brand Identity System — Logo, Symbol, Colour, Grid, Sub-brand Applications</figcaption>
+    </figure>
+  </div>
+
+  <!-- ── Brand Identity body ───────────────────────────────────── -->
+  <div class="page-layout">
+    <aside class="sidebar-fixed" style="visibility:hidden; pointer-events:none;"></aside>
+    <div class="content-col">
+      <div class="body-wrap">
+        <div class="body-content">
+          <div class="section">
+            <p class="section-label">Brand Identity System</p>
+            <p>The UDM identity was built on a modular logic. The primary mark — "Urban Dive" in bold weight with the distinctive <strong>UP arrow symbol</strong> — communicated upward momentum and digital fluency. The symbol was designed to function independently as a brand icon across digital and physical contexts, from app icons to exhibition signage.</p>
+            <p>A strict grid system governed all applications, ensuring that the logo retained its proportional integrity whether printed at business-card scale or blown up to a 3-metre exhibition banner. Sub-brands, including <strong>Urban Dive School</strong>, were developed within the same visual language — differentiated by colour while maintaining structural consistency.</p>
+            <p>The colour palette centred on a deep navy and a high-visibility yellow, a pairing that projected authority and energy simultaneously. These two values — credibility and dynamism — were the core of UDM's brand positioning.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Process / Sketches — full-width ───────────────────────── -->
+  <div>
+    <figure class="full-bleed">
+      <img src="UDM_5.webp" alt="Urban Dive Marketing — design process, logo sketches and concept exploration" />
+      <figcaption>Design Process — Concept Exploration, Keyword Mapping, Logo Sketches</figcaption>
+    </figure>
+  </div>
+
+
+  <!-- Brand System (Business Card + Logo System) -->
+  <div class="page-layout" id="brand-system">
+    <aside class="sidebar-fixed" style="visibility:hidden; pointer-events:none;"></aside>
+    <div class="content-col">
+      <div class="body-wrap">
+        <div class="body-content">
+          <div class="section">
+            <p class="section-label">Brand System</p>
+            <p>Every brand system is only as strong as its most repeated touchpoint — and for UDM, that was the business card. Designed in two versions (navy front / white back and white front / white back), the cards were produced with precise crop marks and inspected through the full printing process. The <strong>Heesun Jung</strong> card was among the first produced, serving as the quality benchmark for all subsequent print runs.</p>
+            <p>The logo system was extended to cover <strong>Urban Dive School</strong> as a sub-brand, maintaining structural consistency with the primary mark while differentiating through colour and weight. Both light and dark background versions were prepared, ensuring flexibility across digital and print applications — from email signatures to exhibition banners.</p>
+            <p>Underlying every deliverable was the discipline of the <strong>RGD (Registered Graphic Designers of Canada) Client/Design Brief</strong> — a two-page framework covering project objectives, target audience, key message, tone &amp; manner, and project mandates. As an OCAD University graduate, applying this professional standard to every project was not a formality but a foundation: it ensured that design decisions were always traceable back to a strategic rationale, and that interns and international team members could understand the intent behind each creative choice.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Business Card + Logo System images -->
+  <div class="screen-grid">
+    <div class="screen-item">
+      <img src="UDM_7.webp" alt="Urban Dive Marketing logo system — light and dark background versions" />
+      <p class="screen-item-caption">Logo System — Primary &amp; Sub-brand, Light/Dark Variants</p>
+    </div>
+    <div class="screen-item">
+      <img src="UDM_6.webp" alt="Urban Dive Marketing business card design — print-ready artwork with crop marks" />
+      <p class="screen-item-caption">Business Card Design — Print-ready Artwork with Crop Marks</p>
+    </div>
+  </div>
+
+  <!-- Business Card mockup full-bleed -->
+  <div>
+    <figure class="full-bleed">
+      <img src="UDM_8.webp" alt="Urban Dive Marketing business card final print mockup" />
+      <figcaption>Business Card — Final Print Mockup, Printing Process Inspection</figcaption>
+    </figure>
+  </div>
+
+
+  <!-- ── Marketing Strategy section ─────────────────────────────── -->
+  <div class="page-layout" id="marketing">
+    <aside class="sidebar-fixed" style="visibility:hidden; pointer-events:none;"></aside>
+    <div class="content-col">
+      <div class="body-wrap">
+        <div class="body-content">
+          <div class="section">
+            <p class="section-label">Marketing Strategy</p>
+            <p>Urban Dive Marketing's value proposition was built on a clear-eyed understanding of the digital landscape: that design without strategy is noise, and strategy without design is invisible. The 2019 booklet opened with a direct challenge to clients — <strong>why go digital?</strong> — and answered it with data. At a time when 94% of negative business experiences were attributed to poor website UX, and 63% of consumers refused to engage with a business that lacked an online presence, the case for a coherent digital brand was not a recommendation. It was a business imperative.</p>
+            <p>The CPM (cost per thousand impressions) comparison — from <strong>$32 for newspaper</strong> down to <strong>$0.25 for Facebook Ads</strong> — served as the booklet's most persuasive spread, translating abstract marketing theory into a concrete financial argument. This was the kind of content that converted a sceptical CFO, not just a marketing manager. Designing this spread required understanding the audience's decision-making logic, not just their aesthetic preferences.</p>
+            <p>The design challenge was to make these arguments feel as authoritative as a strategy deck while remaining as readable as a magazine. High-contrast typography, a disciplined navy-and-yellow palette, and a consistent grid system ensured that the data communicated urgency without sacrificing credibility.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Marketing booklet pages — 2×2 grid ──────────────────────── -->
+  <div class="mkt-grid">
+    <div class="mkt-grid-item">
+      <img src="mkt_cover.webp" alt="Urban Dive Marketing booklet cover — marketing strategy philosophy" />
+      <p class="mkt-grid-caption">Booklet Cover — Marketing Strategy Philosophy, 2019</p>
+    </div>
+    <div class="mkt-grid-item">
+      <img src="mkt_why_digital.webp" alt="Why Go Digital — digital marketing statistics infographic" />
+      <p class="mkt-grid-caption">Why Go Digital? — Consumer Behaviour Data, p.2</p>
+    </div>
+    <div class="mkt-grid-item">
+      <img src="mkt_cpm.webp" alt="Cost to reach 1000 people — CPM comparison across media channels" />
+      <p class="mkt-grid-caption">Cost Per Thousand Impressions — Media Channel Comparison, p.3</p>
+    </div>
+    <div class="mkt-grid-item">
+      <img src="mkt_quote.webp" alt="Digital marketing without research, strategy and a marketing funnel quote" />
+      <p class="mkt-grid-caption">Strategy Manifesto — Research · Funnel · Execution, p.4</p>
+    </div>
+  </div>
+
+  <!-- ── Editorial section ─────────────────────────────────────── -->
+  <div class="page-layout">
+    <aside class="sidebar-fixed" style="visibility:hidden; pointer-events:none;"></aside>
+    <div class="content-col">
+      <div class="body-wrap" id="editorial">
+        <div class="body-content">
+          <div class="section">
+            <p class="section-label">Editorial Design</p>
+            <p>The 2019 UDM Booklet served as both a client-facing manifesto and an internal benchmark for typographic standards. Its purpose was to communicate UDM's marketing funnel methodology — Research &amp; Consulting, Strategy &amp; Optimization, Execute &amp; Analyze — in a format that felt as credible as the strategy itself.</p>
+            <p>The design used a high-contrast palette of deep navy and bright yellow, with custom infographics translating complex digital statistics into clear, scannable visual data. Every spread was governed by a consistent grid, ensuring that the booklet read as a unified document rather than a collection of pages.</p>
+            <p>The intern collaboration spread — designed by intern Karina Wu under direct mentorship — demonstrated the effectiveness of the training model: a junior designer producing work that met the same standard as the lead designer's output.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Booklet images — 2×2 grid ───────────────────────────────── -->
+  <div class="screen-grid">
+    <div class="screen-item">
+      <img src="UDM_1.webp" alt="UDM Booklet stack — cover design" />
+      <p class="screen-item-caption">Booklet Cover — Print Production</p>
+    </div>
+    <div class="screen-item">
+      <img src="UDM_3.webp" alt="UDM Booklet interior — intern collaboration spread" />
+      <p class="screen-item-caption">Interior Spread — Intern Collaboration</p>
+    </div>
+    <div class="screen-item">
+      <img src="booklet_detail_1.webp" alt="UDM Booklet p.6 — Research, Strategy, Execute cycle infographic" />
+      <p class="screen-item-caption">p.6 — Research &amp; Consulting · Strategy &amp; Optimization · Execute &amp; Analyze</p>
+    </div>
+    <div class="screen-item">
+      <img src="booklet_detail_2.webp" alt="UDM Booklet p.7 — Brand Awareness, Revenue Increase, Customer Loyalty" />
+      <p class="screen-item-caption">p.7 — Brand Awareness · Revenue Increase · Customer Loyalty</p>
+    </div>
+  </div>
+
+  <!-- Selected Client Work — Abundance Real Estate -->
+  <div class="page-layout" id="client-work">
+    <aside class="sidebar-fixed" style="visibility:hidden; pointer-events:none;"></aside>
+    <div class="content-col">
+      <div class="body-wrap">
+        <div class="body-content">
+          <div class="section">
+            <p class="section-label">Selected Client Work</p>
+            <p>Beyond building UDM's internal brand, the role extended to client-facing design work. <strong>Abundance Real Estate Group</strong> — a Toronto-based brokerage — commissioned a full brand identity and print collateral package. The brief called for a premium, understated identity that would position the agency above the visual noise typical of the real estate sector.</p>
+            <p>The solution centred on a restrained typographic system: a serif wordmark in spaced capitals, a strictly black-and-white palette, and a card design where the back carried a single, confident line of copy — <em>"I'd love to help you do the same."</em> — rather than a list of services. The result was a business card that felt more like a personal letter than a marketing tool, reflecting the broker's relationship-first approach.</p>
+            <p>The full package — business cards (dark and light versions), a branded folder, and print production oversight — was delivered from brief to final print inspection, following the same RGD design brief process applied to all UDM client engagements.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Abundance mockup full-bleed -->
+  <div>
+    <figure class="full-bleed">
+      <img src="UDM_9.webp" alt="Abundance Real Estate Group — business card mockup, dark and light versions" />
+      <figcaption>Abundance Real Estate Group — Business Card System, Dark &amp; Light Versions</figcaption>
+    </figure>
+  </div>
+
+  <!-- Abundance bag & folder full-bleed -->
+  <div>
+    <figure class="full-bleed">
+      <img src="AB_bag_folder.webp" alt="Abundance Real Estate Group — shopping bag and branded folder, silver foil wordmark on matte black" />
+      <figcaption>Abundance Real Estate Group — Shopping Bag &amp; Branded Folder, Silver Foil on Matte Black</figcaption>
+    </figure>
+  </div>
+
+  <!-- Abundance detail photos -->
+  <div class="collab-strip">
+    <div class="collab-item">
+      <img src="AB_5.jpg" alt="Abundance Real Estate — branded wine bottle with business card, season's greetings" />
+      <p class="collab-caption">Brand Extension — Wine Label &amp; Seasonal Gift Package</p>
+    </div>
+    <div class="collab-item">
+      <img src="AB_6.jpg" alt="Abundance Real Estate — 41 Colonnade Rd, sold over asking listing poster" />
+      <p class="collab-caption">Listing Poster — 41 Colonnade Rd, Sold Over Asking</p>
+    </div>
+    <div class="collab-item">
+      <img src="AB_4.jpg" alt="Abundance Real Estate — branded paper bag, front and side view" />
+      <p class="collab-caption">Paper Bag — Brand Collateral, Silver Foil Wordmark</p>
+    </div>
+  </div>
+
+
+  <!-- ── Outcome ───────────────────────────────────────────────── -->
+  <div class="page-layout">
+    <aside class="sidebar-fixed" style="visibility:hidden; pointer-events:none;"></aside>
+    <div class="content-col">
+      <div class="body-wrap" id="outcome">
+        <div class="body-content">
+          <div class="section">
+            <p class="section-label">Outcome</p>
+            <p>By centralising the design vision in Toronto and establishing clear guidelines for international teams, UDM transformed its visual presence from a fragmented collection of assets into a coherent brand ecosystem. The resulting identity system communicated the agency's authority as a digital accelerator, while the editorial booklet gave the sales team a credible, high-quality tool for client acquisition.</p>
+            <p>The mentorship structure — training interns in Toronto and guiding the Pakistan team remotely — ensured that every output, from a simple document template to a large-scale exhibition booth, adhered to the same standard of excellence. The result was a brand ecosystem that communicated UDM's authority as a digital accelerator, giving the sales team a credible, high-quality tool for client acquisition across Canada and internationally.</p>
+          </div>
+
+          <div class="pull-quote">
+            <p>Every company needs someone to help them harness the potential of emerging technologies, new business models, and ever-changing human behaviours to craft the right strategy.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Next project ──────────────────────────────────────────── -->
+  <a href="../case_study_04/index.html" class="next-project">
+    <div>
+      <p class="next-label">Next Project</p>
+      <p class="next-title">V-TAG</p>
+    </div>
+    <span class="next-arrow">→</span>
+  </a>
+
+  <!-- ── Footer ───────────────────────────────────────────────── -->
+  <footer>
+    <p class="footer-left">© 2026 Luke Heesun Jung</p>
+    <div class="footer-right">
+      <a href="https://www.linkedin.com/in/lukeheesunjung/" target="_blank">LinkedIn</a>
+      <a href="mailto:lukeheesunjung@gmail.com">Email</a>
+      <a href="../resume.pdf" target="_blank">Resume</a>
+    </div>
+  </footer>
+
+<script>
+  // Nav scroll-aware
+  (function() {
+    var nav = document.querySelector('nav');
+    var heroH = window.innerHeight;
+    function onScroll() {
+      nav.classList.toggle('scrolled', window.scrollY > heroH * 0.85);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+
+  // Sidebar active link via IntersectionObserver (targets fixed overlay)
+  (function() {
+    var links = document.querySelectorAll('#sidebar-nav-main a');
+    var sections = [];
+    links.forEach(function(a) {
+      var id = a.getAttribute('href').replace('#','');
+      var el = document.getElementById(id);
+      if (el) sections.push({ id: id, el: el, a: a });
+    });
+    if (!sections.length) return;
+
+    var current = sections[0].id;
+    function setActive(id) {
+      if (id === current) return;
+      current = id;
+      links.forEach(function(a) { a.classList.remove('active'); });
+      var match = document.querySelector('#sidebar-nav-main a[href="#' + id + '"]');
+      if (match) match.classList.add('active');
+    }
+
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) setActive(e.target.id);
+      });
+    }, { rootMargin: '-30% 0px -60% 0px', threshold: 0 });
+
+    sections.forEach(function(s) { obs.observe(s.el); });
+  })();
+</script>
+
+</body>
+</html>

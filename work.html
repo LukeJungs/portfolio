@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>All Work — Luke Heesun Jung</title>
+  <meta name="description" content="All selected work by Luke Heesun Jung — graphic designer based in Toronto." />
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black: #0a0a0a;
+      --white: #f8f7f4;
+      --grey: #6b6b6b;
+      --light: #e8e6e1;
+      --font: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body {
+      font-family: var(--font);
+      background: var(--white);
+      color: var(--black);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* Skip nav */
+    .skip-nav {
+      position: absolute; top: -100px; left: 0;
+      background: var(--black); color: var(--white);
+      padding: 8px 16px; font-size: 13px;
+      transition: top 0.2s;
+      z-index: 9999;
+    }
+    .skip-nav:focus { top: 0; }
+
+    /* Nav */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 0 48px;
+      height: 56px;
+      border-bottom: 1px solid var(--light);
+      background: rgba(248,247,244,0.92);
+      backdrop-filter: blur(12px);
+    }
+    .nav-logo {
+      font-size: 13px; font-weight: 500;
+      letter-spacing: 0.04em; text-transform: uppercase;
+      text-decoration: none; color: var(--black);
+    }
+    .nav-links { display: flex; gap: 32px; list-style: none; }
+    .nav-links a {
+      font-size: 13px; font-weight: 400;
+      color: var(--grey); text-decoration: none;
+      transition: color 0.2s;
+    }
+    .nav-links a:hover { color: var(--black); }
+
+    /* Page header */
+    .page-header {
+      padding: 80px 48px 48px;
+      border-bottom: 1px solid var(--light);
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    .page-header h1 {
+      font-size: clamp(36px, 5vw, 64px);
+      font-weight: 300;
+      letter-spacing: -0.02em;
+      line-height: 1;
+    }
+    .page-header .count {
+      font-size: 13px;
+      color: var(--grey);
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      padding-bottom: 8px;
+    }
+
+    /* Filter bar */
+    .filter-bar {
+      display: flex;
+      gap: 0;
+      border-bottom: 1px solid var(--light);
+      padding: 0 48px;
+      overflow-x: auto;
+    }
+    .filter-btn {
+      background: none; border: none; cursor: pointer;
+      font-family: var(--font);
+      font-size: 12px; font-weight: 500;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--grey);
+      padding: 16px 20px 14px;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+      white-space: nowrap;
+    }
+    .filter-btn:hover { color: var(--black); }
+    .filter-btn.active { color: var(--black); border-bottom-color: var(--black); }
+
+    /* Work grid */
+    .work-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      border-left: 1px solid var(--light);
+    }
+    .work-card {
+      display: block;
+      text-decoration: none;
+      color: inherit;
+      border-right: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+      transition: background 0.2s;
+    }
+    .work-card:hover { background: #f0efe9; }
+    .work-card:focus-visible {
+      outline: 2px solid var(--black);
+      outline-offset: -2px;
+    }
+    .work-card-thumb {
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      background: #e8e6e1;
+    }
+    .work-card-thumb img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.4s ease;
+    }
+    .work-card:hover .work-card-thumb img { transform: scale(1.03); }
+    .work-card-info {
+      padding: 20px 24px 24px;
+      border-top: 1px solid var(--light);
+    }
+    .work-card-label {
+      font-size: 11px; font-weight: 500;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--grey);
+      margin-bottom: 6px;
+    }
+    .work-card-title {
+      font-size: 16px; font-weight: 400;
+      line-height: 1.3;
+      letter-spacing: -0.01em;
+    }
+    .work-card-tags {
+      margin-top: 12px;
+      display: flex; flex-wrap: wrap; gap: 6px;
+    }
+    .tag {
+      font-size: 10px; font-weight: 500;
+      letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--grey);
+      border: 1px solid var(--light);
+      padding: 3px 8px;
+      border-radius: 2px;
+    }
+
+    /* Footer */
+    footer {
+      border-top: 1px solid var(--light);
+      padding: 32px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    footer p { font-size: 12px; color: var(--grey); }
+    footer a { color: var(--grey); text-decoration: none; }
+    footer a:hover { color: var(--black); }
+
+    /* Responsive */
+    @media (max-width: 900px) {
+      nav { padding: 0 24px; }
+      .nav-links { gap: 20px; }
+      .page-header { padding: 48px 24px 32px; }
+      .filter-bar { padding: 0 16px; }
+      .work-grid { grid-template-columns: repeat(2, 1fr); }
+      footer { padding: 24px; flex-direction: column; gap: 12px; text-align: center; }
+    }
+    @media (max-width: 600px) {
+      nav { padding: 0 16px; height: 52px; }
+      .nav-logo { font-size: 12px; }
+      .nav-links { gap: 16px; }
+      .nav-links a { font-size: 12px; }
+      .page-header { padding: 36px 16px 24px; flex-direction: column; align-items: flex-start; gap: 8px; }
+      .page-header h1 { font-size: clamp(28px, 8vw, 40px); }
+      .filter-bar { padding: 0 8px; -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+      .filter-bar::-webkit-scrollbar { display: none; }
+      .filter-btn { padding: 14px 14px 12px; font-size: 11px; min-height: 44px; }
+      .work-grid { grid-template-columns: 1fr; }
+      .work-card-info { padding: 16px 16px 20px; }
+      .work-card-title { font-size: 15px; }
+      footer { padding: 20px 16px; }
+    }
+    @media (max-width: 480px) {
+      .work-grid { grid-template-columns: 1fr; }
+      .filter-btn { padding: 12px 12px 10px; font-size: 10px; letter-spacing: 0.05em; }
+      .tag { font-size: 9px; padding: 2px 6px; }
+    }
+    /* Touch device optimizations */
+    @media (hover: none) and (pointer: coarse) {
+      .work-card:hover { background: var(--white); }
+      .work-card:hover .work-card-thumb img { transform: none; }
+      .work-card:active { background: #f0efe9; }
+      .filter-btn { min-height: 44px; min-width: 44px; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-nav">Skip to main content</a>
+
+  <nav>
+    <a href="index.html" class="nav-logo">Luke Heesun Jung</a>
+    <ul class="nav-links">
+      <li><a href="index.html#about">About</a></li>
+      <li><a href="work.html" aria-current="page" style="color:var(--black);">Work</a></li>
+      <li><a href="mailto:lukeheesunjung@gmail.com">Contact</a></li>
+    </ul>
+  </nav>
+
+  <main id="main-content">
+    <div class="page-header">
+      <h1>All Work</h1>
+      <span class="count">6 Projects</span>
+    </div>
+
+    <div class="filter-bar" role="group" aria-label="Filter by category">
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="branding">Branding</button>
+      <button class="filter-btn" data-filter="ui-ux">UI / UX</button>
+      <button class="filter-btn" data-filter="education">Education</button>
+      <button class="filter-btn" data-filter="art">Art Practice</button>
+      <button class="filter-btn" data-filter="seoul">Seoul</button>
+      <button class="filter-btn" data-filter="toronto">Toronto</button>
+      <button class="filter-btn" data-filter="social-media">Social Media</button>
+      <button class="filter-btn" data-filter="art-direction">Art Direction</button>
+      <button class="filter-btn" data-filter="packaging">Packaging</button>
+      <button class="filter-btn" data-filter="app-design">App Design</button>
+      <button class="filter-btn" data-filter="music">Music</button>
+      <button class="filter-btn" data-filter="ceramics">Ceramics</button>
+    </div>
+
+    <div class="work-grid" id="work-grid">
+
+      <!-- CS01 — LittleN × Sandeul -->
+      <a class="work-card" href="case_study_01/index.html" data-tags="branding ui-ux seoul app-design">
+        <div class="work-card-thumb">
+          <img src="work_thumb_01_v4.jpg" alt="LittleN × Sandeul — Kindergarten App & Brand System" loading="lazy" />
+        </div>
+        <div class="work-card-info">
+          <p class="work-card-label">Branding · UI/UX · 2023–2024</p>
+          <h2 class="work-card-title">LittleN × Sandeul</h2>
+          <div class="work-card-tags">
+            <span class="tag">App Design</span>
+            <span class="tag">Brand Identity</span>
+            <span class="tag">Seoul</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- CS04 — V-TAG -->
+      <a class="work-card" href="case_study_04/index.html" data-tags="branding packaging toronto social-media">
+        <div class="work-card-thumb" style="background:#000;">
+          <img src="main_card_V-TAG.webp" alt="V-TAG — Brand Identity & Packaging" loading="lazy" style="object-fit:contain; padding:20px;" />
+        </div>
+        <div class="work-card-info">
+          <p class="work-card-label">Branding · Packaging · 2021–2022</p>
+          <h2 class="work-card-title">V-TAG</h2>
+          <div class="work-card-tags">
+            <span class="tag">Brand Identity</span>
+            <span class="tag">Packaging</span>
+            <span class="tag">Toronto</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- CS02 — Urban Dive Marketing -->
+      <a class="work-card" href="case_study_02/index.html" data-tags="branding art-direction social-media toronto">
+        <div class="work-card-thumb">
+          <img src="work_thumb_02_real.webp" alt="Urban Dive Marketing — Design Leadership" loading="lazy" />
+        </div>
+        <div class="work-card-info">
+          <p class="work-card-label">Design Leadership · 2020–2022</p>
+          <h2 class="work-card-title">Urban Dive Marketing</h2>
+          <div class="work-card-tags">
+            <span class="tag">Art Direction</span>
+            <span class="tag">Social Media</span>
+            <span class="tag">Toronto</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- CS03 — AZOTO -->
+      <a class="work-card" href="case_study_03/index.html" data-tags="branding packaging toronto">
+        <div class="work-card-thumb" style="background:#000;">
+          <img src="main_card_AZOTO.webp" alt="AZOTO — Liquid Nitrogen Ice Cream Brand Identity" loading="lazy" style="object-fit:contain; padding:20px;" />
+        </div>
+        <div class="work-card-info">
+          <p class="work-card-label">Branding · Packaging · 2019–2020</p>
+          <h2 class="work-card-title">AZOTO</h2>
+          <div class="work-card-tags">
+            <span class="tag">Brand Identity</span>
+            <span class="tag">Packaging</span>
+            <span class="tag">Toronto</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- CS06 — RDA -->
+      <a class="work-card" href="case_study_06/index.html" data-tags="education branding art art-direction seoul">
+        <div class="work-card-thumb" style="background:#fff;">
+          <img src="case_study_06/rda_logo_white.png" alt="Reasonab Design Academy — RDA" loading="lazy" style="object-fit:contain; padding:20px;" />
+        </div>
+        <div class="work-card-info">
+          <p class="work-card-label">Education · Art Direction · 2016–2020</p>
+          <h2 class="work-card-title">Reasonab Design Academy</h2>
+          <div class="work-card-tags">
+            <span class="tag">Education</span>
+            <span class="tag">Curriculum</span>
+            <span class="tag">Seoul</span>
+          </div>
+        </div>
+      </a>
+
+      <!-- CS00 — Art & Design Practice -->
+      <a class="work-card" href="case_study_00/index.html" data-tags="art music ceramics toronto seoul">
+        <div class="work-card-thumb">
+          <img src="case_study_00/sketch_0.png" alt="Process as Form — Art & Design Practice" loading="lazy" />
+        </div>
+        <div class="work-card-info">
+          <p class="work-card-label">Art Practice · Ongoing</p>
+          <h2 class="work-card-title">Process as Form</h2>
+          <div class="work-card-tags">
+            <span class="tag">Drawing</span>
+            <span class="tag">Ceramics</span>
+            <span class="tag">Music</span>
+          </div>
+        </div>
+      </a>
+
+    </div>
+  </main>
+
+  <footer>
+    <p>© 2024 Luke Heesun Jung. All rights reserved.</p>
+    <p><a href="mailto:lukeheesunjung@gmail.com">lukeheesunjung@gmail.com</a></p>
+  </footer>
+
+  <script>
+    // Filter functionality
+    const btns = document.querySelectorAll('.filter-btn');
+    const cards = document.querySelectorAll('.work-card');
+
+    btns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        btns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const filter = btn.dataset.filter;
+        cards.forEach(card => {
+          const tags = card.dataset.tags || '';
+          if (filter === 'all' || tags.includes(filter)) {
+            card.style.display = '';
+          } else {
+            card.style.display = 'none';
+          }
+        });
+      });
+    });
+  </script>
+</body>
+</html>

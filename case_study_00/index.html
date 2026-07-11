@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Process as Form — Luke Heesun Jung</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:  #0a0a0a;
+      --white:  #f8f7f4;
+      --grey:   #6b6b6b;
+      --light:  #e8e6e1;
+      --font:   'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--white); color: var(--black); overflow-x: hidden; }
+
+    /* ── Nav ─────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 24px 48px;
+      background: var(--white);
+      border-bottom: 1px solid var(--light);
+    }
+    .nav-logo {
+      font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--black); text-decoration: none;
+    }
+    .nav-back {
+      font-size: 12px; font-weight: 400; letter-spacing: 0.06em; text-transform: uppercase;
+      color: var(--grey); text-decoration: none; transition: color .2s;
+    }
+    .nav-back:hover { color: var(--black); }
+
+    /* ── Header block ─────────────────────────────────────────── */
+    .cs-header {
+      padding: 120px 48px 64px;
+      border-bottom: 1px solid var(--light);
+      display: grid;
+      grid-template-columns: 1fr 320px;
+      gap: 48px;
+      align-items: end;
+    }
+    .cs-title {
+      font-size: clamp(48px, 7vw, 96px);
+      font-weight: 300;
+      letter-spacing: -0.03em;
+      line-height: 1.0;
+      color: var(--black);
+    }
+    .cs-title em {
+      font-style: italic;
+    }
+    .cs-tags {
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--grey); margin-bottom: 16px;
+    }
+    .cs-desc {
+      font-size: 15px; font-weight: 300; line-height: 1.7;
+      color: var(--black); max-width: 360px;
+    }
+
+    /* ── About section (always visible) ────────────────────────── */
+    .about-section {
+      padding: 48px 48px 56px;
+      border-bottom: 1px solid var(--light);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px;
+      align-items: start;
+    }
+    .about-section blockquote {
+      font-size: 20px; font-weight: 300; line-height: 1.7;
+      color: var(--black); font-style: italic;
+      border-left: 2px solid var(--black);
+      padding-left: 24px;
+      margin-bottom: 0;
+    }
+    .about-section p {
+      font-size: 14px; line-height: 1.8; color: var(--grey);
+      margin-bottom: 20px;
+    }
+    .about-meta {
+      margin-top: 24px;
+      display: flex; flex-direction: column; gap: 6px;
+    }
+    .about-meta span {
+      font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--grey);
+    }
+    .about-meta strong {
+      font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--black); font-weight: 500;
+    }
+
+    /* ── Image stream ─────────────────────────────────────────── */
+    .stream {
+      padding-top: 0;
+    }
+
+    /* Full-width single image */
+    .img-full {
+      width: 100%;
+      display: block;
+    }
+    .img-full img,
+    .img-full video {
+      width: 100%; display: block;
+      object-fit: cover;
+    }
+
+    /* 2-col equal */
+    .img-2col {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+    }
+    .img-2col img {
+      width: 100%; display: block;
+      object-fit: cover;
+      aspect-ratio: 1 / 1;
+    }
+
+    /* 2-col sketch + final side by side — sketch slightly smaller */
+    .pair-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0;
+    }
+    .pair-row img {
+      width: 100%; display: block;
+      object-fit: cover;
+      aspect-ratio: 1 / 1;
+    }
+    .pair-row .pair-sketch {
+      background: #f0ede8;
+    }
+    .pair-row .pair-final {
+      background: var(--black);
+    }
+
+    /* 5-col sketch strip */
+    .sketch-strip {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+    }
+    .sketch-strip img {
+      width: 100%; display: block;
+      object-fit: cover;
+      aspect-ratio: 1 / 1;
+    }
+
+    /* 5-col final strip */
+    .final-strip {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+    }
+    .final-strip img {
+      width: 100%; display: block;
+      object-fit: cover;
+      aspect-ratio: 1 / 1;
+    }
+
+    /* Inline quote between images */
+    .stream-quote {
+      padding: 72px 48px;
+      border-top: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+    }
+    .stream-quote blockquote {
+      font-size: clamp(20px, 2.8vw, 32px);
+      font-weight: 300;
+      line-height: 1.5;
+      letter-spacing: -0.01em;
+      color: var(--black);
+      font-style: italic;
+      max-width: 800px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    /* Section label — minimal, left-aligned */
+    .stream-label {
+      padding: 48px 48px 24px;
+      font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: var(--grey);
+      border-top: 1px solid var(--light);
+    }
+
+    /* Video block */
+    .video-block {
+      width: 100%;
+      background: var(--black);
+    }
+    .video-block video {
+      width: 100%; display: block;
+      max-height: 90vh;
+      object-fit: contain;
+    }
+
+    /* ── Extended Practice ─────────────────────────────────────── */
+    .stream-divider {
+      height: 1px;
+      background: var(--light);
+      margin: 64px 48px;
+    }
+    .full-img { width: 100%; }
+    .full-img img { width: 100%; display: block; object-fit: cover; }
+    .three-col {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+    }
+    .three-col img {
+      width: 100%; display: block;
+      object-fit: cover;
+      aspect-ratio: 1 / 1;
+    }
+    .booth-row {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      align-items: stretch;
+    }
+    .booth-render {
+      width: 100%; display: block;
+      object-fit: cover;
+      max-height: 480px;
+    }
+    .booth-photos {
+      display: flex;
+      flex-direction: column;
+    }
+    .booth-photos img {
+      width: 100%; flex: 1; object-fit: cover; display: block;
+      max-height: 240px;
+    }
+    @media (max-width: 768px) {
+      .booth-row { grid-template-columns: 1fr; }
+      .three-col { grid-template-columns: 1fr 1fr; }
+    }
+
+    /* ── Next project ─────────────────────────────────────────── */
+    .next-project {
+      display: block;
+      padding: 80px 48px;
+      border-top: 1px solid var(--light);
+      text-decoration: none;
+      color: var(--black);
+      transition: background .2s;
+    }
+    .next-project:hover { background: var(--light); }
+    .next-label {
+      font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+      color: var(--grey); margin-bottom: 16px;
+    }
+    .next-title {
+      font-size: clamp(28px, 4vw, 52px);
+      font-weight: 300; letter-spacing: -0.02em;
+    }
+    .next-tags {
+      font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: var(--grey); margin-top: 12px;
+    }
+
+    /* ── Footer ───────────────────────────────────────────────── */
+    footer {
+      padding: 40px 48px;
+      border-top: 1px solid var(--light);
+      display: flex; justify-content: space-between; align-items: center;
+    }
+    footer p { font-size: 12px; color: var(--grey); letter-spacing: 0.04em; }
+
+    /* ── Responsive ───────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      nav { padding: 20px 24px; }
+      .cs-header { grid-template-columns: 1fr; padding: 100px 24px 48px; gap: 32px; }
+      .about-section { grid-template-columns: 1fr; padding: 40px 24px 48px; gap: 32px; }
+      .stream-label { padding: 36px 24px 16px; }
+      .stream-quote { padding: 48px 24px; }
+      .img-2col { grid-template-columns: 1fr; }
+      .pair-row { grid-template-columns: 1fr; }
+      .sketch-strip { grid-template-columns: repeat(3, 1fr); }
+      .final-strip { grid-template-columns: repeat(2, 1fr); }
+      .next-project { padding: 56px 24px; }
+      footer { padding: 32px 24px; flex-direction: column; gap: 12px; text-align: center; }
+    }
+
+    /* ── Skip Navigation (Accessibility) ─────────────────────────── */
+    .skip-nav {
+      position: absolute;
+      top: -100%;
+      left: 0;
+      background: var(--black);
+      color: var(--white);
+      padding: 12px 24px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      z-index: 9999;
+      transition: top 0.2s;
+    }
+    .skip-nav:focus {
+      top: 0;
+    }
+
+    /* ── Focus Visible (Keyboard Navigation) ─────────────────────── */
+    :focus-visible {
+      outline: 2px solid var(--black);
+      outline-offset: 3px;
+    }
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid var(--black);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+  </style>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+</head>
+<body>
+  <a href="#main-content" class="skip-nav">Skip to main content</a>
+
+<!-- Nav -->
+<nav>
+  <a href="../index.html" class="nav-logo">Luke Heesun Jung</a>
+  <a href="../index.html" class="nav-back">← All Work</a>
+</nav>
+
+<!-- Header -->
+<header class="cs-header">
+  <h1 class="cs-title">Process<br><em>as Form</em></h1>
+  <div>
+    <p class="cs-tags">Art &amp; Design Practice &nbsp;·&nbsp; V-TAG</p>
+    <p class="cs-desc">A sketch is not a draft. It is the first decision. Five ideas, drawn by hand — each one becoming something real.</p>
+  </div>
+</header>
+
+<!-- About section (always visible) -->
+<section class="about-section">
+  <blockquote>"The hand knows things the screen cannot."</blockquote>
+  <div>
+    <p>Every project in this portfolio began as a mark on paper. This page traces that movement — from crayon and pencil to digital image, from instinct to intent. The five pairs shown here are drawn from the V-TAG brand project: each sketch captures an emotional direction, each final image shows where that direction landed. The process is not linear. It is a discipline of translation — from feeling to form, from form to function.</p>
+    <div class="about-meta">
+      <span>Medium &nbsp;&mdash;&nbsp; <strong>Hand-drawn, Crayon &amp; Pencil on Paper</strong></span>
+      <span>Tools &nbsp;&mdash;&nbsp; <strong>Adobe Photoshop, Adobe Illustrator</strong></span>
+      <span>Credit &nbsp;&mdash;&nbsp; <strong>Luke Heesun Jung &copy; 2020</strong></span>
+    </div>
+  </div>
+</section>
+
+<!-- ─── IMAGE STREAM ─────────────────────────────────────── -->
+<div class="stream">
+
+  <!-- 1. Stopmotion video — sketch → final crossfade -->
+  <div class="video-block">
+    <video autoplay loop muted playsinline>
+      <source src="stopmotion.webm" type="video/webm" />
+      <source src="stopmotion.mp4" type="video/mp4" />
+    </video>
+  </div>
+
+  <!-- 2. Label: Sketches -->
+  <div class="stream-label">Sketches — Hand-drawn, Crayon &amp; Pencil on Paper</div>
+
+  <!-- 3. All 5 sketches in a row -->
+  <div class="sketch-strip">
+    <img src="sketch_0.png" alt="Sketch 0 — radial form" loading="lazy" />
+    <img src="sketch_1.png" alt="Sketch 1 — device study" loading="lazy" />
+    <img src="sketch_2.png" alt="Sketch 2 — horizon" loading="lazy" />
+    <img src="sketch_3.png" alt="Sketch 3 — flame" loading="lazy" />
+    <img src="sketch_4.png" alt="Sketch 4 — energy field" loading="lazy" />
+  </div>
+
+  <!-- 4. Quote -->
+  <div class="stream-quote">
+    <blockquote>"A sketch is not a draft. It is the first decision."</blockquote>
+  </div>
+
+  <!-- 5. Pair 0: radial sketch → podflower final -->
+  <div class="pair-row">
+    <img class="pair-sketch" src="sketch_0.png" alt="Sketch — radial colour burst" loading="lazy" />
+    <img class="pair-final" src="final_0.webp" alt="Final — V-TAG podflower" loading="lazy" />
+  </div>
+
+  <!-- 6. Pair 1: device sketch → blue device on cards -->
+  <div class="pair-row">
+    <img class="pair-final" src="final_1.png" alt="Final — V-TAG blue device on playing cards" loading="lazy" />
+    <img class="pair-sketch" src="sketch_1.png" alt="Sketch — device form study" loading="lazy" />
+  </div>
+
+  <!-- 7. Pair 2: horizon sketch → V-TAG cloud scene -->
+  <div class="pair-row">
+    <img class="pair-sketch" src="sketch_2.png" alt="Sketch — horizon and space" loading="lazy" />
+    <img class="pair-final" src="final_2.png" alt="Final — V-TAG flying over river" loading="lazy" />
+  </div>
+
+  <!-- 8. Pair 3: flame sketch → bonfire scene -->
+  <div class="pair-row">
+    <img class="pair-final" src="final_3.png" alt="Final — V-TAG devices around bonfire" loading="lazy" />
+    <img class="pair-sketch" src="sketch_3.png" alt="Sketch — flame energy" loading="lazy" />
+  </div>
+
+  <!-- 9. Pair 4: energy field sketch → product closeup -->
+  <div class="pair-row">
+    <img class="pair-sketch" src="sketch_4.png" alt="Sketch — colour energy field" loading="lazy" />
+    <img class="pair-final" src="final_4.png" alt="Final — V-TAG product with Health Canada warning" loading="lazy" />
+  </div>
+
+  <!-- 10. Label: Final works -->
+  <div class="stream-label">Final Works — Digital Composite &amp; Photography</div>
+
+  <!-- 11. All 5 finals in a row -->
+  <div class="final-strip">
+    <img src="final_0.webp" alt="Final 0" loading="lazy" />
+    <img src="final_1.png" alt="Final 1" loading="lazy" />
+    <img src="final_2.png" alt="Final 2" loading="lazy" />
+    <img src="final_3.png" alt="Final 3" loading="lazy" />
+    <img src="final_4.png" alt="Final 4" loading="lazy" />
+  </div>
+
+  <!-- ─── EXTENDED PRACTICE ─────────────────────────────── -->
+
+  <!-- Divider -->
+  <div class="stream-divider"></div>
+
+  <!-- Label: Further Sketches -->
+  <div class="stream-label">Further Sketches — Pencil on Paper</div>
+
+  <!-- Ceramic sketches 2-col -->
+  <div class="pair-row">
+    <img src="ceramic_sketch_1.jpeg" alt="3D Ceramic object sketch — form and transparency study" loading="lazy" />
+    <img src="ceramic_sketch_2.jpeg" alt="Ceramic coil sketch — product development view" loading="lazy" />
+  </div>
+
+  <!-- V-TAG idea sketches full-width -->
+  <div class="full-img">
+    <img src="vtag_idea_sketches.webp" alt="V-TAG idea sketches — device and scene studies" loading="lazy" />
+  </div>
+
+  <!-- Label: Mockups -->
+  <div class="stream-label">Packaging Mockups — Adobe Illustrator &amp; Photoshop</div>
+
+  <!-- Package mockups 3-col -->
+  <div class="three-col">
+    <img src="package_mockup_1.webp" alt="V-TAG Starter Kit — front and back" loading="lazy" />
+    <img src="package_mockup_2.webp" alt="V-TAG device packaging — front with warning" loading="lazy" />
+    <img src="package_mockup_3.webp" alt="V-TAG Starter Kit — contents panel" loading="lazy" />
+  </div>
+
+  <!-- Label: Exhibition -->
+  <div class="stream-label">Exhibition — Shenzhen IECIE 2020</div>
+
+  <!-- Booth render (large left) + 2 real photos (stacked right) -->
+  <div class="booth-row">
+    <img class="booth-render" src="booth_render.png" alt="V-TAG exhibition booth design render" loading="lazy" />
+    <div class="booth-photos">
+      <img src="exhibition_booth.jpg" alt="V-TAG booth — Shenzhen IECIE 2020" loading="lazy" />
+      <img src="exhibition_overview.jpg" alt="Shenzhen IECIE 2020 — exhibition hall overview" loading="lazy" />
+    </div>
+  </div>
+
+</div>
+<!-- ─── END STREAM ───────────────────────────────────────── -->
+
+<!-- ─── TEAM WORK ───────────────────────────────────────── -->
+
+<style>
+  .team-quote-block {
+    padding: 72px 64px 56px;
+    border-top: 1px solid var(--light);
+    max-width: 900px;
+  }
+  .team-quote-label {
+    font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--grey); margin-bottom: 24px;
+  }
+  .team-quote-lead {
+    font-size: clamp(18px, 2vw, 26px); font-weight: 300; line-height: 1.6;
+    letter-spacing: -0.01em; color: var(--black); margin-bottom: 28px;
+  }
+  .team-quote-body {
+    font-size: 15px; font-weight: 300; line-height: 1.85;
+    color: #4a4a4a; margin-bottom: 20px;
+  }
+  .team-hero {
+    width: 100%; display: block;
+    border-top: 1px solid var(--light);
+  }
+  .team-hero img {
+    width: 100%; display: block;
+    height: auto;
+    max-height: none;
+  }
+  .team-grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2px;
+    border-top: 2px solid var(--light);
+  }
+  .team-grid-3 img {
+    width: 100%; display: block;
+    height: auto;
+  }
+  @media (max-width: 768px) {
+    .team-quote-block { padding: 48px 24px 40px; }
+    .team-grid-3 { grid-template-columns: 1fr; }
+  }
+</style>
+
+<div class="stream-label">Team Work — Collaboration with Creative Content Writer</div>
+
+<div class="team-quote-block">
+  <p class="team-quote-label">On Collaboration</p>
+  <p class="team-quote-lead">“At the end of every project, the most honest and creative conclusion I can reach is this: <em>I could not have done it alone.</em>”</p>
+  <p class="team-quote-body">I love working with people. Inside every finished piece — every ‘work’ you can see — lives the time, the passion, and the hopes of many. Beyond the scale of the budget, all of it becomes one under the name One Team. Collaboration is always welcome.</p>
+  <p class="team-quote-body">I share this work here with permission. It’s something I don’t take lightly. The visual expression you see was decided in meetings where content creators, clients, CFOs, and CEOs all had a seat at the table. Visual language is my primary language — but for many people, it’s music, poetry, writing, or dance. A language that is clear and easy to understand is proof that it has been refined many times over.</p>
+  <p class="team-quote-body">I love conversation. I love sitting with the parts that get stuck, exploring them, staying there a while. And yes — I also love the feeling of an open highway, driving a sports car with nothing in the way. If only that were always possible. But wherever I go, I notice the weeds growing wild along the road, the flowers no one planted, the beautiful clouds drifting overhead, the few fierce minutes of a sunset going red and burning out. Those moments matter to me too.</p>
+</div>
+
+<!-- Hero image: _0 full width -->
+<div class="team-hero">
+  <img src="vtag_team_0.png" alt="V-TAG Social Media Campaign — 2021 April, Theme: Summer — ideation sketches overview" loading="lazy" />
+</div>
+
+<!-- 3×3 grid: images 1–9 -->
+<div class="team-grid-3">
+  <img src="vtag_team_1.png" alt="Post 1 — Summer nights, Crimson Red device on melting ice cream" loading="lazy" />
+  <img src="vtag_team_2.png" alt="Post 2 — Rainbow flower, flavour pods concept sketch" loading="lazy" />
+  <img src="vtag_team_3.png" alt="Post 3 — Cloud shoe, cool and cold concept sketch" loading="lazy" />
+  <img src="vtag_team_4.png" alt="Post 4 — Friday feelings, neon corridor with pods and devices" loading="lazy" />
+  <img src="vtag_team_5.png" alt="Post 5 — Champion all day, playing card pattern device sketch" loading="lazy" />
+  <img src="vtag_team_6.png" alt="Post 6 — Follow the sun, holographic sequins abstract mood sketch" loading="lazy" />
+  <img src="vtag_team_7.png" alt="Post 7 — Sky and lake, device-cloud reflected image sketch" loading="lazy" />
+  <img src="vtag_team_8.png" alt="Post 8 — Midnight campfire, device composed of flame sketch" loading="lazy" />
+  <img src="vtag_team_9.png" alt="Post 9 — You’ll never know, pots floating in air/bubble sketch" loading="lazy" />
+</div>
+<p style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey); padding: 16px 64px 48px; border-bottom: 1px solid var(--light);">2021 April Social Media Campaign — Theme: Summer &nbsp;/&nbsp; Creative Content Writer × Luke Heesun Jung &nbsp;/&nbsp; Shared with permission</p>
+
+<!-- Next project -->
+<a href="../case_study_04/index.html" class="next-project">
+  <p class="next-label">← Back to</p>
+  <h2 class="next-title">V-TAG Brand System</h2>
+  <p class="next-tags">Brand Identity &nbsp;·&nbsp; Packaging &nbsp;·&nbsp; Exhibition</p>
+</a>
+
+<!-- Footer -->
+<footer>
+  <p>© 2026 Luke Heesun Jung</p>
+  <p>Portfolio — Graphic Design &amp; Brand Identity</p>
+</footer>
+
+<script>
+  function toggleAbout() {
+    const btn  = document.getElementById('aboutBtn');
+    const body = document.getElementById('aboutBody');
+    btn.classList.toggle('open');
+    body.classList.toggle('open');
+  }
+</script>
+
+</body>
+</html>

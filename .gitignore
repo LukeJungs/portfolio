@@ -1,0 +1,17 @@
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor
+.vscode/
+.idea/
+
+# Temp / backup
+*.bak
+*.tmp
+*_clean.jpg
+*_clean.png
+
+# Node (if ever used)
+node_modules/

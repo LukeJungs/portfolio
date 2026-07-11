@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>V-TAG — Regulated Consumer Goods Packaging | Luke Heesun Jung</title>
+  <meta name="description" content="End-to-end packaging design system for V-TAG — a Health Canada–regulated vaping brand. Bilingual compliance, Pantone colour governance, and iterative production across 20+ SKUs. 2020–2022." />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:  #0a0a0a;
+      --white:  #f8f7f4;
+      --grey:   #6b6b6b;
+      --light:  #e8e6e1;
+      --vtag-dark:  #1a1a1a;
+      --vtag-gold:  #c8a84b;
+      --font:   'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--white); color: var(--black); overflow-x: hidden; }
+
+    /* ── Nav ─────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 24px 48px;
+      background: transparent;
+      transition: background 0.35s ease, padding 0.35s ease;
+    }
+    nav.scrolled {
+      background: var(--white);
+      padding: 16px 48px;
+      border-bottom: 1px solid var(--light);
+    }
+    .nav-logo {
+      font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--white); text-decoration: none;
+      transition: color 0.35s ease;
+    }
+    nav.scrolled .nav-logo { color: var(--black); }
+    .nav-back {
+      font-size: 12px; font-weight: 400; letter-spacing: 0.06em; text-transform: uppercase;
+      color: rgba(255,255,255,0.80); text-decoration: none;
+      transition: color 0.35s ease, opacity .2s;
+    }
+    nav.scrolled .nav-back { color: var(--grey); }
+    .nav-back:hover { opacity: 1; }
+    nav.scrolled .nav-back:hover { color: var(--black); }
+
+    /* ── Hero ────────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      min-height: 640px;
+      overflow: hidden;
+      background: var(--vtag-dark);
+    }
+    .hero-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      display: block;
+      filter: brightness(0.52);
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(10,10,10,0.10) 0%, rgba(10,10,10,0.75) 100%);
+      pointer-events: none;
+    }
+    .hero-content {
+      position: absolute;
+      bottom: 72px; left: 48px; right: 48px;
+      z-index: 10;
+    }
+    .hero-tags {
+      font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+      color: rgba(255,255,255,0.55); margin-bottom: 20px;
+    }
+    .hero-title {
+      font-size: clamp(42px, 6vw, 88px); font-weight: 300; letter-spacing: -0.02em;
+      color: var(--white); line-height: 1.0; margin-bottom: 24px;
+    }
+    .hero-title span { font-weight: 600; }
+    .hero-descriptor {
+      font-size: clamp(14px, 1.5vw, 18px); font-weight: 300; line-height: 1.55;
+      color: rgba(255,255,255,0.78); max-width: 680px;
+    }
+
+    /* ── Meta strip ──────────────────────────────────────────── */
+    .meta-strip {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid var(--light);
+    }
+    .meta-cell {
+      padding: 40px 40px; border-right: 1px solid var(--light);
+    }
+    .meta-cell:last-child { border-right: none; }
+    .meta-label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey); margin-bottom: 10px; }
+    .meta-value { font-size: 14px; font-weight: 400; line-height: 1.6; color: var(--black); }
+    .meta-value strong { font-weight: 600; }
+
+    /* ── Body layout ─────────────────────────────────────────── */
+    .page-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      align-items: start;
+    }
+    .sidebar-overlay { display: none; }
+    .sidebar-fixed {
+      position: sticky;
+      top: 72px;
+      align-self: start;
+      padding: 80px 40px 80px 48px;
+      border-right: 1px solid var(--light);
+    }
+    .sidebar-label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey); margin-bottom: 16px; }
+    .sidebar-nav { list-style: none; }
+    .sidebar-nav li { margin-bottom: 10px; }
+    .sidebar-nav a {
+      font-size: 13px; color: var(--grey); text-decoration: none;
+      letter-spacing: 0.02em; transition: color .2s;
+    }
+    .sidebar-nav a:hover { color: var(--black); }
+    .sidebar-nav a.active { color: var(--black); font-weight: 500; }
+
+    .content-col { overflow: hidden; }
+    .body-wrap { border-bottom: 1px solid var(--light); }
+    .body-content { padding: 80px 64px 80px 56px; }
+
+    /* ── Section ─────────────────────────────────────────────── */
+    .section { margin-bottom: 80px; }
+    .section:last-child { margin-bottom: 0; }
+    .section-label {
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--grey); margin-bottom: 28px;
+      padding-bottom: 16px; border-bottom: 1px solid var(--light);
+    }
+    .section p {
+      font-size: 17px; font-weight: 300; line-height: 1.75;
+      color: var(--black); margin-bottom: 28px;
+    }
+    .section p:last-child { margin-bottom: 0; }
+    .section p strong { font-weight: 500; }
+
+    /* ── Pull quote ──────────────────────────────────────────── */
+    .pull-quote {
+      border-left: 2px solid var(--black);
+      padding: 4px 0 4px 28px;
+      margin: 48px 0;
+    }
+    .pull-quote p {
+      font-size: clamp(20px, 2.2vw, 28px) !important;
+      font-weight: 300 !important;
+      line-height: 1.45 !important;
+      letter-spacing: -0.01em;
+      color: var(--black) !important;
+      margin-bottom: 0 !important;
+    }
+
+    /* ── Full-bleed image ────────────────────────────────────── */
+    .full-bleed {
+      width: 100%; margin: 0;
+    }
+    .full-bleed img {
+      width: 100%; display: block;
+      border-top: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+    }
+    .full-bleed figcaption {
+      padding: 16px 48px;
+      font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--grey);
+      border-bottom: 1px solid var(--light);
+    }
+
+    /* ── Screen grid ─────────────────────────────────────────── */
+    .screen-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-top: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+      margin-bottom: 0;
+    }
+    .screen-item {
+      overflow: hidden; border-right: 1px solid var(--light);
+    }
+    .screen-item:last-child { border-right: none; }
+    .screen-item img { width: 100%; display: block; aspect-ratio: 3/2; object-fit: cover; object-position: center; }
+    .screen-item-caption {
+      padding: 20px 24px;
+      border-top: 1px solid var(--light);
+      font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey);
+    }
+
+    /* ── Screen grid 3-col ───────────────────────────────────── */
+    .screen-grid-3 {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 0;
+      border-top: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+      margin-bottom: 0;
+    }
+    .screen-grid-3 .screen-item { border-right: 1px solid var(--light); }
+    .screen-grid-3 .screen-item:last-child { border-right: none; }
+
+    /* ── Brief gallery — document pages ─────────────────────── */
+    /* Single-column strip for document pages — preserves editorial feel */
+    .brief-strip {
+      border-top: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+    }
+    .brief-strip-item {
+      border-bottom: 1px solid var(--light);
+    }
+    .brief-strip-item:last-child { border-bottom: none; }
+    .brief-strip-item img {
+      width: 100%; display: block;
+    }
+    .brief-strip-caption {
+      padding: 14px 48px;
+      font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey);
+      border-top: 1px solid var(--light);
+    }
+
+    /* 2-col brief grid */
+    .brief-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-top: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+    }
+    .brief-grid-item {
+      border-right: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+    }
+    .brief-grid-item:nth-child(even) { border-right: none; }
+    /* last row bottom border removal */
+    .brief-grid-item:nth-last-child(-n+2):nth-child(odd):last-child,
+    .brief-grid-item:nth-last-child(-n+2):nth-child(even):last-child,
+    .brief-grid-item:nth-last-child(1),
+    .brief-grid-item:nth-last-child(2) { border-bottom: none; }
+    .brief-grid-item img {
+      width: 100%; display: block;
+    }
+    .brief-grid-caption {
+      padding: 14px 20px;
+      font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey);
+      border-top: 1px solid var(--light);
+    }
+
+    /* 4-col brief grid — logo manual */
+    .brief-grid-4 {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border-top: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+    }
+    .brief-grid-4 .brief-grid-item {
+      border-right: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+    }
+    .brief-grid-4 .brief-grid-item:nth-child(4n) { border-right: none; }
+    /* Remove bottom border from last row (items 13 = last row has 1 item, row 4 = items 13) */
+    .brief-grid-4 .brief-grid-item:nth-last-child(-n+4) { border-bottom: none; }
+
+    /* Real product photo — size-constrained full-bleed */
+    .real-photo img {
+      max-height: 80vh;
+      object-fit: contain;
+      background: #f5f5f3;
+    }
+
+    /* Real product photo grid — 2-col */
+    .real-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-top: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+    }
+    .real-grid-item {
+      overflow: hidden;
+      border-right: 1px solid var(--light);
+    }
+    .real-grid-item:last-child { border-right: none; }
+    .real-grid-item img {
+      width: 100%; display: block;
+      aspect-ratio: 3/4;
+      object-fit: cover;
+      object-position: center center;
+    }
+    .real-grid-caption {
+      padding: 16px 24px;
+      border-top: 1px solid var(--light);
+      font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey);
+    }
+
+    /* Logo identity block — logo + grid system side by side */
+    .logo-identity-row {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-top: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+    }
+    .logo-identity-cell {
+      border-right: 1px solid var(--light);
+      padding: 0;
+      overflow: hidden;
+    }
+    .logo-identity-cell:last-child { border-right: none; }
+    .logo-identity-cell img { width: 100%; display: block; }
+    .logo-identity-caption {
+      padding: 14px 24px;
+      font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey);
+      border-top: 1px solid var(--light);
+    }
+
+    /* ── Stat row ────────────────────────────────────────────── */
+    .stat-row {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+      margin-bottom: 0;
+    }
+    .stat-cell {
+      padding: 48px 40px; border-right: 1px solid var(--light);
+      text-align: left;
+    }
+    .stat-cell:last-child { border-right: none; }
+    .stat-number {
+      font-size: clamp(36px, 4vw, 56px); font-weight: 300;
+      letter-spacing: -0.03em; line-height: 1.0;
+      color: var(--black); margin-bottom: 10px;
+    }
+    .stat-desc {
+      font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--grey); line-height: 1.5;
+    }
+
+    /* ── Tab list ────────────────────────────────────────────── */
+    .tab-list { list-style: none; margin-bottom: 0; }
+    .tab-item {
+      display: flex; align-items: baseline; gap: 20px;
+      padding: 20px 0; border-bottom: 1px solid var(--light);
+    }
+    .tab-item:first-child { border-top: 1px solid var(--light); }
+    .tab-num {
+      font-size: 11px; letter-spacing: 0.10em; color: var(--grey);
+      min-width: 28px; text-transform: uppercase;
+    }
+    .tab-name { font-size: 15px; font-weight: 500; color: var(--black); min-width: 200px; }
+    .tab-desc { font-size: 14px; font-weight: 300; color: var(--grey); line-height: 1.5; }
+
+    /* ── ADDIE phase block ───────────────────────────────────── */
+    .addie-block {
+      background: var(--vtag-dark);
+      padding: 96px 56px;
+      border-bottom: 1px solid var(--light);
+    }
+    .addie-label {
+      font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: rgba(255,255,255,0.35); margin-bottom: 40px;
+    }
+    .addie-heading {
+      font-size: clamp(28px, 4vw, 48px); font-weight: 300; line-height: 1.2;
+      color: var(--white); margin-bottom: 32px; max-width: 720px;
+    }
+    .addie-heading em { font-style: italic; color: var(--vtag-gold); }
+    .addie-body {
+      max-width: 640px; margin-bottom: 64px;
+    }
+    .addie-body p {
+      font-size: 15px; line-height: 1.75; color: rgba(255,255,255,0.62);
+      margin-bottom: 20px;
+    }
+    .addie-body p:last-child { margin-bottom: 0; }
+    .addie-body strong { color: rgba(255,255,255,0.88); font-weight: 500; }
+
+    /* ADDIE phase grid inside dark block */
+    .addie-phase-grid {
+      display: grid; grid-template-columns: repeat(5, 1fr);
+      gap: 0;
+      border-top: 1px solid rgba(255,255,255,0.12);
+      margin-top: 64px;
+    }
+    .addie-phase-cell {
+      padding: 32px 24px;
+      border-right: 1px solid rgba(255,255,255,0.12);
+    }
+    .addie-phase-cell:last-child { border-right: none; }
+    .addie-phase-letter {
+      font-size: 28px; font-weight: 300; letter-spacing: -0.02em;
+      color: var(--vtag-gold); margin-bottom: 8px;
+    }
+    .addie-phase-name {
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(255,255,255,0.40); margin-bottom: 12px;
+    }
+    .addie-phase-desc {
+      font-size: 12px; line-height: 1.6; color: rgba(255,255,255,0.55);
+    }
+
+    /* ── Compliance block ────────────────────────────────────── */
+    .compliance-row {
+      display: grid; grid-template-columns: 1fr 1fr;
+      border-top: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+      margin-bottom: 0;
+    }
+    .compliance-cell {
+      padding: 48px 40px; border-right: 1px solid var(--light);
+    }
+    .compliance-cell:last-child { border-right: none; }
+    .compliance-cell-label {
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--grey); margin-bottom: 20px;
+      padding-bottom: 16px; border-bottom: 1px solid var(--light);
+    }
+    .compliance-cell ul {
+      list-style: none; padding: 0;
+    }
+    .compliance-cell ul li {
+      font-size: 14px; font-weight: 300; line-height: 1.7;
+      color: var(--black); padding: 10px 0;
+      border-bottom: 1px solid var(--light);
+    }
+    .compliance-cell ul li:last-child { border-bottom: none; }
+    .compliance-cell ul li span {
+      font-size: 11px; letter-spacing: 0.10em; text-transform: uppercase;
+      color: var(--grey); display: block; margin-top: 2px;
+    }
+
+    /* ── Website / digital section ───────────────────────────── */
+    .website-section {
+      border-top: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+    }
+    .website-section img {
+      width: 100%; display: block;
+    }
+    .website-caption {
+      padding: 16px 48px;
+      font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey);
+      border-top: 1px solid var(--light);
+    }
+
+    /* ── Next project ────────────────────────────────────────── */
+    .next-project {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 56px 48px; border-top: 1px solid var(--light);
+      text-decoration: none; color: var(--black);
+      transition: background .2s;
+    }
+    .next-project:hover { background: var(--light); }
+    .next-label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey); margin-bottom: 10px; }
+    .next-title { font-size: 24px; font-weight: 300; color: var(--black); }
+    .next-arrow { font-size: 28px; font-weight: 200; color: var(--grey); }
+
+    /* ── Footer ──────────────────────────────────────────────── */
+    footer {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 28px 48px; border-top: 1px solid var(--light);
+    }
+    .footer-left { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey); }
+    .footer-right { display: flex; gap: 28px; }
+    .footer-right a { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey); text-decoration: none; transition: color .2s; }
+    .footer-right a:hover { color: var(--black); }
+
+    /* ── Responsive ──────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      nav { padding: 20px 24px; }
+      .meta-strip { grid-template-columns: 1fr 1fr; }
+      .meta-cell:nth-child(2) { border-right: none; }
+      .meta-cell:nth-child(3) { border-right: 1px solid var(--light); }
+      .page-layout { grid-template-columns: 1fr; }
+      .sidebar-fixed { display: none; }
+      .sidebar-overlay { display: none; }
+      .body-content { padding: 48px 24px; }
+      .screen-grid { grid-template-columns: 1fr; }
+      .screen-grid-3 { grid-template-columns: 1fr; }
+      .screen-item { border-right: none; border-bottom: 1px solid var(--light); }
+      .stat-row { grid-template-columns: 1fr; }
+      .stat-cell { border-right: none; border-bottom: 1px solid var(--light); }
+      .hero-content { left: 24px; right: 24px; bottom: 48px; }
+      footer { flex-direction: column; gap: 16px; }
+      .next-project { padding: 40px 24px; }
+      .addie-phase-grid { grid-template-columns: 1fr 1fr; }
+      .addie-block { padding: 64px 24px; }
+      .compliance-row { grid-template-columns: 1fr; }
+      .compliance-cell { border-right: none; border-bottom: 1px solid var(--light); }
+      .brief-grid { grid-template-columns: 1fr; }
+      .brief-grid-4 { grid-template-columns: 1fr 1fr; }
+      .brief-grid-4 .brief-grid-item:nth-child(4n) { border-right: 1px solid var(--light); }
+      .brief-grid-4 .brief-grid-item:nth-child(2n) { border-right: none; }
+      .real-grid { grid-template-columns: 1fr; }
+      .real-grid-item { border-right: none; border-bottom: 1px solid var(--light); }
+      .brief-grid-item { border-right: none; }
+      .logo-identity-row { grid-template-columns: 1fr; }
+      .logo-identity-cell { border-right: none; border-bottom: 1px solid var(--light); }
+      .full-bleed figcaption { padding: 14px 24px; }
+      .brief-strip-caption { padding: 14px 24px; }
+      .website-caption { padding: 14px 24px; }
+    }
+
+    /* ── Skip Navigation (Accessibility) ─────────────────────────── */
+    .skip-nav {
+      position: absolute;
+      top: -100%;
+      left: 0;
+      background: var(--black);
+      color: var(--white);
+      padding: 12px 24px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      z-index: 9999;
+      transition: top 0.2s;
+    }
+    .skip-nav:focus {
+      top: 0;
+    }
+
+    /* ── Focus Visible (Keyboard Navigation) ─────────────────────── */
+    :focus-visible {
+      outline: 2px solid var(--black);
+      outline-offset: 3px;
+    }
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid var(--black);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 20px 24px; }
+      .hero-content { padding: 0 24px 56px; }
+      .meta-strip { grid-template-columns: 1fr 1fr; }
+      .cs-section { padding: 56px 24px; }
+      .stream-label { padding: 32px 24px 16px; }
+      .dark-block { padding: 56px 24px; }
+      .img-2col { grid-template-columns: 1fr; }
+      .img-3col { grid-template-columns: 1fr 1fr; }
+      .img-4col { grid-template-columns: 1fr 1fr; }
+      .app-flow { grid-template-columns: 1fr; }
+      .bc-pair { grid-template-columns: 1fr; }
+      .art-4col { grid-template-columns: 1fr 1fr; }
+      .art-3col { grid-template-columns: 1fr 1fr; }
+      .next-project { padding: 56px 24px; }
+      footer { padding: 32px 24px; flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+</head>
+<body>
+  <a href="#main-content" class="skip-nav">Skip to main content</a>
+
+  <!-- ── Nav ──────────────────────────────────────────────────── -->
+  <nav>
+    <a href="../index.html" class="nav-logo">Luke Heesun Jung</a>
+    <a href="../index.html#work" class="nav-back">← All Work</a>
+  </nav>
+
+  <!-- ── Hero ─────────────────────────────────────────────────── -->
+  <section class="hero">
+    <img class="hero-img" src="podflower.webp" alt="V-TAG — Regulated Consumer Goods Packaging System" />
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-tags">Regulated Packaging &nbsp;·&nbsp; Brand Identity &nbsp;·&nbsp; Bilingual Compliance &nbsp;·&nbsp; Production Design</p>
+      <h1 class="hero-title"><span>V-TAG</span></h1>
+      <p class="hero-descriptor">Designing a compliant, scalable packaging system for a Health Canada–regulated vaping brand — navigating federal mandates, bilingual typography, and multi-SKU production across three product lines from 2020 to 2022.</p>
+    </div>
+  </section>
+
+  <!-- ── Meta strip ────────────────────────────────────────────── -->
+  <div class="meta-strip" id="main-content">
+    <div class="meta-cell">
+      <p class="meta-label">Client</p>
+      <p class="meta-value">V-TAG<br /><strong>Aurora, Canada</strong></p>
+    </div>
+    <div class="meta-cell">
+      <p class="meta-label">Role</p>
+      <p class="meta-value">Graphic Designer<br />Brand Identity<br /><strong>Packaging Lead</strong></p>
+    </div>
+    <div class="meta-cell">
+      <p class="meta-label">Scope</p>
+      <p class="meta-value">Packaging · Compliance<br />Brand System · Print<br /><strong>20+ SKUs</strong></p>
+    </div>
+    <div class="meta-cell">
+      <p class="meta-label">Year</p>
+      <p class="meta-value"><strong>2020 – 2022</strong><br />Canada · China</p>
+    </div>
+  </div>
+
+  <!-- ── Body ──────────────────────────────────────────────────── -->
+  <div class="page-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar-fixed">
+      <p class="sidebar-label">Contents</p>
+      <ul class="sidebar-nav" id="sidebar-nav-main">
+        <li><a href="#context" class="active">Context</a></li>
+        <li><a href="#analysis">Analysis</a></li>
+        <li><a href="#identity">Identity</a></li>
+        <li><a href="#compliance">Compliance</a></li>
+        <li><a href="#production">Production</a></li>
+        <li><a href="#brand-extension">Brand Extension</a></li>
+        <li><a href="#digital">Digital</a></li>
+        <li><a href="#iteration">Iteration</a></li>
+        <li><a href="#outcome">Outcome</a></li>
+      </ul>
+    </aside>
+
+    <!-- Content column -->
+    <div class="content-col">
+
+      <!-- ── Context ─────────────────────────────────────────── -->
+      <div class="body-wrap" id="context">
+        <div class="body-content">
+          <div class="section">
+            <p class="section-label">Context</p>
+            <p>V-TAG launched in 2020 as a Canadian vaping brand operating under the <strong>Tobacco and Vaping Products Act (TVPA)</strong>, the federal framework administered by Health Canada. From the outset, the design challenge was not simply aesthetic — every surface of every package was a regulated document. Warning language, nicotine concentration, ingredient disclosure, bilingual parity, age restriction symbols, and UPC barcode standards were all mandatory, non-negotiable, and subject to revision as federal guidance evolved.</p>
+            <p>The brand required a complete visual identity built from the ground up: logo, colour system, typographic standards, and a packaging architecture capable of scaling across multiple product lines and dozens of flavour variants — all while maintaining full regulatory compliance on every printed unit shipped to Canadian retailers.</p>
+          </div>
+
+          <div class="pull-quote">
+            <p>"Every centimetre of the package was both a brand decision and a legal obligation."</p>
+          </div>
+
+          <div class="section">
+            <p>The team was small and cross-functional. Chuck led product design, Baiwen handled photography, Brian Chang managed operations and CEO oversight, and DHK in Korea produced high-resolution product renders and video assets. As the in-house graphic designer alongside Naeun, the scope covered everything printed or displayed — from the V-TAG wordmark to the Shopify product detail page, from the internal policy documents to the physical dieline submitted to the manufacturing facility in Shenzhen.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ── Analysis ────────────────────────────────────────── -->
+      <div class="body-wrap" id="analysis">
+        <div class="body-content">
+          <div class="section">
+            <p class="section-label">Analysis — Regulatory &amp; Design Constraints</p>
+            <p>Before any visual work began, a thorough analysis of the regulatory environment was essential. Health Canada's <strong>Vaping Products Labelling and Packaging Regulations</strong> defined the minimum requirements: mandatory bilingual warning statements in both English and French, nicotine concentration displayed in mg/mL, a standardized AVERTISSEMENT block with prescribed minimum font sizes, and a poison warning with the skull-and-crossbones symbol for liquid nicotine products.</p>
+            <p>Beyond federal mandates, provincial age restrictions added further complexity. Certain provinces — including Alberta, Manitoba, Saskatchewan, Quebec, Northwest Territories, Nunavut, and Yukon — required explicit 18+ or 19+ labelling on the physical package. Each symbol had to be sized, positioned, and reproduced at sufficient resolution for print production.</p>
+          </div>
+
+          <div class="compliance-row">
+            <div class="compliance-cell">
+              <p class="compliance-cell-label">Federal Requirements</p>
+              <ul>
+                <li>Bilingual WARNING / AVERTISSEMENT block
+                  <span>Prescribed minimum type size — both languages equal weight</span>
+                </li>
+                <li>Nicotine concentration — mg/mL
+                  <span>Mandatory front-panel placement</span>
+                </li>
+                <li>POISON warning with symbol
+                  <span>Required for liquid nicotine — EN + FR</span>
+                </li>
+                <li>Ingredients list — EN + FR
+                  <span>Glycerol, propylene glycol, flavour, nicotine</span>
+                </li>
+                <li>Manufacturer address — EN + FR
+                  <span>Full civic address required on pack</span>
+                </li>
+                <li>UPC / Barcode — GS1 Standards
+                  <span>Scannable at retail — minimum quiet zone enforced</span>
+                </li>
+              </ul>
+            </div>
+            <div class="compliance-cell">
+              <p class="compliance-cell-label">Provincial &amp; Additional Requirements</p>
+              <ul>
+                <li>18+ restriction symbol
+                  <span>AB / MB / SK / QC / NT / NU / YT</span>
+                </li>
+                <li>19+ restriction symbol
+                  <span>Remaining provinces and territories</span>
+                </li>
+                <li>No-sale-to-minors icon
+                  <span>Graphic symbol — no text substitute permitted</span>
+                </li>
+                <li>RoHS compliance mark
+                  <span>Electronic component — ENVOI device</span>
+                </li>
+                <li>CE &amp; FCC marks
+                  <span>Required for device hardware export</span>
+                </li>
+                <li>WEEE / Recycling symbols
+                  <span>Electronic waste — mandatory on device packaging</span>
+                </li>
+              </ul>
+            </div>
+          </div>
+
+          <div class="section">
+            <p>The bilingual requirement was the most persistent design constraint. French translations of flavour names, warning statements, and ingredient lists consistently ran longer than their English equivalents — <em>Framboise Bleue</em> versus <em>Blue Razz</em>, <em>Avertissement</em> versus <em>Warning</em>. Every layout decision had to accommodate both languages simultaneously, at equal visual weight, within the same spatial envelope. This was not a translation problem. It was a <strong>typographic systems problem</strong>.</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content-col -->
+  </div><!-- /page-layout -->
+
+  <!-- ── Identity — Logo mark full-bleed ──────────────────────── -->
+  <figure class="full-bleed" id="identity">
+    <img src="vtag_logo.jpg" alt="V-TAG Logo — V005x5 primary wordmark with chevron symbol, black on white, 2020" />
+    <figcaption>V-TAG — Primary Wordmark &nbsp;·&nbsp; V005x5 &nbsp;·&nbsp; Brand Identity 2020</figcaption>
+  </figure>
+
+  <!-- ── Continue page-layout — Identity text ─────────────────── -->
+  <div class="page-layout">
+    <aside class="sidebar-fixed" aria-hidden="true" style="visibility:hidden;"></aside>
+    <div class="content-col">
+      <div class="body-wrap">
+        <div class="body-content">
+          <div class="section">
+            <p class="section-label">Design — Brand Identity &amp; Logo System</p>
+            <p>The V-TAG wordmark was designed to communicate precision and modernity — a clean sans-serif logotype paired with a custom chevron symbol derived from the letterform of the "V". The mark needed to function at the scale of a full-bleed package front and at the reduced size of a side panel printed at 6pt. Scalability and legibility across production sizes were primary criteria, not secondary considerations.</p>
+            <p>The identity system was governed by a formal design brief — a structured document specifying logo construction grids, primary colour values (<strong>Black #121212 / White #FFFFFF</strong>), and use-case mapping across every application surface. Different logo lockups were defined for distinct contexts: <strong>V00</strong> for official documents and legally related packaging, <strong>V01</strong> for marketing, social media, and advertisement, <strong>V02</strong> for banners and wall installation. This governance ensured the mark remained consistent across regulated materials, commercial collateral, and digital touchpoints — even as the team and production volume scaled.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Logo Brief — 4-col grid, all 13 pages ────────────────── -->
+  <div class="brief-grid-4">
+    <div class="brief-grid-item">
+      <img src="brief_logo_p1.jpg" alt="V-TAG Logo Brief — Page 1: Cover, Brand Identity, Logo Design" />
+      <p class="brief-grid-caption">Logo Brief — Cover &nbsp;·&nbsp; Brand Identity</p>
+    </div>
+    <div class="brief-grid-item">
+      <img src="brief_logo_p2.jpg" alt="V-TAG Logo Brief — Page 2: V00 5x5 logo grid, primary colour, primary uses" />
+      <p class="brief-grid-caption">V00 5×5 — Construction Grid &nbsp;·&nbsp; Primary Colour</p>
+    </div>
+    <div class="brief-grid-item">
+      <img src="brief_logo_p3.jpg" alt="V-TAG Logo Brief — Page 3: V01 6x5 logo grid, marketing and social media uses" />
+      <p class="brief-grid-caption">V01 6×5 — Marketing &amp; Social Media</p>
+    </div>
+    <div class="brief-grid-item">
+      <img src="brief_logo_p4.jpg" alt="V-TAG Logo Brief — Page 4: V02 7x5 logo grid, banners and wall installation" />
+      <p class="brief-grid-caption">V02 7×5 — Banners &amp; Wall Installation</p>
+    </div>
+    <div class="brief-grid-item">
+      <img src="brief_logo_p5.jpg" alt="V-TAG Logo Brief — Page 5: Logo variation and colour application" />
+      <p class="brief-grid-caption">Logo Variation — Colour Application</p>
+    </div>
+    <div class="brief-grid-item">
+      <img src="brief_logo_p6.jpg" alt="V-TAG Logo Brief — Page 6: Logo on dark background" />
+      <p class="brief-grid-caption">Logo on Dark Background</p>
+    </div>
+    <div class="brief-grid-item">
+      <img src="brief_logo_p7.jpg" alt="V-TAG Logo Brief — Page 7: Logo scale and clearspace rules" />
+      <p class="brief-grid-caption">Scale &amp; Clearspace Rules</p>
+    </div>
+    <div class="brief-grid-item">
+      <img src="brief_logo_p8.jpg" alt="V-TAG Logo Brief — Page 8: Incorrect logo usage examples" />
+      <p class="brief-grid-caption">Incorrect Usage — Do Not</p>
+    </div>
+    <div class="brief-grid-item">
+      <img src="brief_logo_p9.jpg" alt="V-TAG Logo Brief — Page 9: Typography system and typeface specification" />
+      <p class="brief-grid-caption">Typography System &amp; Typeface Spec</p>
+    </div>
+    <div class="brief-grid-item">
+      <img src="brief_logo_p10.jpg" alt="V-TAG Logo Brief — Page 10: Colour palette and Pantone references" />
+      <p class="brief-grid-caption">Colour Palette &amp; Pantone References</p>
+    </div>
+    <div class="brief-grid-item">
+      <img src="brief_logo_p11.jpg" alt="V-TAG Logo Brief — Page 11: Brand application — packaging" />
+      <p class="brief-grid-caption">Brand Application — Packaging</p>
+    </div>
+    <div class="brief-grid-item">
+      <img src="brief_logo_p12.jpg" alt="V-TAG Logo Brief — Page 12: Brand application — digital and print collateral" />
+      <p class="brief-grid-caption">Brand Application — Digital &amp; Print</p>
+    </div>
+  </div>
+
+  <!-- ── Continue page-layout — Compliance ────────────────────── -->
+  <div class="page-layout">
+    <aside class="sidebar-fixed" aria-hidden="true" style="visibility:hidden;"></aside>
+    <div class="content-col">
+
+      <!-- ── Compliance Architecture ─────────────────────────── -->
+      <div class="body-wrap" id="compliance">
+        <div class="body-content">
+          <div class="section">
+            <p class="section-label">Design — Compliance Architecture</p>
+            <p>The most technically demanding aspect of the packaging system was the <strong>warning block architecture</strong>. Health Canada mandates that the WARNING / AVERTISSEMENT statement occupy a clearly delineated zone on the primary display panel, with both languages present at equal visual prominence. On a narrow side panel — such as the EON single-device box — this meant compressing a multi-line bilingual warning into a vertical column less than 25mm wide, while maintaining the prescribed minimum type size.</p>
+            <p>The solution was a modular warning block system: a fixed-width bordered rectangle containing the English warning in bold, followed immediately by the French equivalent, with a dividing rule between them. This block was treated as an immovable design element — every other layout decision on the panel was made around it, not before it. Typography, product imagery, and brand elements were positioned in the remaining space after compliance requirements were satisfied.</p>
+          </div>
+
+          <div class="pull-quote">
+            <p>"The warning block was not a constraint on the design. It was the foundation the design was built around."</p>
+          </div>
+
+          <div class="section">
+            <p>The bilingual challenge extended beyond the warning block. Flavour names required equal-weight bilingual treatment on the front panel — <em>Blueberry | Myrtille</em>, <em>Mango | Mangue</em>, <em>Mint | Menthe</em> — with the vertical bar acting as both a visual separator and a typographic rhythm element. The French names were never subordinated to the English; they shared the same typeface weight, size, and colour. This was both a regulatory requirement and a design principle.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Package front — full-bleed ───────────────────────────── -->
+  <figure class="full-bleed">
+    <img src="vtag_device_front.png" alt="V-TAG ENVOI Starter Kit — front panel dieline showing compliance architecture, bilingual warning block, and product imagery" />
+    <figcaption>ENVOI Starter Kit — Front Panel Dieline &nbsp;·&nbsp; Compliance Architecture &nbsp;·&nbsp; Bilingual Warning Block</figcaption>
+  </figure>
+
+  <!-- ── Continue page-layout — Colour System ─────────────────── -->
+  <div class="page-layout">
+    <aside class="sidebar-fixed" aria-hidden="true" style="visibility:hidden;"></aside>
+    <div class="content-col">
+      <div class="body-wrap">
+        <div class="body-content">
+          <div class="section">
+            <p class="section-label">Design — Colour System</p>
+            <p>The colour system was built on <strong>Pantone Uncoated (U) references</strong> to ensure consistency across the manufacturing chain. Each of the eleven EON flavour variants was assigned a primary Pantone colour — Mint (3536U), Blue Lemon (293U + 121U), Mango (121U), Blue Razz (299U), Strawberry Banana (2347U + 121U), Strawberry Kiwi (2293U), Blueberry (7684U), Lush Watermelon (362U), Peach (176U), Classic (2035U), Lychee (White) — and a corresponding secondary tone for the device ring and accent elements. Every colour decision was documented in a specification sheet submitted alongside the production file to the factory.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Colour System — full-bleed ───────────────────────────── -->
+  <figure class="full-bleed">
+    <img src="vtag_color_system.webp" alt="V-TAG EON — 11-flavour Pantone colour system and device colour reference sheet, 2021" />
+    <figcaption>EON Single Device — Pantone Colour System &nbsp;·&nbsp; 11 Flavour Variants &nbsp;·&nbsp; V-TAG 2021</figcaption>
+  </figure>
+
+  <!-- ── Continue page-layout — Production ────────────────────── -->
+  <div class="page-layout">
+    <aside class="sidebar-fixed" aria-hidden="true" style="visibility:hidden;"></aside>
+    <div class="content-col">
+
+      <!-- ── Production ──────────────────────────────────────── -->
+      <div class="body-wrap" id="production">
+        <div class="body-content">
+          <div class="section">
+            <p class="section-label">Development — Production &amp; Manufacturing Handoff</p>
+            <p>The packaging system spanned three distinct product lines, each with its own structural requirements. The <strong>ENVOI Starter Kit</strong> was a rigid sleeve box containing the device, pod, charger, and manual — requiring a full dieline with window cut and a four-panel compliance layout. The <strong>ENVOI Device Kit</strong> and <strong>Pod Kit</strong> followed a modular architecture — the same structural template adapted for three colourways (black, red, royal blue) and multiple nicotine concentrations (2%, 3%). The <strong>EON single-device disposable</strong> extended this system across eleven flavour variants, each requiring a unique front panel colour while maintaining identical compliance architecture across every SKU.</p>
+          </div>
+
+          <div class="stat-row">
+            <div class="stat-cell">
+              <p class="stat-number">20+</p>
+              <p class="stat-desc">SKUs designed<br />across 3 product lines</p>
+            </div>
+            <div class="stat-cell">
+              <p class="stat-number">11</p>
+              <p class="stat-desc">EON flavour variants<br />Pantone-governed</p>
+            </div>
+            <div class="stat-cell">
+              <p class="stat-number">2</p>
+              <p class="stat-desc">Official languages<br />Every panel, equal weight</p>
+            </div>
+          </div>
+
+          <div class="section">
+            <p>Production files were prepared for a manufacturing facility in Shenzhen, China. This required converting all Pantone references to CMYK process values verified against the supplier's press profile, specifying paper stock weight and finish for each package component, and confirming barcode quiet zones met GS1 minimum standards for retail scanning. Every file submitted to the factory was accompanied by a written specification sheet — paper weight, lamination type, die-cut registration marks, and colour approval reference.</p>
+
+            <ul class="tab-list">
+              <li class="tab-item">
+                <span class="tab-num">01</span>
+                <span class="tab-name">ENVOI Starter Kit</span>
+                <span class="tab-desc">Rigid sleeve box — device, pod, charger, manual. Full dieline with window cut.</span>
+              </li>
+              <li class="tab-item">
+                <span class="tab-num">02</span>
+                <span class="tab-name">ENVOI Device Kit</span>
+                <span class="tab-desc">Device + 3 mouthpieces. Three colourways — Black, Red, Royal Blue.</span>
+              </li>
+              <li class="tab-item">
+                <span class="tab-num">03</span>
+                <span class="tab-name">Pod Kit (3%)</span>
+                <span class="tab-desc">V-POD 2mL — flavour variants with bilingual front panel system.</span>
+              </li>
+              <li class="tab-item">
+                <span class="tab-num">04</span>
+                <span class="tab-name">EON Single Disposable</span>
+                <span class="tab-desc">11 flavour variants — single-template system, Pantone colour governance.</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+  <!-- ── Package grid ──────────────────────────────────────────── -->
+  <div class="screen-grid">
+    <div class="screen-item">
+      <img src="device_kit_01.jpg" alt="V-TAG ENVOI Device Kit — front panel, Royal Blue colourway" />
+      <p class="screen-item-caption">ENVOI Device Kit — Front Panel &nbsp;·&nbsp; Royal Blue</p>
+    </div>
+    <div class="screen-item">
+      <img src="device_kit_02.jpg" alt="V-TAG ENVOI Device Kit — back panel with bilingual compliance content" />
+      <p class="screen-item-caption">ENVOI Device Kit — Back Panel &nbsp;·&nbsp; Compliance Architecture</p>
+    </div>
+  </div>
+
+  <div class="screen-grid">
+    <div class="screen-item">
+      <img src="pod_kit_01.jpg" alt="V-TAG Pod Kit 3% — front panel bilingual system" />
+      <p class="screen-item-caption">Pod Kit 3% — Front Panel &nbsp;·&nbsp; Bilingual System</p>
+    </div>
+    <div class="screen-item">
+      <img src="pod_kit_02.jpg" alt="V-TAG Pod Kit 3% — back panel with ingredients and warning block" />
+      <p class="screen-item-caption">Pod Kit 3% — Back Panel &nbsp;·&nbsp; Ingredients &amp; Warning</p>
+    </div>
+  </div>
+
+  <!-- ── EON package grid ──────────────────────────────────────── -->
+  <div class="screen-grid-3">
+    <div class="screen-item">
+      <img src="eon_pkg_01.jpg" alt="EON Single — Mint / Menthe and Blue Lemon / Citron Bleu" />
+      <p class="screen-item-caption">EON Single — Mint &amp; Blue Lemon Variants</p>
+    </div>
+    <div class="screen-item">
+      <img src="eon_pkg_02.jpg" alt="EON Single — Mango / Mangue and Blue Razz / Framboise Bleue" />
+      <p class="screen-item-caption">EON Single — Mango &amp; Blue Razz Variants</p>
+    </div>
+    <div class="screen-item">
+      <img src="eon_pkg_03.jpg" alt="EON Single — Strawberry Banana / Fraise Banane" />
+      <p class="screen-item-caption">EON Single — Strawberry Banana Variant</p>
+    </div>
+  </div>
+
+  <!-- ── Brand Extension — Expo Bag ───────────────────────────── -->
+  <div class="page-layout">
+    <aside class="sidebar-fixed" aria-hidden="true" style="visibility:hidden;"></aside>
+    <div class="content-col">
+      <div class="body-wrap" id="brand-extension">
+        <div class="body-content">
+          <div class="section">
+            <p class="section-label">Development — Brand Extension &amp; Expo Collateral</p>
+            <p>The V-TAG identity was designed to scale beyond the product package. As the brand prepared for trade and consumer expo appearances, the same visual language — the V chevron, the stark black-and-white primary palette, the typographic precision — was extended into promotional and event materials. The <strong>Expo Bag</strong> brief is a direct record of this process: a press-ready design document specifying material grade (<strong>Max 200 gsm C1S premium art-board</strong>), handle specification (<strong>2 × 45 cm black PP rope</strong>), print colour (<strong>1 colour black</strong>), production quantity (<strong>1,500 units</strong>), and unit cost (<strong>0.89 EUR</strong>).</p>
+            <p>The document itself is evidence of production literacy — the ability to translate a brand decision into a vendor-ready specification. This is the same discipline applied to every packaging dieline: not just designing the visual, but owning the full production chain from concept to factory handoff.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Expo Bag Brief — all 4 pages ─────────────────────────── -->
+  <div class="brief-grid">
+    <div class="brief-grid-item">
+      <img src="brief_expo_p1.jpg" alt="Expo Bag Design Brief — Page 1: Cover, Exposition Design, V-TAG 2020" />
+      <p class="brief-grid-caption">Expo Bag Brief — Cover &nbsp;·&nbsp; Exposition Design</p>
+    </div>
+    <div class="brief-grid-item">
+      <img src="brief_expo_p2.jpg" alt="Expo Bag Design Brief — Page 2: Material specification, production cost, quantity" />
+      <p class="brief-grid-caption">Material Spec &nbsp;·&nbsp; 200 gsm C1S &nbsp;·&nbsp; 1,500 Units</p>
+    </div>
+    <div class="brief-grid-item">
+      <img src="brief_expo_p3.jpg" alt="Expo Bag Design Brief — Page 3: Mockup and brand application" />
+      <p class="brief-grid-caption">Mockup &nbsp;·&nbsp; Brand Application</p>
+    </div>
+    <div class="brief-grid-item">
+      <img src="brief_expo_p4.jpg" alt="Expo Bag Design Brief — Page 4: Final layout and production reference" />
+      <p class="brief-grid-caption">Final Layout &nbsp;·&nbsp; Production Reference</p>
+    </div>
+  </div>
+
+  <!-- ── Digital — Website ─────────────────────────────────────── -->
+  <div class="page-layout">
+    <aside class="sidebar-fixed" aria-hidden="true" style="visibility:hidden;"></aside>
+    <div class="content-col">
+      <div class="body-wrap" id="digital">
+        <div class="body-content">
+          <div class="section">
+            <p class="section-label">Implementation — Digital &amp; E-Commerce</p>
+            <p>The packaging language did not stop at the printed box. The V-TAG website and Shopify storefront extended the same visual system — high-contrast product photography, minimal typographic hierarchy, and the V-TAG wordmark as the primary brand signal — into the digital commerce environment. Product detail pages (PDPs) were designed to carry the same information architecture as the physical package: flavour identity, nicotine strength, product contents, and compliance language, translated into a scrollable retail interface.</p>
+            <p>The website design also served as the primary B2C touchpoint for Canadian consumers, complementing the retail distribution channel. Maintaining visual consistency between the physical package and the digital storefront was a deliberate brand decision — ensuring that a customer who encountered V-TAG on a retail shelf and then visited the website experienced the same identity, the same hierarchy, and the same tone.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Website screenshot — full-bleed ──────────────────────── -->
+  <div class="website-section">
+    <img src="vtag_website.png" alt="V-TAG website — Home page, digital storefront, product lineup, 2021" />
+    <p class="website-caption">V-TAG Website — Home Page &nbsp;·&nbsp; Digital Storefront &nbsp;·&nbsp; 2021</p>
+  </div>
+
+  <!-- ── ADDIE dark block ──────────────────────────────────────── -->
+  <div class="addie-block" id="iteration">
+    <p class="addie-label">ADDIE Model — Applied Framework</p>
+    <h2 class="addie-heading">Craft, iteration, and the <em>discipline of repetition</em></h2>
+    <div class="addie-body">
+      <p>The packaging system was not designed once. It was designed, reviewed, corrected, translated, proofread, corrected again, submitted to the factory, revised against press proofs, and corrected once more. This iterative cycle — repeated across every SKU, every colourway, every language revision — is the defining characteristic of regulated goods design. The ADDIE model was not applied as a formal methodology; it describes, accurately, how the work actually proceeded.</p>
+      <p><strong>Analysis</strong> preceded every design decision: regulatory requirements were mapped before layouts were opened. <strong>Design</strong> built the system — the warning block architecture, the bilingual flavour name treatment, the Pantone colour governance, the logo construction grid. <strong>Development</strong> translated that system into production-ready files: dielines, specification sheets, and vendor briefs for a factory in Shenzhen. <strong>Implementation</strong> was the print run — and the moment when every typographic decision was tested against physical reality. <strong>Evaluation</strong> was the correction cycle: catching a misplaced accent in <em>dépendance</em>, verifying that <em>Framboise Bleue</em> fit the same column width as <em>Blue Razz</em>, confirming that the barcode quiet zone had not been violated by a bleed mark.</p>
+    </div>
+
+    <div class="addie-phase-grid">
+      <div class="addie-phase-cell">
+        <p class="addie-phase-letter">A</p>
+        <p class="addie-phase-name">Analysis</p>
+        <p class="addie-phase-desc">Health Canada TVPA requirements, provincial age symbols, GS1 barcode standards, bilingual parity rules</p>
+      </div>
+      <div class="addie-phase-cell">
+        <p class="addie-phase-letter">D</p>
+        <p class="addie-phase-name">Design</p>
+        <p class="addie-phase-desc">Logo construction grid, warning block system, Pantone colour governance, bilingual typographic hierarchy</p>
+      </div>
+      <div class="addie-phase-cell">
+        <p class="addie-phase-letter">D</p>
+        <p class="addie-phase-name">Development</p>
+        <p class="addie-phase-desc">Production file preparation, CMYK conversion, paper spec sheets, vendor briefs, factory handoff documentation</p>
+      </div>
+      <div class="addie-phase-cell">
+        <p class="addie-phase-letter">I</p>
+        <p class="addie-phase-name">Implementation</p>
+        <p class="addie-phase-desc">Press proof review, print run approval, digital storefront, retail distribution across Canadian market</p>
+      </div>
+      <div class="addie-phase-cell">
+        <p class="addie-phase-letter">E</p>
+        <p class="addie-phase-name">Evaluation</p>
+        <p class="addie-phase-desc">Translation verification, proofreading cycles, regulatory update integration, SKU revision management</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Outcome ───────────────────────────────────────────────── -->
+  <div class="page-layout" id="outcome">
+    <aside class="sidebar-fixed" aria-hidden="true" style="visibility:hidden;"></aside>
+    <div class="content-col">
+      <div class="body-wrap">
+        <div class="body-content">
+          <div class="section">
+            <p class="section-label">Outcome</p>
+            <p>The V-TAG packaging system launched across Canadian retail in 2021 and remained in production through 2022. More than twenty individual SKUs were designed, produced, and distributed — each compliant with Health Canada's federal vaping regulations, each carrying bilingual content at equal visual weight, and each traceable back to a single, coherent design system.</p>
+            <p>The project demonstrated that <strong>regulatory compliance and brand coherence are not in opposition</strong>. The constraints imposed by Health Canada — mandatory warning blocks, bilingual parity, prescribed symbol sizes — became the structural logic of the packaging system. Working within those constraints produced a visual language that was disciplined, legible, and scalable: qualities that defined the brand as much as the Pantone colours or the V-TAG wordmark.</p>
+            <p>The iterative nature of the work — the repeated proofreading cycles, the translation checks, the factory revision rounds — built a production discipline that extended across every other design output at V-TAG: internal documents, the company website, B2B price sheets, the Shopify storefront, and expo collateral. The craft of getting it right, every time, on every surface, was the consistent standard.</p>
+          </div>
+
+          <div class="stat-row">
+            <div class="stat-cell">
+              <p class="stat-number">3</p>
+              <p class="stat-desc">Product lines<br />Starter Kit · Device Kit · EON</p>
+            </div>
+            <div class="stat-cell">
+              <p class="stat-number">2020</p>
+              <p class="stat-desc">Brand identity<br />to retail launch</p>
+            </div>
+            <div class="stat-cell">
+              <p class="stat-number">100%</p>
+              <p class="stat-desc">Health Canada<br />federal compliance</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Real product — Pod Kit flavour spread ───────────────────── -->
+  <figure class="full-bleed real-photo">
+    <img src="vtag_real_6.png" alt="V-TAG Pod Kit — 4 flavour variants with open box, Mint / Peach / Grapefruit / Blueberry" />
+    <figcaption>Pod Kit — Flavour Variants &nbsp;·&nbsp; Mint · Peach · Grapefruit · Blueberry &nbsp;·&nbsp; 3 mg/mL</figcaption>
+  </figure>
+
+  <!-- ── Starter Kit dieline — full-bleed ─────────────────────── -->
+  <figure class="full-bleed">
+    <img src="vtag_starter_dieline.png" alt="V-TAG ENVOI Starter Kit — back panel dieline with full compliance content: POISON warning, ingredients, provincial age symbols, CE/FCC/RoHS/WEEE marks, UPC barcode" />
+    <figcaption>ENVOI Starter Kit — Back Panel &nbsp;·&nbsp; Full Compliance Content &nbsp;·&nbsp; Bilingual EN/FR</figcaption>
+  </figure>
+
+
+  <!-- ── EON sheet — full-bleed ────────────────────────────────── -->
+  <figure class="full-bleed">
+    <img src="vtag_eon_sheet.webp" alt="V-TAG EON — product sheet showing full flavour lineup, device variants, and retail communication layout" />
+    <figcaption>EON Single — Product Sheet &nbsp;·&nbsp; Full Flavour Lineup &nbsp;·&nbsp; Retail Communication</figcaption>
+  </figure>
+
+
+
+
+  <!-- ── Real product — full lineup flatlay ────────────────────── -->
+  <figure class="full-bleed real-photo">
+    <img src="vtag_real_5.png" alt="V-TAG full product lineup — EON disposable 6 flavours, ENVOI device, Pod Kit, EON box, Strawberry Kiwi variant" />
+    <figcaption>V-TAG Full Product Lineup — EON Disposable · ENVOI Device · Pod Kit &nbsp;·&nbsp; Canadian Retail 2021–2022</figcaption>
+  </figure>
+
+  <!-- ── Next project ──────────────────────────────────────────── -->
+  <a class="next-project" href="../case_study_03/index.html">
+    <div>
+      <p class="next-label">Next Project</p>
+      <p class="next-title">AZOTO</p>
+    </div>
+    <span class="next-arrow">→</span>
+  </a>
+
+  <!-- ── Footer ───────────────────────────────────────────────── -->
+  <footer>
+    <p class="footer-left">© 2026 Luke Heesun Jung</p>
+    <div class="footer-right">
+      <a href="https://www.linkedin.com/in/lukeheesunjung/" target="_blank">LinkedIn</a>
+      <a href="mailto:lukeheesunjung@gmail.com">Email</a>
+      <a href="../resume.pdf" target="_blank">Resume</a>
+    </div>
+  </footer>
+
+<script>
+  // Nav scroll-aware
+  (function() {
+    var nav = document.querySelector('nav');
+    var heroH = window.innerHeight;
+    function onScroll() {
+      nav.classList.toggle('scrolled', window.scrollY > heroH * 0.85);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+
+  // Sidebar active link via IntersectionObserver
+  (function() {
+    var links = document.querySelectorAll('#sidebar-nav-main a');
+    var sections = [];
+    links.forEach(function(a) {
+      var id = a.getAttribute('href').replace('#','');
+      var el = document.getElementById(id);
+      if (el) sections.push({ id: id, el: el, a: a });
+    });
+    if (!sections.length) return;
+
+    var current = sections[0].id;
+    function setActive(id) {
+      if (id === current) return;
+      current = id;
+      links.forEach(function(a) { a.classList.remove('active'); });
+      var match = document.querySelector('#sidebar-nav-main a[href="#' + id + '"]');
+      if (match) match.classList.add('active');
+    }
+
+    var obs = new IntersectionObserver(function(entries) {
+      entries.forEach(function(e) {
+        if (e.isIntersecting) setActive(e.target.id);
+      });
+    }, { rootMargin: '-30% 0px -60% 0px', threshold: 0 });
+
+    sections.forEach(function(s) { obs.observe(s.el); });
+  })();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luke Heesun Jung — Graphic Designer</title>
+  <style>
+    /* ── Reset & Base ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:   #0a0a0a;
+      --white:   #f8f7f4;
+      --grey:    #6b6b6b;
+      --light:   #e8e6e1;
+      --accent:  #0a0a0a;
+      --font:    'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--white);
+      color: var(--black);
+      overflow-x: hidden;
+    }
+
+    /* ── Nav ──────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 48px;
+      background: transparent;
+      transition: background 0.35s ease, padding 0.35s ease;
+    }
+
+    nav.scrolled {
+      background: var(--white);
+      padding: 16px 48px;
+      border-bottom: 1px solid var(--light);
+    }
+
+    .nav-logo {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--white);
+      text-decoration: none;
+      transition: color 0.35s ease;
+    }
+
+    nav.scrolled .nav-logo { color: var(--black); }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--white);
+      text-decoration: none;
+      opacity: 0.85;
+      transition: opacity 0.2s, color 0.35s ease;
+    }
+
+    nav.scrolled .nav-links a { color: var(--black); }
+
+    .nav-links a:hover { opacity: 1; }
+
+    /* ── Hero ─────────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      min-height: 700px;
+      overflow: hidden;
+      background: #0a0a0a;
+    }
+
+    /* Full-bleed background image */
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      display: block;
+      /* Subtle parallax handled by JS */
+      will-change: transform;
+    }
+
+    /* Very subtle dark vignette at bottom to ease into white body */
+    .hero-vignette {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        transparent 60%,
+        rgba(10,10,10,0.18) 100%
+      );
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* Bottom bar */
+    .hero-bottom {
+      position: absolute;
+      bottom: 36px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding: 0 48px;
+      z-index: 10;
+    }
+
+    .hero-bottom-left {
+      font-size: 11px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+    }
+
+    .hero-bottom-right {
+      font-size: 11px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      text-align: right;
+    }
+
+    /* Scroll indicator */
+    .hero-scroll {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      z-index: 10;
+      cursor: pointer;
+    }
+
+    .hero-scroll span {
+      font-size: 10px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+    }
+
+    .scroll-arrow {
+      width: 1px;
+      height: 36px;
+      background: rgba(255,255,255,0.30);
+      animation: scrollPulse 2.4s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50% { opacity: 0.8; transform: scaleY(1.25); }
+    }
+
+    /* ── About Strip ──────────────────────────────────────────── */
+    .about-strip {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      border-top: 1px solid var(--light);
+    }
+
+    .about-cell {
+      padding: 48px 40px;
+      border-right: 1px solid var(--light);
+    }
+
+    .about-cell:last-child { border-right: none; }
+
+    .about-label {
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-bottom: 14px;
+    }
+
+    .about-value {
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.55;
+      color: var(--black);
+    }
+
+    .about-value strong {
+      font-weight: 600;
+    }
+
+    /* ── Statement ────────────────────────────────────────────── */
+    .statement {
+      padding: 96px 48px;
+      max-width: 900px;
+      border-top: 1px solid var(--light);
+    }
+
+    .statement p {
+      font-size: clamp(22px, 2.8vw, 38px);
+      font-weight: 300;
+      line-height: 1.4;
+      letter-spacing: -0.01em;
+      color: var(--black);
+    }
+
+    .statement p em {
+      font-style: normal;
+      font-weight: 500;
+    }
+
+    /* ── Work Preview ─────────────────────────────────────────── */
+    .work-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 48px 48px 32px;
+      border-top: 1px solid var(--light);
+    }
+
+    .work-header h2 {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--black);
+    }
+
+    .work-header a {
+      font-size: 11px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--grey);
+      text-decoration: none;
+      border-bottom: 1px solid var(--light);
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .work-header a:hover {
+      color: var(--black);
+      border-color: var(--black);
+    }
+
+    .work-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-top: 1px solid var(--light);
+    }
+
+    .work-item {
+      position: relative;
+      overflow: hidden;
+      aspect-ratio: 4/3;
+      border-right: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+      cursor: pointer;
+    }
+
+    .work-item:nth-child(even) { border-right: none; }
+
+    .work-item img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.88);
+      transition: transform 0.6s ease, filter 0.4s ease;
+    }
+
+    .work-item:hover img {
+      transform: scale(1.04);
+      filter: brightness(0.72);
+    }
+
+    .work-item-info {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 28px 32px;
+      background: linear-gradient(to top, rgba(0,0,0,0.55) 0%, transparent 100%);
+    }
+
+    .work-item-tags {
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.65);
+      margin-bottom: 6px;
+    }
+
+    .work-item-title {
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--white);
+      letter-spacing: -0.01em;
+    }
+
+    /* ── Footer ───────────────────────────────────────────────── */
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 32px 48px;
+      border-top: 1px solid var(--light);
+    }
+
+    .footer-left {
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--grey);
+    }
+
+    .footer-right {
+      display: flex;
+      gap: 28px;
+    }
+
+    .footer-right a {
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--grey);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-right a:hover { color: var(--black); }
+
+    /* ── Responsive ───────────────────────────────────────────── */
+    @media (max-width: 768px) {
+      nav { padding: 20px 24px; }
+      .nav-links { display: none; }
+      .hero-bottom { padding: 0 24px; }
+      .about-strip { grid-template-columns: 1fr 1fr; }
+      .about-cell:nth-child(2) { border-right: none; }
+      .about-cell:nth-child(3) { border-right: 1px solid var(--light); }
+      .statement { padding: 64px 24px; }
+      .work-grid { grid-template-columns: 1fr; }
+      .work-item { border-right: none; }
+      footer { flex-direction: column; gap: 16px; text-align: center; }
+    }
+  </style>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+</head>
+<body>
+
+  <!-- ── Navigation ───────────────────────────────────────────── -->
+  <nav>
+    <a href="#" class="nav-logo">Luke Heesun Jung</a>
+    <ul class="nav-links">
+      <li><a href="#work">Work</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="mailto:lukeheesunjung@gmail.com">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── Hero ─────────────────────────────────────────────────── -->
+  <section class="hero">
+
+    <!-- Full-bleed background image -->
+    <img class="hero-bg" src="heroshot.webp"
+         alt="Luke Heesun Jung — Graphic Designer" />
+
+    <!-- Bottom vignette -->
+    <div class="hero-vignette"></div>
+
+    <!-- Bottom bar -->
+    <div class="hero-bottom">
+      <div class="hero-bottom-left">
+        10+ Years Experience<br />
+        Toronto &amp; Seoul
+      </div>
+      <div class="hero-bottom-right">
+        Branding · Editorial<br />
+        Packaging · UI/UX
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="hero-scroll" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})">
+      <div class="scroll-arrow"></div>
+      <span>Scroll</span>
+    </div>
+
+  </section>
+
+  <!-- ── About Strip ───────────────────────────────────────────── -->
+  <section class="about-strip" id="about">
+    <div class="about-cell">
+      <p class="about-label">Discipline</p>
+      <p class="about-value">Visual Communication<br />Branding &amp; Identity<br />UI/UX &amp; Digital Product</p>
+    </div>
+    <div class="about-cell">
+      <p class="about-label">Background</p>
+      <p class="about-value">Trained in <strong>Ceramic Art</strong>,<br />then Graphic Design<br />at OCAD University</p>
+    </div>
+    <div class="about-cell">
+      <p class="about-label">Experience</p>
+      <p class="about-value"><strong>10+ years</strong> across<br />Toronto and Seoul<br />100+ global clients</p>
+    </div>
+    <div class="about-cell">
+      <p class="about-label">Currently</p>
+      <p class="about-value">Open to <strong>full-time</strong><br />opportunities<br />in Toronto</p>
+    </div>
+  </section>
+
+  <!-- ── Statement ────────────────────────────────────────────── -->
+  <section class="statement">
+    <p>
+      Trained first in ceramic art, then graphic design —
+      a practice built on <em>material thinking</em>,
+      where every decision carries weight beyond the screen.
+      From branding infrastructure to kindergarten safety systems,
+      the work begins before the brief.
+    </p>
+  </section>
+
+  <!-- ── Work Preview ──────────────────────────────────────────── -->
+  <div class="work-header" id="work">
+    <h2>Selected Work</h2>
+    <a href="#">View All →</a>
+  </div>
+
+  <div class="work-grid">
+    <a class="work-item" href="case_study_01/index.html" style="text-decoration:none; display:block;">
+      <img src="bus_photo_2.jpg" alt="LittleN × Sandeul" />
+      <div class="work-item-info">
+        <p class="work-item-tags">UI/UX · Digital Product · Education</p>
+        <p class="work-item-title">LittleN × Sandeul</p>
+      </div>
+    </a>
+    <div class="work-item" style="background:#e8e6e1; display:flex; align-items:center; justify-content:center;">
+      <div style="text-align:center; padding:40px;">
+        <p style="font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:#aaa; margin-bottom:12px;">Coming Soon</p>
+        <p style="font-size:22px; font-weight:300; color:#ccc;">Project 02</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Footer ───────────────────────────────────────────────── -->
+  <footer>
+    <p class="footer-left">© 2026 Luke Heesun Jung</p>
+    <div class="footer-right">
+      <a href="https://www.linkedin.com/in/lukeheesunjung/" target="_blank">LinkedIn</a>
+      <a href="mailto:lukeheesunjung@gmail.com">Email</a>
+      <a href="#">Resume</a>
+    </div>
+  </footer>
+
+<script>
+  // Scroll-aware nav — main page
+  (function() {
+    var nav = document.querySelector('nav');
+    var heroH = window.innerHeight;
+    function onScroll() {
+      if (window.scrollY > heroH * 0.85) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+</script>
+</body>
+</html>

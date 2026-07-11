@@ -1,0 +1,749 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Process as Form — Luke Heesun Jung</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:  #0a0a0a;
+      --white:  #f8f7f4;
+      --grey:   #6b6b6b;
+      --light:  #e8e6e1;
+      --font:   'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--white); color: var(--black); overflow-x: hidden; }
+
+    /* ── Nav ─────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 24px 48px;
+      background: transparent;
+      transition: background 0.35s ease, padding 0.35s ease;
+    }
+    nav.scrolled {
+      background: var(--white);
+      padding: 16px 48px;
+      border-bottom: 1px solid var(--light);
+    }
+    .nav-logo {
+      font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--white); text-decoration: none;
+      transition: color 0.35s ease;
+    }
+    nav.scrolled .nav-logo { color: var(--black); }
+    .nav-back {
+      font-size: 12px; font-weight: 400; letter-spacing: 0.06em; text-transform: uppercase;
+      color: rgba(255,255,255,0.80); text-decoration: none;
+      transition: color 0.35s ease, opacity .2s;
+    }
+    nav.scrolled .nav-back { color: var(--grey); }
+    .nav-back:hover { opacity: 1; }
+    nav.scrolled .nav-back:hover { color: var(--black); }
+
+    /* ── Hero ────────────────────────────────────────────────── */
+    .hero {
+      position: relative; width: 100%; height: 100vh;
+      min-height: 640px; overflow: hidden; z-index: 1;
+    }
+    .hero-img {
+      width: 100%; height: 100%;
+      object-fit: cover; object-position: center top;
+      display: block; filter: brightness(0.72);
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.55) 100%);
+      pointer-events: none;
+    }
+    .hero-content {
+      position: absolute; bottom: 72px; left: 48px; right: 48px; z-index: 10;
+    }
+    .hero-tags {
+      font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+      color: rgba(255,255,255,0.60); margin-bottom: 20px;
+    }
+    .hero-title {
+      font-size: clamp(42px, 6vw, 88px); font-weight: 300; letter-spacing: -0.02em;
+      color: var(--white); line-height: 1.0; margin-bottom: 24px;
+    }
+    .hero-descriptor {
+      font-size: clamp(14px, 1.5vw, 18px); font-weight: 300; line-height: 1.55;
+      color: rgba(255,255,255,0.80); max-width: 560px;
+    }
+
+    /* ── Meta strip ──────────────────────────────────────────── */
+    .meta-strip {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid var(--light);
+    }
+    .meta-cell { padding: 40px; border-right: 1px solid var(--light); }
+    .meta-cell:last-child { border-right: none; }
+    .meta-label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey); margin-bottom: 10px; }
+    .meta-value { font-size: 14px; font-weight: 400; line-height: 1.6; color: var(--black); }
+    .meta-value strong { font-weight: 600; }
+
+    /* ── Body layout ─────────────────────────────────────────── */
+    .page-layout {
+      display: grid; grid-template-columns: 280px 1fr; align-items: start;
+    }
+    .sidebar-fixed {
+      position: sticky; top: 72px; align-self: start;
+      padding: 80px 40px 80px 48px;
+      border-right: 1px solid var(--light); z-index: 0;
+    }
+    .sidebar-label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey); margin-bottom: 16px; }
+    .sidebar-nav { list-style: none; }
+    .sidebar-nav li { margin-bottom: 10px; }
+    .sidebar-nav a {
+      font-size: 13px; color: var(--grey); text-decoration: none;
+      letter-spacing: 0.02em; transition: color .2s;
+    }
+    .sidebar-nav a:hover { color: var(--black); }
+    .sidebar-nav a.active { color: var(--black); font-weight: 500; }
+
+    .content-col { overflow: hidden; }
+    .body-wrap { border-bottom: 1px solid var(--light); }
+    .body-content { padding: 80px 64px 80px 56px; }
+
+    /* ── Section ─────────────────────────────────────────────── */
+    .section { margin-bottom: 64px; }
+    .section:last-child { margin-bottom: 0; }
+    .section-label {
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--grey); margin-bottom: 28px;
+      padding-bottom: 16px; border-bottom: 1px solid var(--light);
+    }
+    .section p {
+      font-size: 16px; font-weight: 300; line-height: 1.75;
+      color: var(--black); margin-bottom: 20px;
+    }
+    .section p:last-child { margin-bottom: 0; }
+    .section p strong { font-weight: 500; }
+
+    /* ── Pull quote ──────────────────────────────────────────── */
+    .pull-quote {
+      border-left: 2px solid var(--black);
+      padding: 4px 0 4px 28px; margin: 48px 0;
+    }
+    .pull-quote p {
+      font-size: clamp(18px, 2vw, 26px) !important;
+      font-weight: 300 !important; line-height: 1.45 !important;
+      letter-spacing: -0.01em; color: var(--black) !important;
+      margin-bottom: 0 !important;
+    }
+
+    /* ── Full-bleed ──────────────────────────────────────────── */
+    .full-bleed { width: 100%; margin: 0; }
+    .full-bleed img {
+      width: 100%; display: block;
+      border-top: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+    }
+    .full-bleed figcaption {
+      padding: 14px 48px;
+      font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--grey); border-bottom: 1px solid var(--light);
+    }
+
+    /* ── 2-col image grid ────────────────────────────────────── */
+    .img-2col {
+      display: grid; grid-template-columns: 1fr 1fr;
+      border-top: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+    }
+    .img-2col-item { overflow: hidden; border-right: 1px solid var(--light); }
+    .img-2col-item:last-child { border-right: none; }
+    .img-2col-item img {
+      width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block;
+    }
+    .img-2col-caption {
+      padding: 14px 20px;
+      font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--grey); border-top: 1px solid var(--light);
+    }
+
+    /* ── 3-col image grid ────────────────────────────────────── */
+    .img-3col {
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      border-top: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+    }
+    .img-3col-item { overflow: hidden; border-right: 1px solid var(--light); }
+    .img-3col-item:last-child { border-right: none; }
+    .img-3col-item img {
+      width: 100%; aspect-ratio: 3/4; object-fit: cover; display: block;
+    }
+    .img-3col-caption {
+      padding: 14px 16px;
+      font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--grey); border-top: 1px solid var(--light);
+    }
+
+    /* ── 4-col image grid ────────────────────────────────────── */
+    .img-4col {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+    }
+    .img-4col-item { overflow: hidden; border-right: 1px solid var(--light); }
+    .img-4col-item:last-child { border-right: none; }
+    .img-4col-item img {
+      width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block;
+    }
+    .img-4col-caption {
+      padding: 12px 14px;
+      font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--grey); border-top: 1px solid var(--light);
+    }
+
+    /* ── Sketch → Result pair (side-by-side with label) ─────── */
+    .sketch-result {
+      display: grid; grid-template-columns: 1fr 1fr;
+      border-top: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+    }
+    .sketch-result-item { overflow: hidden; border-right: 1px solid var(--light); }
+    .sketch-result-item:last-child { border-right: none; }
+    .sketch-result-item img {
+      width: 100%; aspect-ratio: 1/1; object-fit: cover; display: block;
+    }
+    .sketch-result-label {
+      padding: 10px 20px;
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--grey); border-top: 1px solid var(--light);
+      background: var(--white);
+    }
+    .sketch-result-caption {
+      padding: 10px 20px 14px;
+      font-size: 11px; letter-spacing: 0.06em;
+      color: var(--black); font-weight: 300;
+    }
+
+    /* ── Process step row ────────────────────────────────────── */
+    .process-row {
+      display: grid; grid-template-columns: repeat(6, 1fr);
+      border-top: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+    }
+    .process-step {
+      padding: 28px 20px; border-right: 1px solid var(--light);
+      text-align: center;
+    }
+    .process-step:last-child { border-right: none; }
+    .process-step.active { background: var(--black); }
+    .process-step-num {
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--grey); margin-bottom: 8px;
+    }
+    .process-step.active .process-step-num { color: rgba(255,255,255,0.5); }
+    .process-step-name {
+      font-size: 13px; font-weight: 500; color: var(--black);
+    }
+    .process-step.active .process-step-name { color: var(--white); }
+
+    /* ── Small grid (exhibition / photoshoot) ────────────────── */
+    .small-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+    }
+    .small-grid-item { overflow: hidden; border-right: 1px solid var(--light); }
+    .small-grid-item:last-child { border-right: none; }
+    .small-grid-item img {
+      width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block;
+      filter: brightness(0.92);
+    }
+    .small-grid-caption {
+      padding: 10px 12px;
+      font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--grey); border-top: 1px solid var(--light);
+    }
+
+    /* ── Dark block ──────────────────────────────────────────── */
+    .dark-block {
+      background: var(--black); color: var(--white);
+      padding: 96px 48px; width: 100%;
+    }
+    .dark-label {
+      font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: rgba(255,255,255,0.40); margin-bottom: 40px;
+    }
+    .dark-heading {
+      font-size: clamp(24px, 3.5vw, 44px); font-weight: 300; line-height: 1.2;
+      color: var(--white); margin-bottom: 32px; max-width: 720px;
+    }
+    .dark-body p {
+      font-size: 15px; line-height: 1.75; color: rgba(255,255,255,0.65);
+      margin-bottom: 16px; max-width: 640px;
+    }
+    .dark-body p:last-child { margin-bottom: 0; }
+
+    /* ── Next project ────────────────────────────────────────── */
+    .next-project {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 56px 48px; border-top: 1px solid var(--light);
+      text-decoration: none; color: var(--black);
+      transition: background .2s;
+    }
+    .next-project:hover { background: var(--light); }
+    .next-label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey); margin-bottom: 10px; }
+    .next-title { font-size: 24px; font-weight: 300; color: var(--black); }
+    .next-arrow { font-size: 28px; font-weight: 200; color: var(--grey); }
+
+    /* ── Footer ──────────────────────────────────────────────── */
+    footer {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 28px 48px; border-top: 1px solid var(--light);
+    }
+    .footer-left { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey); }
+    .footer-right { display: flex; gap: 28px; }
+    .footer-right a {
+      font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--grey); text-decoration: none; transition: color .2s;
+    }
+    .footer-right a:hover { color: var(--black); }
+
+    /* ── Responsive ──────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .page-layout { grid-template-columns: 220px 1fr; }
+      .process-row { grid-template-columns: repeat(3, 1fr); }
+      .img-4col { grid-template-columns: repeat(2, 1fr); }
+      .img-4col-item:nth-child(2) { border-right: none; }
+      .img-4col-item:nth-child(3) { border-top: 1px solid var(--light); }
+    }
+    @media (max-width: 768px) {
+      nav { padding: 20px 24px; }
+      nav.scrolled { padding: 14px 24px; }
+      .hero-content { bottom: 48px; left: 24px; right: 24px; }
+      .meta-strip { grid-template-columns: 1fr 1fr; }
+      .meta-cell:nth-child(2) { border-right: none; }
+      .meta-cell:nth-child(3) { border-top: 1px solid var(--light); }
+      .page-layout { grid-template-columns: 1fr; }
+      .sidebar-fixed { display: none; }
+      .body-content { padding: 48px 24px; }
+      .img-2col, .sketch-result { grid-template-columns: 1fr; }
+      .img-2col-item, .sketch-result-item { border-right: none; border-bottom: 1px solid var(--light); }
+      .img-3col { grid-template-columns: 1fr 1fr; }
+      .img-3col-item:nth-child(2) { border-right: none; }
+      .img-3col-item:nth-child(3) { border-top: 1px solid var(--light); border-right: none; }
+      .img-4col, .small-grid { grid-template-columns: 1fr 1fr; }
+      .process-row { grid-template-columns: repeat(3, 1fr); }
+      .dark-block { padding: 64px 24px; }
+      .next-project { padding: 40px 24px; }
+      footer { padding: 24px; flex-direction: column; gap: 16px; text-align: center; }
+    }
+
+    /* ── Skip Navigation (Accessibility) ─────────────────────────── */
+    .skip-nav {
+      position: absolute;
+      top: -100%;
+      left: 0;
+      background: var(--black);
+      color: var(--white);
+      padding: 12px 24px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      z-index: 9999;
+      transition: top 0.2s;
+    }
+    .skip-nav:focus {
+      top: 0;
+    }
+
+    /* ── Focus Visible (Keyboard Navigation) ─────────────────────── */
+    :focus-visible {
+      outline: 2px solid var(--black);
+      outline-offset: 3px;
+    }
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid var(--black);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+  </style>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+</head>
+<body>
+  <a href="#main-content" class="skip-nav">Skip to main content</a>
+
+  <!-- ── Nav ──────────────────────────────────────────────────── -->
+  <nav id="main-nav">
+    <a class="nav-logo" href="../index.html">Luke Heesun Jung</a>
+    <a class="nav-back" href="../index.html#work">← All Work</a>
+  </nav>
+
+  <!-- ── Hero ─────────────────────────────────────────────────── -->
+  <section class="hero">
+    <img class="hero-img" src="ceramic_sketch.jpg" alt="Process as Form — ceramic sketch, design process" />
+    <div class="hero-overlay"></div>
+    <div class="hero-content">
+      <p class="hero-tags">Fine Art &nbsp;·&nbsp; Design Process &nbsp;·&nbsp; V-TAG &nbsp;·&nbsp; Spatial Design</p>
+      <h1 class="hero-title">Process<br />as Form</h1>
+      <p class="hero-descriptor">From the first mark on paper to the object on the shelf — the same method, applied across every discipline.</p>
+    </div>
+  </section>
+
+  <!-- ── Meta strip ────────────────────────────────────────────── -->
+  <div class="meta-strip" id="main-content">
+    <div class="meta-cell">
+      <p class="meta-label">Discipline</p>
+      <p class="meta-value">Fine Art<br />Graphic Design<br /><strong>Art Direction</strong></p>
+    </div>
+    <div class="meta-cell">
+      <p class="meta-label">Medium</p>
+      <p class="meta-value">Ceramic · Painting<br />Packaging · Spatial<br /><strong>Handcraft to Digital</strong></p>
+    </div>
+    <div class="meta-cell">
+      <p class="meta-label">Context</p>
+      <p class="meta-value">V-TAG · Personal Work<br />Seoul · Toronto<br /><strong>2014 – 2022</strong></p>
+    </div>
+    <div class="meta-cell">
+      <p class="meta-label">Process</p>
+      <p class="meta-value">Understand · Research<br />Sketch · Design<br /><strong>Apply · Evaluate</strong></p>
+    </div>
+  </div>
+
+  <!-- ── Body ──────────────────────────────────────────────────── -->
+  <div class="page-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar-fixed">
+      <p class="sidebar-label">Contents</p>
+      <ul class="sidebar-nav" id="sidebar-nav">
+        <li><a href="#understand" class="active">Understand</a></li>
+        <li><a href="#research">Research</a></li>
+        <li><a href="#sketch">Sketch</a></li>
+        <li><a href="#design">Design</a></li>
+        <li><a href="#apply">Apply</a></li>
+        <li><a href="#evaluate">Evaluate</a></li>
+      </ul>
+    </aside>
+
+    <!-- Content column -->
+    <div class="content-col">
+
+      <!-- ── Understand ─────────────────────────────────────── -->
+      <div class="body-wrap" id="understand">
+        <div class="body-content">
+          <div class="section">
+            <p class="section-label">01 &nbsp;·&nbsp; Understand</p>
+            <p>Every project begins with understanding the material — what it resists, what it allows. Before a brief, before a client, there is a question about form and space. That question is the same whether the material is clay, paper, or a screen.</p>
+            <p>The work here is not background. It is the foundation the rest is built on.</p>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content-col -->
+  </div><!-- /page-layout -->
+
+  <!-- ── Understand: artwork_0 pair ───────────────────────────── -->
+  <div class="img-2col">
+    <div class="img-2col-item">
+      <img src="artwork_0.webp" alt="Fine art — form study" />
+      <p class="img-2col-caption">Form Study</p>
+    </div>
+    <div class="img-2col-item">
+      <img src="artwork_0-1.png" alt="Fine art — spatial study" />
+      <p class="img-2col-caption">Spatial Study</p>
+    </div>
+  </div>
+
+  <!-- ── Body continues ────────────────────────────────────────── -->
+  <div class="page-layout">
+    <aside class="sidebar-fixed" style="visibility:hidden;"></aside>
+    <div class="content-col">
+
+      <!-- ── Research ──────────────────────────────────────── -->
+      <div class="body-wrap" id="research">
+        <div class="body-content">
+          <div class="section">
+            <p class="section-label">02 &nbsp;·&nbsp; Research</p>
+            <p>Research is not only reading. It is making — testing material, surface, and structure to understand what is possible before committing to a direction. Painting and drawing are part of this phase: a way of seeing that informs every subsequent decision.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Research: artwork_1 + artwork_2 (4-col) ──────────────── -->
+  <div class="img-4col">
+    <div class="img-4col-item">
+      <img src="artwork_1.png" alt="Research — material study 1" />
+      <p class="img-4col-caption">Material Study 01</p>
+    </div>
+    <div class="img-4col-item">
+      <img src="artwork_1-1.png" alt="Research — material study 2" />
+      <p class="img-4col-caption">Material Study 02</p>
+    </div>
+    <div class="img-4col-item">
+      <img src="artwork_2.png" alt="Research — colour and surface study" />
+      <p class="img-4col-caption">Colour &amp; Surface</p>
+    </div>
+    <div class="img-4col-item">
+      <img src="artwork_2-1.png" alt="Research — structural study" />
+      <p class="img-4col-caption">Structural Study</p>
+    </div>
+  </div>
+
+  <!-- ── Body continues ────────────────────────────────────────── -->
+  <div class="page-layout">
+    <aside class="sidebar-fixed" style="visibility:hidden;"></aside>
+    <div class="content-col">
+
+      <!-- ── Sketch ────────────────────────────────────────── -->
+      <div class="body-wrap" id="sketch">
+        <div class="body-content">
+          <div class="section">
+            <p class="section-label">03 &nbsp;·&nbsp; Sketch</p>
+            <p>The sketch is where intent meets constraint for the first time. A ceramic coil sketch and a V-TAG packaging concept sketch are the same act — resolving a three-dimensional problem on a two-dimensional surface, fast enough that the idea does not escape.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Sketch: ceramic → V-TAG (4-col) ──────────────────────── -->
+  <div class="img-4col">
+    <div class="img-4col-item">
+      <img src="ceramic_sketch.jpg" alt="Ceramic form sketch — 3D object study" />
+      <p class="img-4col-caption">Ceramic — Form</p>
+    </div>
+    <div class="img-4col-item">
+      <img src="ceramic_coil_sketch.jpg" alt="Ceramic coil construction sketch" />
+      <p class="img-4col-caption">Ceramic — Coil</p>
+    </div>
+    <div class="img-4col-item">
+      <img src="vtag_idea_sketches.webp" alt="V-TAG packaging idea sketches" />
+      <p class="img-4col-caption">V-TAG — Packaging</p>
+    </div>
+    <div class="img-4col-item">
+      <img src="vtag_potkit_sketches.webp" alt="V-TAG pot kit device sketches" />
+      <p class="img-4col-caption">V-TAG — Device</p>
+    </div>
+  </div>
+
+  <!-- ── Body continues ────────────────────────────────────────── -->
+  <div class="page-layout">
+    <aside class="sidebar-fixed" style="visibility:hidden;"></aside>
+    <div class="content-col">
+
+      <!-- ── Design ────────────────────────────────────────── -->
+      <div class="body-wrap" id="design">
+        <div class="body-content">
+          <div class="section">
+            <p class="section-label">04 &nbsp;·&nbsp; Design</p>
+            <p>Design is the translation of the sketch into a system. The same proportional logic, the same sensitivity to surface — now applied with production constraints, typographic rules, and brand consistency in mind. The work becomes repeatable.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Design: sketch → result pairs ────────────────────────── -->
+  <!-- Row 1: artwork_3 pair -->
+  <div class="sketch-result">
+    <div class="sketch-result-item">
+      <img src="artwork_3.png" alt="Design — artwork study 3" />
+      <p class="sketch-result-label">Sketch</p>
+      <p class="sketch-result-caption">Composition study</p>
+    </div>
+    <div class="sketch-result-item">
+      <img src="artwork_3-1.png" alt="Design — artwork result 3" />
+      <p class="sketch-result-label">Result</p>
+      <p class="sketch-result-caption">Applied composition</p>
+    </div>
+  </div>
+
+  <!-- Row 2: artwork_4 pair -->
+  <div class="sketch-result" style="border-top: none;">
+    <div class="sketch-result-item">
+      <img src="artwork_4.png" alt="Design — artwork study 4" />
+      <p class="sketch-result-label">Sketch</p>
+      <p class="sketch-result-caption">Form resolution</p>
+    </div>
+    <div class="sketch-result-item">
+      <img src="artwork_4-1.png" alt="Design — artwork result 4" />
+      <p class="sketch-result-label">Result</p>
+      <p class="sketch-result-caption">Final form</p>
+    </div>
+  </div>
+
+  <!-- ── Body continues ────────────────────────────────────────── -->
+  <div class="page-layout">
+    <aside class="sidebar-fixed" style="visibility:hidden;"></aside>
+    <div class="content-col">
+
+      <!-- ── Apply ─────────────────────────────────────────── -->
+      <div class="body-wrap" id="apply">
+        <div class="body-content">
+          <div class="section">
+            <p class="section-label">05 &nbsp;·&nbsp; Apply</p>
+            <p>Application is the proof. The design moves from screen to physical object — packaging mockups, material samples, spatial environments. This is where the decisions made in every prior step either hold or fail.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Apply: mockup 3-col ───────────────────────────────────── -->
+  <div class="img-3col">
+    <div class="img-3col-item">
+      <img src="mockup_1.webp" alt="V-TAG packaging mockup — front panel" />
+      <p class="img-3col-caption">Mockup 01 — Front</p>
+    </div>
+    <div class="img-3col-item">
+      <img src="mockup_2.webp" alt="V-TAG packaging mockup — side panel" />
+      <p class="img-3col-caption">Mockup 02 — Side</p>
+    </div>
+    <div class="img-3col-item">
+      <img src="mockup_3.webp" alt="V-TAG packaging mockup — pre-production" />
+      <p class="img-3col-caption">Mockup 03 — Pre-Production</p>
+    </div>
+  </div>
+
+  <!-- ── Body continues ────────────────────────────────────────── -->
+  <div class="page-layout">
+    <aside class="sidebar-fixed" style="visibility:hidden;"></aside>
+    <div class="content-col">
+
+      <!-- ── Evaluate ──────────────────────────────────────── -->
+      <div class="body-wrap" id="evaluate">
+        <div class="body-content">
+          <div class="section">
+            <p class="section-label">06 &nbsp;·&nbsp; Evaluate</p>
+            <p>Evaluation happens in the real world. The photoshoot tests how the design reads under light. The exhibition tests how the brand holds at scale — from a 10 cm package to a 10 m booth. Both are the same question: does it work?</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ── Evaluate: photoshoot + exhibition (small 4-col) ──────── -->
+  <div class="small-grid">
+    <div class="small-grid-item">
+      <img src="photoshooting.webp" alt="Product photoshoot — V-TAG packaging" />
+      <p class="small-grid-caption">Photoshoot</p>
+    </div>
+    <div class="small-grid-item">
+      <img src="exhibition_1.jpg" alt="V-TAG exhibition — Shenzhen" />
+      <p class="small-grid-caption">Exhibition 01</p>
+    </div>
+    <div class="small-grid-item">
+      <img src="exhibition_2.jpg" alt="V-TAG exhibition — booth detail" />
+      <p class="small-grid-caption">Exhibition 02</p>
+    </div>
+    <div class="small-grid-item">
+      <img src="exhibition_3.png" alt="V-TAG exhibition — visitor interaction" />
+      <p class="small-grid-caption">Exhibition 03</p>
+    </div>
+  </div>
+
+  <!-- ── Booth full-bleed (contained height) ───────────────────── -->
+  <figure class="full-bleed">
+    <img src="booth_1.png" alt="V-TAG exhibition booth — Shenzhen Exhibition Show" style="max-height: 70vh; object-fit: cover;" />
+    <figcaption>V-TAG Exhibition Booth &nbsp;·&nbsp; Shenzhen Exhibition Show</figcaption>
+  </figure>
+
+  <!-- ── Dark reflection ───────────────────────────────────────── -->
+  <div class="dark-block">
+    <p class="dark-label">The Method</p>
+    <h2 class="dark-heading">The process does not change. The material does.</h2>
+    <div class="dark-body">
+      <p>Understand the problem. Research the constraints. Sketch the possibilities. Design the system. Apply it to the real world. Evaluate what holds.</p>
+      <p>This sequence is not a formula — it is a discipline. It applies to a ceramic vessel, a regulated package, a spatial environment, or a digital interface. The medium changes. The rigour does not.</p>
+    </div>
+  </div>
+
+  <!-- ── Process row summary ───────────────────────────────────── -->
+  <div class="process-row">
+    <div class="process-step">
+      <p class="process-step-num">01</p>
+      <p class="process-step-name">Understand</p>
+    </div>
+    <div class="process-step">
+      <p class="process-step-num">02</p>
+      <p class="process-step-name">Research</p>
+    </div>
+    <div class="process-step">
+      <p class="process-step-num">03</p>
+      <p class="process-step-name">Sketch</p>
+    </div>
+    <div class="process-step">
+      <p class="process-step-num">04</p>
+      <p class="process-step-name">Design</p>
+    </div>
+    <div class="process-step">
+      <p class="process-step-num">05</p>
+      <p class="process-step-name">Apply</p>
+    </div>
+    <div class="process-step">
+      <p class="process-step-num">06</p>
+      <p class="process-step-name">Evaluate</p>
+    </div>
+  </div>
+
+  <!-- ── Next project ──────────────────────────────────────────── -->
+  <a class="next-project" href="../case_study_04/index.html">
+    <div>
+      <p class="next-label">Related Project</p>
+      <p class="next-title">V-TAG →</p>
+    </div>
+    <span class="next-arrow">→</span>
+  </a>
+
+  <!-- ── Footer ───────────────────────────────────────────────── -->
+  <footer>
+    <p class="footer-left">© 2026 Luke Heesun Jung</p>
+    <div class="footer-right">
+      <a href="https://www.linkedin.com/in/lukeheesunjung/" target="_blank">LinkedIn</a>
+      <a href="mailto:lukeheesunjung@gmail.com">Email</a>
+      <a href="../resume.pdf" target="_blank">Resume</a>
+    </div>
+  </footer>
+
+<script>
+  // Nav scroll-aware
+  (function() {
+    var nav = document.getElementById('main-nav');
+    function onScroll() {
+      nav.classList.toggle('scrolled', window.scrollY > window.innerHeight * 0.6);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+
+  // Sidebar active state
+  (function() {
+    var sections = ['understand','research','sketch','design','apply','evaluate'];
+    var links = document.querySelectorAll('.sidebar-nav a');
+    function onScroll() {
+      var scrollY = window.scrollY + 120;
+      var active = sections[0];
+      sections.forEach(function(id) {
+        var el = document.getElementById(id);
+        if (el && el.offsetTop <= scrollY) active = id;
+      });
+      links.forEach(function(a) {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + active);
+      });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+</script>
+</body>
+</html>

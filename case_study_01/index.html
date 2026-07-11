@@ -1,0 +1,763 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LittleN × Sandeul — Luke Heesun Jung</title>
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:  #0a0a0a;
+      --white:  #f8f7f4;
+      --grey:   #6b6b6b;
+      --light:  #e8e6e1;
+      --font:   'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+    body { font-family: var(--font); background: var(--white); color: var(--black); overflow-x: hidden; }
+
+    /* ── Nav ─────────────────────────────────────────────────── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 24px 48px;
+      background: transparent;
+      transition: background 0.35s ease, padding 0.35s ease;
+    }
+    nav.scrolled {
+      background: var(--white);
+      padding: 16px 48px;
+      border-bottom: 1px solid var(--light);
+    }
+    .nav-logo {
+      font-size: 13px; font-weight: 500; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--white); text-decoration: none;
+      transition: color 0.35s ease;
+    }
+    nav.scrolled .nav-logo { color: var(--black); }
+    .nav-back {
+      font-size: 12px; font-weight: 400; letter-spacing: 0.06em; text-transform: uppercase;
+      color: rgba(255,255,255,0.80); text-decoration: none;
+      transition: color 0.35s ease, opacity .2s;
+    }
+    nav.scrolled .nav-back { color: var(--grey); }
+    .nav-back:hover { opacity: 1; }
+    nav.scrolled .nav-back:hover { color: var(--black); }
+
+    /* ── Hero ────────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      min-height: 640px;
+      overflow: hidden;
+      z-index: 1;
+    }
+    .hero-img {
+      width: 100%; height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      display: block;
+      filter: brightness(0.80);
+    }
+    .hero-overlay {
+      position: absolute; inset: 0;
+      background: linear-gradient(to bottom, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0.50) 100%);
+      pointer-events: none;
+    }
+    /* center text overlay */
+    .hero-content {
+      position: absolute;
+      bottom: 72px; left: 48px; right: 48px;
+      z-index: 10;
+    }
+    .hero-tags {
+      font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+      color: rgba(255,255,255,0.60); margin-bottom: 20px;
+    }
+    .hero-title {
+      font-size: clamp(42px, 6vw, 88px); font-weight: 300; letter-spacing: -0.02em;
+      color: var(--white); line-height: 1.0; margin-bottom: 24px;
+    }
+    .hero-title span { font-weight: 600; }
+    .hero-descriptor {
+      font-size: clamp(14px, 1.5vw, 18px); font-weight: 300; line-height: 1.55;
+      color: rgba(255,255,255,0.80); max-width: 640px;
+    }
+
+    /* ── Meta strip ──────────────────────────────────────────── */
+    .meta-strip {
+      display: grid; grid-template-columns: repeat(4, 1fr);
+      border-bottom: 1px solid var(--light);
+    }
+    .meta-cell {
+      padding: 40px 40px; border-right: 1px solid var(--light);
+    }
+    .meta-cell:last-child { border-right: none; }
+    .meta-label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey); margin-bottom: 10px; }
+    .meta-value { font-size: 14px; font-weight: 400; line-height: 1.6; color: var(--black); }
+    .meta-value strong { font-weight: 600; }
+
+    /* ── Body layout ─────────────────────────────────────────── */
+    /* Outer two-column layout: sticky sidebar + scrollable content column */
+    .page-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      align-items: start;
+    }
+    /* Sidebar — sticky inside page-layout */
+    .sidebar-overlay { display: none; }
+    .sidebar-fixed {
+      position: sticky;
+      top: 72px;
+      align-self: start;
+      padding: 80px 40px 80px 48px;
+      border-right: 1px solid var(--light);
+      z-index: 0;
+    }
+    .sidebar-label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey); margin-bottom: 16px; }
+    .sidebar-nav { list-style: none; }
+    .sidebar-nav li { margin-bottom: 10px; }
+    .sidebar-nav a {
+      font-size: 13px; color: var(--grey); text-decoration: none;
+      letter-spacing: 0.02em; transition: color .2s;
+    }
+    .sidebar-nav a:hover { color: var(--black); }
+    .sidebar-nav a.active { color: var(--black); font-weight: 500; }
+
+    /* Content column */
+    .content-col { overflow: hidden; }
+
+    /* Legacy body-wrap — now a simple border separator */
+    .body-wrap { border-bottom: 1px solid var(--light); }
+    .body-sidebar { display: none; } /* replaced by sidebar-fixed */
+    .body-content { padding: 80px 64px 80px 56px; }
+
+    /* ── Section: About ──────────────────────────────────────── */
+    .section { margin-bottom: 80px; }
+    .section-label {
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--grey); margin-bottom: 28px;
+      padding-bottom: 16px; border-bottom: 1px solid var(--light);
+    }
+    .section p {
+      font-size: 17px; font-weight: 300; line-height: 1.75;
+      color: var(--black); margin-bottom: 28px;
+    }
+    .section p:last-child { margin-bottom: 0; }
+    .section p strong { font-weight: 500; }
+
+    /* ── Pull quote ──────────────────────────────────────────── */
+    .pull-quote {
+      border-left: 2px solid var(--black);
+      padding: 4px 0 4px 28px;
+      margin: 48px 0;
+    }
+    .pull-quote p {
+      font-size: clamp(20px, 2.2vw, 28px) !important;
+      font-weight: 300 !important;
+      line-height: 1.45 !important;
+      letter-spacing: -0.01em;
+      color: var(--black) !important;
+      margin-bottom: 0 !important;
+    }
+
+    /* ── Full-bleed image ────────────────────────────────────── */
+    .full-bleed {
+      width: 100%; margin: 0;
+    }
+    .full-bleed img {
+      width: 100%; display: block;
+      border-top: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+    }
+    .full-bleed figcaption {
+      padding: 16px 48px;
+      font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--grey);
+      border-bottom: 1px solid var(--light);
+    }
+
+    /* ── Screen grid ─────────────────────────────────────────── */
+    .screen-grid {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 0;
+      border-top: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+      margin-bottom: 80px;
+    }
+    .screen-item {
+      overflow: hidden; border-right: 1px solid var(--light);
+    }
+    .screen-item:last-child { border-right: none; }
+    .screen-item img { width: 100%; display: block; aspect-ratio: 3/2; object-fit: cover; object-position: center; }
+    .screen-item-caption {
+      padding: 20px 24px;
+      border-top: 1px solid var(--light);
+      font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey);
+    }
+
+    /* ── Stat row ────────────────────────────────────────────── */
+    .stat-row {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      border-top: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+      margin-bottom: 80px;
+    }
+    .stat-cell {
+      padding: 48px 40px; border-right: 1px solid var(--light);
+      text-align: left;
+    }
+    .stat-cell:last-child { border-right: none; }
+    .stat-number {
+      font-size: clamp(36px, 4vw, 56px); font-weight: 300;
+      letter-spacing: -0.03em; line-height: 1.0;
+      color: var(--black); margin-bottom: 10px;
+    }
+    .stat-desc {
+      font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--grey); line-height: 1.5;
+    }
+
+    /* ── Photo pair ──────────────────────────────────────────── */
+    .photo-pair {
+      display: grid; grid-template-columns: 1fr 1fr;
+      border-top: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+      margin-bottom: 80px;
+    }
+    .photo-pair-item { overflow: hidden; border-right: 1px solid var(--light); }
+    .photo-pair-item:last-child { border-right: none; }
+    .photo-pair-item img {
+      width: 100%; aspect-ratio: 4/3; object-fit: cover; display: block;
+      filter: brightness(0.90);
+      transition: transform 0.6s ease;
+    }
+    .photo-pair-item:hover img { transform: scale(1.03); }
+
+    /* ── Tab overview ────────────────────────────────────────── */
+    .tab-list { list-style: none; margin-bottom: 0; }
+    .tab-item {
+      display: flex; align-items: baseline; gap: 20px;
+      padding: 20px 0; border-bottom: 1px solid var(--light);
+    }
+    .tab-item:first-child { border-top: 1px solid var(--light); }
+    .tab-num {
+      font-size: 11px; letter-spacing: 0.10em; color: var(--grey);
+      min-width: 28px; text-transform: uppercase;
+    }
+    .tab-name { font-size: 15px; font-weight: 500; color: var(--black); min-width: 180px; }
+    .tab-desc { font-size: 14px; font-weight: 300; color: var(--grey); line-height: 1.5; }
+
+    /* ── Next project ────────────────────────────────────────── */
+    .next-project {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 56px 48px; border-top: 1px solid var(--light);
+      text-decoration: none; color: var(--black);
+      transition: background .2s;
+      grid-column: 1 / -1;
+    }
+    .next-project:hover { background: var(--light); }
+    .next-label { font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--grey); margin-bottom: 10px; }
+    .next-title { font-size: 24px; font-weight: 300; color: var(--black); }
+    .next-arrow { font-size: 28px; font-weight: 200; color: var(--grey); }
+
+    /* ── Footer ──────────────────────────────────────────────── */
+    footer {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 28px 48px; border-top: 1px solid var(--light);
+    }
+    .footer-left { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey); }
+    .footer-right { display: flex; gap: 28px; }
+    .footer-right a { font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--grey); text-decoration: none; transition: color .2s; }
+    .footer-right a:hover { color: var(--black); }
+
+    /* ── Version 2.0 Section ─────────────────────────────────── */
+    .v2-section {
+      background: var(--black);
+      color: var(--white);
+      padding: 96px 48px;
+      width: 100%;
+      box-sizing: border-box;
+      grid-column: 1 / -1;
+    }
+    .v2-label {
+      font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase;
+      color: rgba(255,255,255,0.40); margin-bottom: 40px;
+    }
+    .v2-heading {
+      font-size: clamp(28px, 4vw, 48px); font-weight: 300; line-height: 1.2;
+      color: var(--white); margin-bottom: 32px; max-width: 720px;
+    }
+    .v2-heading span { font-style: italic; }
+    .v2-body {
+      max-width: 640px; margin-bottom: 64px;
+    }
+    .v2-body p {
+      font-size: 15px; line-height: 1.75; color: rgba(255,255,255,0.65);
+      margin-bottom: 20px;
+    }
+    .v2-body p:last-child { margin-bottom: 0; }
+    .v2-body strong { color: rgba(255,255,255,0.90); font-weight: 500; }
+    .v2-images {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      margin-top: 64px;
+    }
+    .v2-images-bottom {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 2px;
+      margin-top: 2px;
+    }
+    .v2-img-wrap {
+      position: relative; overflow: hidden; background: #111;
+    }
+    .v2-img-wrap.full {
+      grid-column: 1 / -1;
+    }
+    .v2-img-wrap img {
+      width: 100%; display: block;
+      opacity: 0.85;
+      transition: opacity 0.4s ease;
+    }
+    .v2-img-wrap:hover img { opacity: 1; }
+    .v2-img-caption {
+      position: absolute; bottom: 16px; left: 20px;
+      font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+      color: rgba(255,255,255,0.50);
+    }
+    .v2-tag {
+      display: inline-block;
+      font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase;
+      color: rgba(255,255,255,0.40);
+      border: 1px solid rgba(255,255,255,0.15);
+      padding: 6px 14px; border-radius: 2px;
+      margin-bottom: 40px;
+    }
+    .v2-divider {
+      width: 40px; height: 1px;
+      background: rgba(255,255,255,0.20);
+      margin: 48px 0;
+    }
+
+    /* ── Project Intro Statement ────────────────────────────── */
+    .project-intro {
+      padding: 72px 64px 72px 48px;
+      border-bottom: 1px solid var(--light);
+    }
+    .project-intro-eyebrow {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-bottom: 24px;
+    }
+    .project-intro-text {
+      font-size: clamp(20px, 2.4vw, 30px);
+      font-weight: 300;
+      line-height: 1.5;
+      letter-spacing: -0.01em;
+      color: var(--black);
+      max-width: 820px;
+    }
+    .project-intro-text em {
+      font-style: normal;
+      font-weight: 500;
+    }
+
+    /* ── Responsive ──────────────────────────────────────────── */
+    @media (max-width: 900px) {
+      nav { padding: 20px 24px; }
+      .meta-strip { grid-template-columns: 1fr 1fr; }
+      .meta-cell:nth-child(2) { border-right: none; }
+      .meta-cell:nth-child(3) { border-right: 1px solid var(--light); }
+      .page-layout { grid-template-columns: 1fr; }
+      .sidebar-fixed { display: none; }
+      .sidebar-overlay { display: none; }
+      .body-content { padding: 48px 24px; }
+      .screen-grid { grid-template-columns: 1fr; }
+      .screen-item { border-right: none; border-bottom: 1px solid var(--light); }
+      .stat-row { grid-template-columns: 1fr; }
+      .stat-cell { border-right: none; border-bottom: 1px solid var(--light); }
+      .photo-pair { grid-template-columns: 1fr; }
+      .photo-pair-item { border-right: none; border-bottom: 1px solid var(--light); }
+      .hero-content { left: 24px; right: 24px; bottom: 48px; }
+      footer { flex-direction: column; gap: 16px; }
+      .next-project { padding: 40px 24px; }
+    }
+
+    /* ── Skip Navigation (Accessibility) ─────────────────────────── */
+    .skip-nav {
+      position: absolute;
+      top: -100%;
+      left: 0;
+      background: var(--black);
+      color: var(--white);
+      padding: 12px 24px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      z-index: 9999;
+      transition: top 0.2s;
+    }
+    .skip-nav:focus {
+      top: 0;
+    }
+
+    /* ── Focus Visible (Keyboard Navigation) ─────────────────────── */
+    :focus-visible {
+      outline: 2px solid var(--black);
+      outline-offset: 3px;
+    }
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid var(--black);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 20px 24px; }
+      .hero-content { padding: 0 24px 56px; }
+      .meta-strip { grid-template-columns: 1fr 1fr; }
+      .cs-section { padding: 56px 24px; }
+      .stream-label { padding: 32px 24px 16px; }
+      .dark-block { padding: 56px 24px; }
+      .img-2col { grid-template-columns: 1fr; }
+      .img-3col { grid-template-columns: 1fr 1fr; }
+      .img-4col { grid-template-columns: 1fr 1fr; }
+      .app-flow { grid-template-columns: 1fr; }
+      .bc-pair { grid-template-columns: 1fr; }
+      .art-4col { grid-template-columns: 1fr 1fr; }
+      .art-3col { grid-template-columns: 1fr 1fr; }
+      .next-project { padding: 56px 24px; }
+      footer { padding: 32px 24px; flex-direction: column; gap: 12px; text-align: center; }
+    }
+  </style>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+</head>
+<body>
+  <a href="#main-content" class="skip-nav">Skip to main content</a>
+
+  <!-- ── Nav ──────────────────────────────────────────────────── -->
+  <nav>
+    <a href="../index.html" class="nav-logo">Luke Heesun Jung</a>
+    <a href="../index.html#work" class="nav-back">← All Work</a>
+  </nav>
+
+  <!-- ── Hero ─────────────────────────────────────────────────── -->
+  <section class="hero">
+
+    <img class="hero-img" src="hero_new.webp" alt="LittleN × Sandeul — School bus management app on mobile" />
+    <div class="hero-overlay"></div>
+
+    <!-- Text overlay -->
+    <div class="hero-content">
+      <p class="hero-tags">UI/UX &nbsp;·&nbsp; Digital Product &nbsp;·&nbsp; Education &nbsp;·&nbsp; Service Design</p>
+      <h1 class="hero-title">LittleN <span>×</span> Sandeul</h1>
+      <p class="hero-descriptor">An end-to-end attendance and bus management system for two private kindergartens — designed from the inside out, starting with two months on the bus.</p>
+    </div>
+
+  </section>
+
+  <!-- ── Meta strip ────────────────────────────────────────────── -->
+  <div class="meta-strip" id="main-content">
+    <div class="meta-cell">
+      <p class="meta-label">Client</p>
+      <p class="meta-value">LittleN English Kindergarten<br />Sandeul Kindergarten<br /><strong>Seoul, Korea</strong></p>
+    </div>
+    <div class="meta-cell">
+      <p class="meta-label">Role</p>
+      <p class="meta-value">Research · Strategy<br />UX Design · Development<br /><strong>Solo Project</strong></p>
+    </div>
+    <div class="meta-cell">
+      <p class="meta-label">Scope</p>
+      <p class="meta-value">Field Research · Interviews<br />System Design · Build<br /><strong>v1.12 Live</strong></p>
+    </div>
+    <div class="meta-cell">
+      <p class="meta-label">Year</p>
+      <p class="meta-value"><strong>2026</strong><br />Ongoing</p>
+    </div>
+  </div>
+
+  <!-- ── Project Intro Statement ────────────────────────────── -->
+  <div class="project-intro">
+    <p class="project-intro-eyebrow">About This Project</p>
+    <p class="project-intro-text">Trained first in ceramic art in <em>South Korea</em>, then graphic design in <em>Toronto, Canada</em> — a practice built on <em>material thinking</em>, where every decision carries weight beyond the screen. From branding infrastructure to kindergarten safety systems, the work begins before the brief.</p>
+  </div>
+
+  <!-- ── Body ──────────────────────────────────────────────────── -->
+  <div class="page-layout">
+
+    <!-- Sidebar -->
+    <aside class="sidebar-fixed">
+      <p class="sidebar-label">Contents</p>
+      <ul class="sidebar-nav" id="sidebar-nav-main">
+        <li><a href="#context" class="active">Context</a></li>
+        <li><a href="#research">Research</a></li>
+        <li><a href="#system">System</a></li>
+        <li><a href="#screens">Screens</a></li>
+        <li><a href="#outcome">Outcome</a></li>
+        <li><a href="#process">Process</a></li>
+      </ul>
+    </aside>
+
+    <!-- Content column -->
+    <div class="content-col">
+
+      <!-- Context -->
+      <div class="body-wrap">
+        <main class="body-content">
+          <section class="section" id="context">
+            <p class="section-label">Context</p>
+            <p>The most important design decision on this project happened before any design began. Two months working as a school bus aide for LittleN and Sandeul made the operational problems concrete: routes ran on paper, status updates happened by phone, and the gap between what was recorded and what was actually happening grew wider every morning.</p>
+
+            <div class="pull-quote">
+              <p>"The challenge was to replace that friction with a real-time system, built for teachers and drivers who had no time to learn a new tool."</p>
+            </div>
+
+            <p>LittleN and Sandeul are two private kindergartens operated by the same family in Seoul — together managing approximately <strong>120 students</strong> across <strong>6 bus routes</strong>, two institutions, and a daily schedule that leaves no room for error.</p>
+          </section>
+        </main>
+      </div>
+
+  <!-- ── Photo pair: real bus photos ───────────────────────────── -->
+  <div class="photo-pair">
+    <div class="photo-pair-item">
+      <img src="photo_bus_1.jpg" alt="Luke with a student on the school bus" />
+    </div>
+    <div class="photo-pair-item">
+      <img src="photo_bus_2.jpg" alt="Luke with two students on the school bus" />
+    </div>
+  </div>
+
+      <!-- Research -->
+      <div class="body-wrap">
+        <main class="body-content">
+          <section class="section" id="research">
+            <p class="section-label">Research</p>
+            <p>Daily interviews with the principal, director, department heads, teachers, and drivers shaped the system's priorities. Safety and timing accuracy came first — not as abstract design principles, but as operational realities that the children on those buses depended on every day.</p>
+            <p>The system had to serve three distinct user groups — teachers checking students in, administrators managing routes, and the institution maintaining a live record — without requiring any of them to navigate the interface differently. Every stakeholder group participated in iterative feedback cycles throughout the build.</p>
+          </section>
+        </main>
+      </div>
+
+  <!-- ── Stats ─────────────────────────────────────────────────── -->
+  <div class="stat-row">
+    <div class="stat-cell">
+      <p class="stat-number">120+</p>
+      <p class="stat-desc">Students managed<br />across two kindergartens</p>
+    </div>
+    <div class="stat-cell">
+      <p class="stat-number">6</p>
+      <p class="stat-desc">Bus routes tracked<br />in real time</p>
+    </div>
+    <div class="stat-cell">
+      <p class="stat-number">3</p>
+      <p class="stat-desc">User groups served<br />with one interface</p>
+    </div>
+  </div>
+
+      <!-- System -->
+      <div class="body-wrap">
+        <main class="body-content">
+          <section class="section" id="system">
+        <p class="section-label">System Design</p>
+        <p>The resulting app is a six-tab hub structured temporally — morning arrival and afternoon dismissal as the two primary states, with each bus route functioning as a self-contained unit. Status updates are single-tap, emergency contacts are one touch away, and temporary route changes are logged automatically.</p>
+
+        <ul class="tab-list">
+          <li class="tab-item">
+            <span class="tab-num">01</span>
+            <span class="tab-name">Today's Overview</span>
+            <span class="tab-desc">Real-time dashboard — live headcount across all routes, both institutions</span>
+          </li>
+          <li class="tab-item">
+            <span class="tab-num">02</span>
+            <span class="tab-name">Morning Check-in</span>
+            <span class="tab-desc">Bus-by-bus attendance with 6 status states per student</span>
+          </li>
+          <li class="tab-item">
+            <span class="tab-num">03</span>
+            <span class="tab-name">Afternoon Dismissal</span>
+            <span class="tab-desc">Mirror structure to morning — same logic, different temporal state</span>
+          </li>
+          <li class="tab-item">
+            <span class="tab-num">04</span>
+            <span class="tab-name">Route Management</span>
+            <span class="tab-desc">Student-to-route assignment and bus configuration</span>
+          </li>
+          <li class="tab-item">
+            <span class="tab-num">05</span>
+            <span class="tab-name">Monthly Schedule</span>
+            <span class="tab-desc">Calendar with operational headcounts, notices, and special events</span>
+          </li>
+          <li class="tab-item">
+            <span class="tab-num">06</span>
+            <span class="tab-name">Change Log</span>
+            <span class="tab-desc">Automatic record of all temporary route and status changes</span>
+          </li>
+        </ul>
+          </section>
+        </main>
+      </div>
+
+  <!-- ── Screen grid ────────────────────────────────────────────── -->
+  <div class="screen-grid" id="screens">
+    <div class="screen-item">
+      <img src="screen_dashboard.webp" alt="Today's Overview — real-time dashboard" />
+      <p class="screen-item-caption">Today's Overview — Live headcount, all routes</p>
+    </div>
+    <div class="screen-item">
+      <img src="screen_checkin.webp" alt="Morning Check-in — bus-by-bus attendance" />
+      <p class="screen-item-caption">Morning Check-in — Bus-by-bus attendance</p>
+    </div>
+  </div>
+
+  <!-- Full-bleed: schedule -->
+  <figure class="full-bleed">
+    <img src="screen_schedule.webp" alt="Monthly Schedule — calendar with operational headcounts" />
+    <figcaption>Monthly Schedule — Operational calendar with headcounts and notices</figcaption>
+  </figure>
+
+      <!-- Outcome + Process -->
+      <div class="body-wrap">
+        <main class="body-content">
+          <section class="section" id="outcome">
+            <p class="section-label">Outcome</p>
+            <p>The app is currently live at version 1.12, deployed across both kindergartens. Paper routes and phone calls have been replaced by a system where every status change is visible, logged, and one tap away — across 120+ students, 6 routes, and two institutions running simultaneously.</p>
+
+            <div class="pull-quote">
+              <p>"Two months on the bus — before any wireframe was drawn — produced a clarity of priorities that no amount of secondary research could have provided."</p>
+            </div>
+
+            <p>The project demonstrated that the most effective design research is not always conducted in a studio. Proximity to the problem — and to the people living it daily — shaped every decision from structure to interaction detail.</p>
+          </section>
+
+          <!-- Process Note -->
+          <section class="section" id="process">
+            <p class="section-label">A Note on Process</p>
+            <p>This project was designed, planned, and built independently — with AI as a core part of the development workflow. That was a deliberate choice, not a shortcut.</p>
+            <p>As clients and collaborators across industries have grown more fluent in what AI tools can and cannot do, the conversation around AI in design practice has shifted. It is no longer a question of whether to use these tools, but how to use them with intention. On this project, AI handled the implementation layer — translating system logic into functional code — while every structural decision, user flow, and interaction priority was defined through direct field research and stakeholder feedback.</p>
+            <p>The result is a working product, not a prototype. Two months of research and two months of build, compressed into a timeline that would not have been possible through conventional development alone. The speed enabled more iteration. More iteration produced a better system.</p>
+          </section>
+        </main>
+      </div>
+
+    </div><!-- /.content-col -->
+  </div><!-- /.page-layout -->
+
+  <!-- ── Version 2.0 Preview ─────────────────────────────────── -->
+  <section class="v2-section" id="v2">
+
+    <p class="v2-label">What’s Next</p>
+    <span class="v2-tag">Version 2.0 &nbsp;·&nbsp; In Planning</span>
+
+    <h2 class="v2-heading">Version 1 is live and in user testing.<br /><span>Version 2 is already in conversation.</span></h2>
+
+    <div class="v2-body">
+      <p>The current deployment represents <strong>Version 1.12</strong> — a fully functional system now in active use across both kindergartens. This phase is intentionally a <strong>user testing period</strong>: real teachers, real drivers, and real administrators using the product daily, generating the kind of feedback that no prototype or pilot study can replicate.</p>
+
+      <p>Every friction point, every workaround, every moment where a user pauses before tapping — these are the inputs that will define Version 2.0. The goal is not to add features, but to refine the system around how people actually use it, not how they were expected to.</p>
+
+      <div class="v2-divider"></div>
+
+      <p>Version 2.0 is projected to represent a <strong>3× or greater increase in scope and budget</strong> relative to the current build. Planning conversations have already begun with the kindergarten directors, exploring what a professionally engineered, investor-backed version of this system could look like at scale.</p>
+
+      <p>Those conversations have included meetings with <strong>potential investors, professional developers, and operations specialists</strong> — all with the shared goal of taking what has been validated through Version 1 and building it into a platform capable of serving not just two kindergartens, but a broader network of early education institutions. The foundation is in place. The next step is finding the right partners to build on it.</p>
+    </div>
+
+    <!-- v2 image grid -->
+    <div class="v2-images">
+      <div class="v2-img-wrap">
+        <img src="v2_hero.png" alt="Version 2.0 — Parent-facing app concept" />
+        <span class="v2-img-caption">Parent App — Real-time bus tracking</span>
+      </div>
+      <div class="v2-img-wrap">
+        <img src="v2_mobile.png" alt="Version 2.0 — Mobile UI concept" />
+        <span class="v2-img-caption">Mobile UI — Morning check-in &amp; schedule</span>
+      </div>
+    </div>
+    <div class="v2-images-bottom">
+      <div class="v2-img-wrap">
+        <img src="v2_mobile2.png" alt="Version 2.0 — Dual screen concept" />
+        <span class="v2-img-caption">Dual view — Check-in &amp; monthly calendar</span>
+      </div>
+      <div class="v2-img-wrap">
+        <img src="v2_desktop.png" alt="Version 2.0 — Admin dashboard concept" />
+        <span class="v2-img-caption">Admin Dashboard — Full route management</span>
+      </div>
+    </div>
+
+  </section>
+
+  <!-- ── Next project ───────────────────────────────────────────── -->
+  <a href="../case_study_02/index.html" class="next-project">
+    <div>
+      <p class="next-label">Next Project</p>
+      <p class="next-title">Urban Dive Marketing</p>
+    </div>
+    <span class="next-arrow">→</span>
+  </a>
+
+  <!-- ── Footer ────────────────────────────────────────────────── -->
+  <footer>
+    <p class="footer-left">Luke Heesun Jung &nbsp;·&nbsp; 2026</p>
+    <div class="footer-right">
+      <a href="https://www.linkedin.com/in/lukeheesunjung/" target="_blank">LinkedIn</a>
+      <a href="mailto:lukeheesunjung@gmail.com">Email</a>
+      <a href="../resume.pdf" target="_blank">Resume</a>
+    </div>
+  </footer>
+
+<script>
+  // ── Nav scroll detection ────────────────────────────────────────
+  (function() {
+    var nav = document.querySelector('nav');
+    var heroH = window.innerHeight;
+    function onScroll() {
+      if (window.scrollY > heroH * 0.85) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+
+  // ── Sidebar active link highlight (IntersectionObserver, targets fixed overlay) ────
+  (function() {
+    var links = document.querySelectorAll('#sidebar-nav-main a');
+    var sections = [];
+    links.forEach(function(a) {
+      var id = a.getAttribute('href').replace('#', '');
+      var el = document.getElementById(id);
+      if (el) sections.push({ id: id, el: el, a: a });
+    });
+    if (!sections.length) return;
+
+    var current = sections[0].id;
+    function setActive(id) {
+      if (id === current) return;
+      current = id;
+      links.forEach(function(a) { a.classList.remove('active'); });
+      var match = document.querySelector('#sidebar-nav-main a[href="#' + id + '"]');
+      if (match) match.classList.add('active');
+    }
+
+    var observer = new IntersectionObserver(function(entries) {
+      entries.forEach(function(entry) {
+        if (entry.isIntersecting) setActive(entry.target.id);
+      });
+    }, { rootMargin: '-20% 0px -70% 0px', threshold: 0 });
+
+    sections.forEach(function(s) { observer.observe(s.el); });
+  })();
+</script>
+</body>
+</html>

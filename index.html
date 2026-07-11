@@ -1,0 +1,805 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Luke Heesun Jung — Graphic Designer</title>
+  <meta name="description" content="Luke Heesun Jung — Graphic Designer based in Toronto. 10+ years across branding, editorial, packaging, and digital product design." />
+  <meta name="author" content="Luke Heesun Jung" />
+
+  <!-- Open Graph (LinkedIn, Facebook, KakaoTalk preview) -->
+  <meta property="og:type" content="website" />
+  <meta property="og:title" content="Luke Heesun Jung — Graphic Designer" />
+  <meta property="og:description" content="10+ years across branding, editorial, packaging, and digital product design. Based in Toronto." />
+  <meta property="og:image" content="heroshot.webp" />
+  <meta property="og:url" content="https://lukeheesunjung.com" />
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Luke Heesun Jung — Graphic Designer" />
+  <meta name="twitter:description" content="10+ years across branding, editorial, packaging, and digital product design." />
+  <meta name="twitter:image" content="heroshot.webp" />
+
+
+  <style>
+    /* ── Reset & Base ─────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --black:   #0a0a0a;
+      --white:   #f8f7f4;
+      --grey:    #6b6b6b;
+      --light:   #e8e6e1;
+      --accent:  #0a0a0a;
+      --font:    'Helvetica Neue', Helvetica, Arial, sans-serif;
+    }
+
+    html { font-size: 16px; scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--white);
+      color: var(--black);
+      overflow-x: hidden;
+    }
+
+    /* ── Nav ──────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 48px;
+      background: transparent;
+      transition: background 0.35s ease, padding 0.35s ease;
+    }
+
+    nav.scrolled {
+      background: var(--white);
+      padding: 16px 48px;
+      border-bottom: 1px solid var(--light);
+    }
+
+    .nav-logo {
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--white);
+      text-decoration: none;
+      transition: color 0.35s ease;
+    }
+
+    nav.scrolled .nav-logo { color: var(--black); }
+
+    .nav-links {
+      display: flex;
+      gap: 36px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--white);
+      text-decoration: none;
+      opacity: 0.85;
+      transition: opacity 0.2s, color 0.35s ease;
+    }
+
+    nav.scrolled .nav-links a { color: var(--black); }
+
+    .nav-links a:hover { opacity: 1; }
+
+    /* ── Hero ─────────────────────────────────────────────────── */
+    .hero {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+      min-height: 700px;
+      overflow: hidden;
+      background: #0a0a0a;
+    }
+
+    /* Full-bleed background image */
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      object-position: center center;
+      display: block;
+      /* Subtle parallax handled by JS */
+      will-change: transform;
+    }
+
+    /* Very subtle dark vignette at bottom to ease into white body */
+    .hero-vignette {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(
+        to bottom,
+        transparent 0%,
+        transparent 60%,
+        rgba(10,10,10,0.18) 100%
+      );
+      z-index: 2;
+      pointer-events: none;
+    }
+
+    /* Bottom bar */
+    .hero-bottom {
+      position: absolute;
+      bottom: 36px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      padding: 0 48px;
+      z-index: 10;
+    }
+
+    .hero-bottom-left {
+      font-size: 11px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+    }
+
+    .hero-bottom-right {
+      font-size: 11px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.45);
+      text-align: right;
+    }
+
+    /* Scroll indicator */
+    .hero-scroll {
+      position: absolute;
+      bottom: 36px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      z-index: 10;
+      cursor: pointer;
+    }
+
+    .hero-scroll span {
+      font-size: 11px;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.35);
+    }
+
+    .scroll-arrow {
+      width: 1px;
+      height: 36px;
+      background: rgba(255,255,255,0.30);
+      animation: scrollPulse 2.4s ease-in-out infinite;
+    }
+
+    @keyframes scrollPulse {
+      0%, 100% { opacity: 0.3; transform: scaleY(1); }
+      50% { opacity: 0.8; transform: scaleY(1.25); }
+    }
+
+    /* ── Hero overlay: name + title ──────────────────────────── */
+    .hero-identity {
+      position: absolute;
+      bottom: 80px;
+      left: 48px;
+      z-index: 10;
+      pointer-events: none;
+    }
+
+    .hero-identity-name {
+      font-size: clamp(13px, 1.2vw, 16px);
+      font-weight: 500;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.90);
+      line-height: 1.0;
+      margin-bottom: 8px;
+    }
+
+    .hero-identity-rule {
+      width: 32px;
+      height: 1px;
+      background: rgba(255,255,255,0.35);
+      margin-bottom: 8px;
+    }
+
+    .hero-identity-title {
+      font-size: 11px;
+      font-weight: 400;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.50);
+    }
+
+    /* ── About Strip ──────────────────────────────────────────── */
+    .about-strip {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr 1fr;
+      border-top: 1px solid var(--light);
+    }
+
+    .about-cell {
+      padding: 48px 40px;
+      border-right: 1px solid var(--light);
+    }
+
+    .about-cell:last-child { border-right: none; }
+
+    .about-label {
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-bottom: 14px;
+    }
+
+    .about-value {
+      font-size: 15px;
+      font-weight: 400;
+      line-height: 1.55;
+      color: var(--black);
+    }
+
+    .about-value strong {
+      font-weight: 600;
+    }
+
+    /* ── Statement ────────────────────────────────────────────── */
+    .statement {
+      padding: 96px 48px;
+      max-width: 900px;
+      border-top: 1px solid var(--light);
+    }
+
+    .statement p {
+      font-size: clamp(22px, 2.8vw, 38px);
+      font-weight: 300;
+      line-height: 1.4;
+      letter-spacing: -0.01em;
+      color: var(--black);
+    }
+
+    .statement p em {
+      font-style: normal;
+      font-weight: 500;
+    }
+
+    /* ── Work Preview ─────────────────────────────────────────── */
+    .work-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      padding: 48px 48px 32px;
+      border-top: 1px solid var(--light);
+    }
+
+    .work-header h2 {
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--black);
+    }
+
+    .work-header a {
+      font-size: 11px;
+      letter-spacing: 0.10em;
+      text-transform: uppercase;
+      color: var(--grey);
+      text-decoration: none;
+      border-bottom: 1px solid var(--light);
+      padding-bottom: 2px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+
+    .work-header a:hover {
+      color: var(--black);
+      border-color: var(--black);
+    }
+
+    .work-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      border-top: 1px solid var(--light);
+    }
+
+    .work-item {
+      position: relative;
+      overflow: hidden;
+      border-right: 1px solid var(--light);
+      border-bottom: 1px solid var(--light);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      text-decoration: none;
+    }
+
+    .work-item:nth-child(3n) { border-right: none; }
+
+    /* Image wrapper — fixed aspect ratio */
+    .work-item-thumb {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 4/3;
+      overflow: hidden;
+      background: #0a0a0a;
+    }
+
+    .work-item-thumb img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.92);
+      transition: transform 0.6s ease, filter 0.4s ease;
+    }
+
+    .work-item:hover .work-item-thumb img {
+      transform: scale(1.04);
+      filter: brightness(0.78);
+    }
+
+    /* Text block — below image, Pentagram style */
+    .work-item-info {
+      padding: 20px 28px 24px;
+      background: var(--white);
+      border-top: 1px solid var(--light);
+    }
+
+    .work-item-tags {
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-bottom: 8px;
+      line-height: 1.6;
+    }
+
+    .work-item-title {
+      font-size: 17px;
+      font-weight: 400;
+      color: var(--black);
+      letter-spacing: -0.01em;
+      line-height: 1.3;
+    }
+
+    /* ── Work item — Coming Soon (pending) ─────────────────── */
+    .work-item--pending {
+      cursor: default;
+    }
+
+    .work-item--pending .work-item-thumb {
+      background: var(--light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .work-item-pending-num {
+      font-size: 32px;
+      font-weight: 300;
+      color: var(--grey);
+      opacity: 0.4;
+      letter-spacing: -0.02em;
+    }
+
+    .work-item-pending-label {
+      display: none;
+    }
+
+    /* ── Footer ───────────────────────────────────────────────── */
+    /* ── Accessibility Statement ─────────────────────────────── */
+    .a11y-statement {
+      padding: 48px;
+      border-top: 1px solid var(--light);
+      background: var(--white);
+    }
+    .a11y-statement-inner {
+      max-width: 760px;
+    }
+    .a11y-label {
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--grey);
+      margin-bottom: 20px;
+    }
+    .a11y-title {
+      font-size: clamp(18px, 2vw, 24px);
+      font-weight: 300;
+      letter-spacing: -0.01em;
+      color: var(--black);
+      margin-bottom: 16px;
+      line-height: 1.3;
+    }
+    .a11y-body {
+      font-size: 14px;
+      font-weight: 300;
+      line-height: 1.75;
+      color: #3a3a3a;
+    }
+    .a11y-body p { margin-bottom: 12px; }
+    .a11y-body p:last-child { margin-bottom: 0; }
+    .a11y-body a {
+      color: var(--black);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
+    .a11y-body a:hover { opacity: 0.65; }
+    .a11y-badges {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-top: 24px;
+    }
+    .a11y-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--grey);
+      border: 1px solid var(--light);
+      padding: 6px 14px;
+      border-radius: 2px;
+    }
+    .a11y-badge::before {
+      content: '';
+      display: inline-block;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: #4caf50;
+    }
+
+    footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 32px 48px;
+      border-top: 1px solid var(--light);
+    }
+
+    .footer-left {
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--grey);
+    }
+
+    .footer-right {
+      display: flex;
+      gap: 28px;
+    }
+
+    .footer-right a {
+      font-size: 11px;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--grey);
+      text-decoration: none;
+      transition: color 0.2s;
+    }
+
+    .footer-right a:hover { color: var(--black); }
+
+    /* ── Responsive ───────────────────────────────────────────── */
+    @media (max-width: 1100px) and (min-width: 769px) {
+      .work-grid { grid-template-columns: 1fr 1fr; }
+      .work-item:nth-child(3n) { border-right: 1px solid var(--light); }
+      .work-item:nth-child(even) { border-right: none; }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 20px 24px; }
+      .nav-links { display: none; }
+      .hero-bottom { padding: 0 24px; }
+      .about-strip { grid-template-columns: 1fr 1fr; }
+      .about-cell:nth-child(2) { border-right: none; }
+      .about-cell:nth-child(3) { border-right: 1px solid var(--light); }
+      .statement { padding: 64px 24px; }
+      .work-grid { grid-template-columns: 1fr; }
+      .work-item { border-right: none; }
+      .work-item:nth-child(3n) { border-right: none; }
+      footer { flex-direction: column; gap: 16px; text-align: center; }
+    }
+
+    /* ── Skip Navigation (Accessibility) ─────────────────────────── */
+    .skip-nav {
+      position: absolute;
+      top: -100%;
+      left: 0;
+      background: var(--black);
+      color: var(--white);
+      padding: 12px 24px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.04em;
+      text-decoration: none;
+      z-index: 9999;
+      transition: top 0.2s;
+    }
+    .skip-nav:focus {
+      top: 0;
+    }
+
+    /* ── Focus Visible (Keyboard Navigation) ─────────────────────── */
+    :focus-visible {
+      outline: 2px solid var(--black);
+      outline-offset: 3px;
+    }
+    a:focus-visible, button:focus-visible {
+      outline: 2px solid var(--black);
+      outline-offset: 3px;
+      border-radius: 2px;
+    }
+
+    .statement-body {
+      font-size: clamp(15px, 1.5vw, 18px) !important;
+      font-weight: 300 !important;
+      line-height: 1.75 !important;
+      letter-spacing: -0.005em !important;
+      color: #3a3a3a !important;
+      margin-top: 28px !important;
+    }
+    .statement-cta {
+      font-size: 12px !important;
+      font-weight: 500 !important;
+      letter-spacing: 0.10em !important;
+      text-transform: uppercase !important;
+      color: var(--grey) !important;
+      margin-top: 36px !important;
+      padding-top: 24px !important;
+      border-top: 1px solid var(--light) !important;
+    }
+  </style>
+  <link rel="icon" type="image/png" href="/favicon.png" />
+  <link rel="shortcut icon" href="/favicon.ico" />
+</head>
+<body>
+  <a href="#main-content" class="skip-nav">Skip to main content</a>
+
+  <!-- ── Navigation ───────────────────────────────────────────── -->
+  <nav>
+    <a href="index.html" class="nav-logo">Luke Heesun Jung</a>
+    <ul class="nav-links">
+      <li><a href="#work">Work</a></li>
+      <li><a href="#about">About</a></li>
+      <li><a href="mailto:lukeheesunjung@gmail.com">Contact</a></li>
+    </ul>
+  </nav>
+
+  <!-- ── Hero ─────────────────────────────────────────────────── -->
+  <section class="hero">
+
+    <!-- ================================================================
+         HERO IMAGE — 교체 방법:
+         1. 새 이미지 파일을 이 폴더(portfolio_site/)에 복사
+         2. 아래 src="heroshot.webp" 부분만 새 파일명으로 변경
+         권장 비율: 16:9 이상 와이드, 최소 1920px 너비
+         현재 파일: heroshot.webp
+    ================================================================ -->
+    <img class="hero-bg" src="heroshot.webp"
+         alt="Luke Heesun Jung — Graphic Designer" />
+
+    <!-- Bottom vignette -->
+    <div class="hero-vignette"></div>
+
+    <!-- Identity overlay: name + title (bottom-left) -->
+    <div class="hero-identity">
+      <h1 class="hero-identity-name">Luke Heesun Jung</h1>
+      <div class="hero-identity-rule"></div>
+      <p class="hero-identity-title">Graphic Designer &nbsp;·&nbsp; Toronto</p>
+    </div>
+
+    <!-- Bottom bar (right side only) -->
+    <div class="hero-bottom">
+      <div></div>
+      <div class="hero-bottom-right">
+        Branding · Editorial<br />
+        Packaging · UI/UX
+      </div>
+    </div>
+
+    <!-- Scroll indicator -->
+    <div class="hero-scroll" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})" role="button" tabindex="0">
+      <div class="scroll-arrow"></div>
+      <span>Scroll</span>
+    </div>
+
+  </section>
+
+  <!-- ── About Strip ───────────────────────────────────────────── -->
+  <section class="about-strip" id="main-content" id="about">
+    <div class="about-cell">
+      <p class="about-label">Discipline</p>
+      <p class="about-value">Visual Communication<br />Branding &amp; Identity<br />UI/UX &amp; Digital Product</p>
+    </div>
+    <div class="about-cell">
+      <p class="about-label">Background</p>
+      <p class="about-value">Ceramic Art<br /><strong>Kyung Hee University</strong><br />Graphic Design<br /><strong>OCAD University</strong></p>
+    </div>
+    <div class="about-cell">
+      <p class="about-label">Experience</p>
+      <p class="about-value"><strong>10+ years</strong><br />Toronto &amp; Seoul<br />Branding · Editorial<br />Packaging · UI/UX</p>
+    </div>
+    <div class="about-cell">
+      <p class="about-label">Currently</p>
+      <p class="about-value">Designing for<br /><strong>kindergartens in Korea</strong><br />Open to <strong>full-time</strong><br />in Toronto</p>
+    </div>
+  </section>
+
+  <!-- ── About ──────────────────────────────────────────────── -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500&display=swap" rel="stylesheet" />
+
+  <div style="border-top: 1px solid var(--light); display: grid; grid-template-columns: 320px 1fr; gap: 0; align-items: start;">
+    <!-- Left column: Hi heading + profile photo -->
+    <div style="border-right: 1px solid var(--light);">
+      <div style="padding: 48px 32px 32px;">
+        <h2 style="
+          font-family: 'Inter Tight', 'Helvetica Neue', sans-serif;
+          font-weight: 500;
+          font-style: normal;
+          font-size: clamp(32px, 3.5vw, 48px);
+          line-height: 1.05;
+          letter-spacing: -0.01em;
+          color: #000000;
+          white-space: pre-wrap;
+          word-wrap: break-word;
+          word-break: break-word;
+        ">Hi,
+I’m
+Luke Jung</h2>
+      </div>
+      <img
+        src="profile_luke.jpg"
+        alt="Luke Heesun Jung — Graphic Designer, Toronto"
+        style="width: 100%; display: block; object-fit: cover; aspect-ratio: 1/1;"
+      />
+    </div>
+    <!-- Right column: body text -->
+    <div style="padding: 48px 48px 64px;">
+      <p style="font-size: clamp(15px, 1.5vw, 18px); font-weight: 400; line-height: 1.7; color: #1a1a1a; margin: 0 0 24px;">I’m a graphic designer specialising in visual communication, with <em>10+ years of experience</em> spanning branding, editorial, packaging, education, and UI/UX across <em>Toronto and Seoul</em>.</p>
+      <p class="statement-body">My path runs from traditional craft to digital — trained first in ceramic art at <em>Kyung Hee University</em>, then graphic design at <em>OCAD University</em> — so I see beyond pixels to hand-crafted experiences. I thrive under pressure, know when to push and when to stop, and build long-lasting impressions through calm, considered design.</p>
+      <p class="statement-body">I’m currently designing for kindergartens in South Korea, leading projects that help kids, parents, and teachers manage their daily routines and schedules — combining strategy and creative direction to make school enjoyable. The same end-to-end brand thinking I bring to every client project.</p>
+      <p class="statement-cta">Currently open to full-time opportunities in Toronto.</p>
+    </div>
+  </div>
+
+  <!-- ── Work Preview ──────────────────────────────────────────── -->
+  <div class="work-header" id="work">
+    <h2>Selected Work</h2>
+    <a href="work.html">View All →</a>
+  </div>
+
+  <div class="work-grid">
+    <!-- Project 01 — LittleN × Sandeul -->
+    <a class="work-item" href="case_study_01/index.html">
+      <div class="work-item-thumb">
+        <img src="work_thumb_01_v4.jpg" alt="LittleN × Sandeul" />
+      </div>
+      <div class="work-item-info">
+        <p class="work-item-tags">UI/UX · Digital Product · Education</p>
+        <p class="work-item-title">LittleN × Sandeul</p>
+      </div>
+    </a>
+    <!-- Project 02 — V-TAG -->
+    <a class="work-item" href="case_study_04/index.html">
+      <div class="work-item-thumb">
+        <img src="main_card_V-TAG.webp" alt="V-TAG — Brand Identity &amp; Packaging" />
+      </div>
+      <div class="work-item-info">
+        <p class="work-item-tags">Regulated Packaging · Brand Identity · Bilingual Compliance</p>
+        <p class="work-item-title">V-TAG</p>
+      </div>
+    </a>
+    <!-- Project 03 — Urban Dive Marketing -->
+    <a class="work-item" href="case_study_02/index.html">
+      <div class="work-item-thumb">
+        <img src="work_thumb_02_real.webp" alt="Urban Dive Marketing" />
+      </div>
+      <div class="work-item-info">
+        <p class="work-item-tags">Brand Identity · Editorial · Design Leadership</p>
+        <p class="work-item-title">Urban Dive Marketing</p>
+      </div>
+    </a>
+    <!-- Project 04 — AZOTO -->
+    <a class="work-item" href="case_study_03/index.html">
+      <div class="work-item-thumb">
+        <img src="main_card_AZOTO.webp" alt="AZOTO — Liquid Nitrogen Ice Cream Brand Identity" />
+      </div>
+      <div class="work-item-info">
+        <p class="work-item-tags">Brand Identity · Trademark · Environmental Design</p>
+        <p class="work-item-title">AZOTO</p>
+      </div>
+    </a>
+    <!-- Project 06 — Reasonab Design Academy -->
+    <a class="work-item" href="case_study_06/index.html">
+      <div class="work-item-thumb">
+        <img src="case_study_06/rda_logo_white.png" alt="Reasonab Design Academy — RDA" style="object-fit:contain; background:#fff; padding:20px;" />
+      </div>
+      <div class="work-item-info">
+        <p class="work-item-tags">Education · Freelance · Art Practice · Entrepreneurship</p>
+        <p class="work-item-title">Reasonab Design Academy</p>
+      </div>
+    </a>
+    <!-- Project 00 — Process as Form -->
+    <a class="work-item" href="case_study_00/index.html">
+      <div class="work-item-thumb">
+        <img src="case_study_00/sketch_0.png" alt="Process as Form — Art & Design Practice" />
+      </div>
+      <div class="work-item-info">
+        <p class="work-item-tags">Fine Art · Design Process · V-TAG</p>
+        <p class="work-item-title">Process as Form</p>
+      </div>
+    </a>
+  </div>
+
+  <!-- ── Accessibility Statement ────────────────────────────── -->
+  <section class="a11y-statement" aria-label="Accessibility Statement">
+    <div class="a11y-statement-inner">
+      <p class="a11y-label">Accessibility</p>
+      <h2 class="a11y-title">This site is built with accessibility in mind.</h2>
+      <div class="a11y-body">
+        <p>This portfolio aims to meet <strong>WCAG 2.1 Level AA</strong> standards — including keyboard navigation, screen reader support, sufficient colour contrast, and responsive layout across all devices and screen sizes.</p>
+        <p>I am always learning. If you encounter any barriers, notice something that could be improved, or simply have a suggestion — please don't hesitate to reach out. Every perspective is welcome, and I genuinely mean that.</p>
+        <p>You can contact me directly at <a href="mailto:lukeheesunjung@gmail.com">lukeheesunjung@gmail.com</a> — I read every message.</p>
+      </div>
+      <div class="a11y-badges">
+        <span class="a11y-badge">WCAG 2.1 AA</span>
+        <span class="a11y-badge">Keyboard Navigable</span>
+        <span class="a11y-badge">Screen Reader Friendly</span>
+        <span class="a11y-badge">Responsive Design</span>
+        <span class="a11y-badge">Skip Navigation</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Footer ───────────────────────────────────────────────── -->
+  <footer>
+    <p class="footer-left">© 2026 Luke Heesun Jung</p>
+    <div class="footer-right">
+      <a href="https://www.linkedin.com/in/lukeheesunjung/" target="_blank">LinkedIn</a>
+      <a href="mailto:lukeheesunjung@gmail.com">Email</a>
+      <!-- Resume PDF: resume.pdf 파일을 이 폴더에 추가하면 자동 연결 -->
+      <a href="resume.pdf" target="_blank" id="resume-link">Resume</a>
+    </div>
+  </footer>
+
+<script>
+  // Scroll-aware nav — main page
+  (function() {
+    var nav = document.querySelector('nav');
+    var heroH = window.innerHeight;
+    function onScroll() {
+      if (window.scrollY > heroH * 0.85) {
+        nav.classList.add('scrolled');
+      } else {
+        nav.classList.remove('scrolled');
+      }
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+  })();
+</script>
+</body>
+</html>
