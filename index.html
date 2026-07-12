@@ -52,7 +52,7 @@
       align-items: center;
       justify-content: space-between;
       padding: 24px 48px;
-      background: transparent;
+      background: #ebebeb;
       transition: background 0.35s ease, padding 0.35s ease;
     }
 
@@ -67,7 +67,7 @@
       font-weight: 500;
       letter-spacing: 0.08em;
       text-transform: uppercase;
-      color: var(--white);
+      color: var(--black);
       text-decoration: none;
       transition: color 0.35s ease;
     }
@@ -85,7 +85,7 @@
       font-weight: 400;
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: var(--white);
+      color: var(--black);
       text-decoration: none;
       opacity: 0.85;
       transition: opacity 0.2s, color 0.35s ease;
@@ -255,8 +255,18 @@
       margin: 0;
       display: flex;
       align-items: baseline;
-      gap: 0;
-      flex-wrap: wrap;
+      gap: 0.35em;
+      flex-wrap: nowrap;
+    }
+
+    .typewriter-left {
+      color: #111;
+      white-space: nowrap;
+    }
+
+    .typewriter-right {
+      color: #111;
+      white-space: nowrap;
     }
 
     .typewriter-prefix {
@@ -785,50 +795,12 @@
   <!-- ── Hero ─────────────────────────────────────────────────── -->
   <!-- ── Typewriter Section ───────────────────────────────────────────── -->
   <div class="typewriter-section">
-    <p class="typewriter-line1">Hi, I'm Luke Jung</p>
+    <p class="typewriter-line1">Hi,</p>
     <p class="typewriter-line2">
-      <span class="typewriter-prefix" id="tw-prefix"></span><span class="typewriter-word" id="tw-word"></span><span class="typewriter-cursor"></span>
+      <span class="typewriter-left">I'm<span class="typewriter-cursor"></span></span>
+      <span class="typewriter-right"><span class="typewriter-word" id="tw-word"></span><span class="typewriter-cursor"></span></span>
     </p>
   </div>
-
-  <section class="hero">
-
-    <!-- ================================================================
-         HERO IMAGE — 교체 방법:
-         1. 새 이미지 파일을 이 폴더(portfolio_site/)에 복사
-         2. 아래 src="heroshot.webp" 부분만 새 파일명으로 변경
-         권장 비율: 16:9 이상 와이드, 최소 1920px 너비
-         현재 파일: heroshot.webp
-    ================================================================ -->
-    <img class="hero-bg" src="heroshot.webp"
-         alt="Luke Heesun Jung — Graphic Designer" />
-
-    <!-- Bottom vignette -->
-    <div class="hero-vignette"></div>
-
-    <!-- Identity overlay: name + title (bottom-left) -->
-    <div class="hero-identity">
-      <h1 class="hero-identity-name">Luke Heesun Jung</h1>
-      <div class="hero-identity-rule"></div>
-      <p class="hero-identity-title">Graphic Designer &nbsp;·&nbsp; Toronto</p>
-    </div>
-
-    <!-- Bottom bar (right side only) -->
-    <div class="hero-bottom">
-      <div></div>
-      <div class="hero-bottom-right">
-        Branding · Editorial<br />
-        Packaging · UI/UX
-      </div>
-    </div>
-
-    <!-- Scroll indicator -->
-    <div class="hero-scroll" onclick="document.getElementById('about').scrollIntoView({behavior:'smooth'})" role="button" tabindex="0">
-      <div class="scroll-arrow"></div>
-      <span>Scroll</span>
-    </div>
-
-  </section>
 
   <!-- ── About Strip ───────────────────────────────────────────── -->
   <section class="about-strip" id="main-content">
@@ -992,48 +964,39 @@ Luke Jung</h2>
 <script>
   // Typewriter animation
   (function() {
-    var phrases = [
-      { prefix: '', word: '(an)artist' },
-      { prefix: 'your ', word: '(a)designer' },
-      { prefix: '', word: '(an)educator' },
-      { prefix: '', word: '(a)brand builder' },
-      { prefix: 'your ', word: '(a)creative director' }
+    var words = [
+      '(an)artist',
+      '(a)designer',
+      '(an)educator',
+      '(a)brand builder',
+      '(a)creative director'
     ];
-    var prefixEl = document.getElementById('tw-prefix');
     var wordEl = document.getElementById('tw-word');
-    if (!prefixEl || !wordEl) return;
+    if (!wordEl) return;
 
-    var phraseIndex = 0;
+    var wordIndex = 0;
     var charIndex = 0;
     var isDeleting = false;
-    var pauseTimer = null;
 
     function type() {
-      var current = phrases[phraseIndex];
-      var fullWord = current.word;
+      var fullWord = words[wordIndex];
 
       if (!isDeleting) {
-        // typing
         charIndex++;
-        prefixEl.textContent = current.prefix;
         wordEl.textContent = fullWord.slice(0, charIndex);
         if (charIndex === fullWord.length) {
-          // pause at end
-          pauseTimer = setTimeout(function() {
+          setTimeout(function() {
             isDeleting = true;
             type();
           }, 1800);
           return;
         }
       } else {
-        // deleting
         charIndex--;
-        prefixEl.textContent = current.prefix;
         wordEl.textContent = fullWord.slice(0, charIndex);
         if (charIndex === 0) {
           isDeleting = false;
-          phraseIndex = (phraseIndex + 1) % phrases.length;
-          prefixEl.textContent = '';
+          wordIndex = (wordIndex + 1) % words.length;
           setTimeout(type, 400);
           return;
         }
@@ -1043,7 +1006,6 @@ Luke Jung</h2>
       setTimeout(type, speed);
     }
 
-    // Start after a short delay
     setTimeout(type, 600);
   })();
 
