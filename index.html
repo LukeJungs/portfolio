@@ -227,6 +227,72 @@
       color: rgba(255,255,255,0.50);
     }
 
+    /* ── Typewriter Hero Section ──────────────────────────────── */
+    .typewriter-section {
+      background: #ebebeb;
+      padding: 64px 48px 72px;
+      border-bottom: 1px solid rgba(0,0,0,0.10);
+      overflow: hidden;
+    }
+
+    .typewriter-line1 {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: clamp(36px, 6vw, 80px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      color: #111;
+      margin: 0 0 4px 0;
+    }
+
+    .typewriter-line2 {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: clamp(36px, 6vw, 80px);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.05;
+      color: #111;
+      margin: 0;
+      display: flex;
+      align-items: baseline;
+      gap: 0;
+      flex-wrap: wrap;
+    }
+
+    .typewriter-prefix {
+      color: #111;
+    }
+
+    .typewriter-word {
+      color: #111;
+      position: relative;
+    }
+
+    .typewriter-cursor {
+      display: inline-block;
+      width: 3px;
+      height: 0.85em;
+      background: #888;
+      margin-left: 2px;
+      vertical-align: baseline;
+      position: relative;
+      top: 0.05em;
+      animation: cursorBlink 0.9s step-end infinite;
+    }
+
+    @keyframes cursorBlink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+      .typewriter-section { padding: 48px 20px 56px; }
+    }
+    @media (max-width: 480px) {
+      .typewriter-section { padding: 40px 16px 48px; }
+    }
+
     /* ── About Strip ──────────────────────────────────────────── */
     .about-strip {
       display: grid;
@@ -717,6 +783,14 @@
   </div>
 
   <!-- ── Hero ─────────────────────────────────────────────────── -->
+  <!-- ── Typewriter Section ───────────────────────────────────────────── -->
+  <div class="typewriter-section">
+    <p class="typewriter-line1">Hi, I'm Luke Jung</p>
+    <p class="typewriter-line2">
+      <span class="typewriter-prefix" id="tw-prefix"></span><span class="typewriter-word" id="tw-word"></span><span class="typewriter-cursor"></span>
+    </p>
+  </div>
+
   <section class="hero">
 
     <!-- ================================================================
@@ -916,6 +990,63 @@ Luke Jung</h2>
   </footer>
 
 <script>
+  // Typewriter animation
+  (function() {
+    var phrases = [
+      { prefix: '', word: '(an)artist' },
+      { prefix: 'your ', word: '(a)designer' },
+      { prefix: '', word: '(an)educator' },
+      { prefix: '', word: '(a)brand builder' },
+      { prefix: 'your ', word: '(a)creative director' }
+    ];
+    var prefixEl = document.getElementById('tw-prefix');
+    var wordEl = document.getElementById('tw-word');
+    if (!prefixEl || !wordEl) return;
+
+    var phraseIndex = 0;
+    var charIndex = 0;
+    var isDeleting = false;
+    var pauseTimer = null;
+
+    function type() {
+      var current = phrases[phraseIndex];
+      var fullWord = current.word;
+
+      if (!isDeleting) {
+        // typing
+        charIndex++;
+        prefixEl.textContent = current.prefix;
+        wordEl.textContent = fullWord.slice(0, charIndex);
+        if (charIndex === fullWord.length) {
+          // pause at end
+          pauseTimer = setTimeout(function() {
+            isDeleting = true;
+            type();
+          }, 1800);
+          return;
+        }
+      } else {
+        // deleting
+        charIndex--;
+        prefixEl.textContent = current.prefix;
+        wordEl.textContent = fullWord.slice(0, charIndex);
+        if (charIndex === 0) {
+          isDeleting = false;
+          phraseIndex = (phraseIndex + 1) % phrases.length;
+          prefixEl.textContent = '';
+          setTimeout(type, 400);
+          return;
+        }
+      }
+
+      var speed = isDeleting ? 45 : 75;
+      setTimeout(type, speed);
+    }
+
+    // Start after a short delay
+    setTimeout(type, 600);
+  })();
+
   // Scroll-aware nav — main page
   (function() {
     var nav = document.querySelector('nav');
