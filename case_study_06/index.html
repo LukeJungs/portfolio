@@ -394,10 +394,15 @@
       .dark-block { padding: 48px 20px; }
       .img-2col { grid-template-columns: 1fr; }
       .img-3col { grid-template-columns: 1fr; }
-      .img-4col { grid-template-columns: 1fr 1fr; }
+      .img-4col { grid-template-columns: 1fr; }
       .app-flow { grid-template-columns: 1fr; }
       .bc-pair { grid-template-columns: 1fr; }
-      .art-4col { grid-template-columns: 1fr 1fr; }
+      .art-4col { grid-template-columns: 1fr; }
+      .img-4col { grid-template-columns: 1fr; }
+      /* Education Key Contributions: 1-col on mobile */
+      .edu-key-contrib { grid-template-columns: 1fr !important; gap: 32px 0 !important; }
+      /* Credit images: 1-col on mobile */
+      .edu-credit-grid { grid-template-columns: 1fr !important; }
       .art-3col { grid-template-columns: 1fr; }
       .photo-pair { grid-template-columns: 1fr; }
       .photo-pair-item { border-right: none; border-bottom: 1px solid var(--light); }
@@ -596,7 +601,7 @@
 <!-- Education — Key contributions note -->
 <div class="dark-block" style="padding: 56px 64px;">
   <p class="section-label">Education — Key Contributions</p>
-  <div class="section-body" style="display:grid; grid-template-columns:1fr 1fr; gap:40px 64px; margin-top:32px;">
+  <div class="section-body edu-key-contrib" style="display:grid; grid-template-columns:1fr 1fr; gap:40px 64px; margin-top:32px;">
     <div>
       <p style="font-size:11px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(255,255,255,0.45); margin-bottom:10px;">Curriculum &amp; Materials</p>
       <p style="font-size:15px; font-weight:300; line-height:1.7; color:rgba(255,255,255,0.80);">Developed and continuously refined the full teaching curriculum and all instructional materials. Was an early adopter of Notion when it first launched — using it as a student management hub and shared resource platform before it became mainstream.</p>
@@ -630,7 +635,7 @@
 </div>
 
 <!-- Credit images: 2+2 grid -->
-<div style="display: grid; grid-template-columns: 1fr 1fr; gap: 2px; border-top: 1px solid var(--light);">
+<div class="edu-credit-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2px; border-top: 1px solid var(--light);">
   <img src="edu_credit_3.png" alt="RDA curriculum reference materials — Workshop Tactics and RDA Yellow card" loading="lazy" style="width:100%; display:block; object-fit:cover; aspect-ratio:4/3;" />
   <img src="edu_credit_1.png" alt="AccessAbility 2 — A Practical Handbook on Accessible Graphic Design (RGD)" loading="lazy" style="width:100%; display:block; object-fit:cover; aspect-ratio:4/3;" />
   <img src="edu_credit_2.png" alt="AccessAbility handbook interior — contents and introduction spread" loading="lazy" style="width:100%; display:block; object-fit:cover; aspect-ratio:4/3;" />
