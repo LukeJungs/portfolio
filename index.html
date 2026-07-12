@@ -558,6 +558,9 @@
       .about-cell:nth-child(2) { border-right: none; }
       .about-cell:nth-child(3) { border-right: 1px solid var(--light); }
       .about-cell:nth-child(4) { border-right: none; }
+      /* About section: narrower on tablet */
+      .about-section { grid-template-columns: 280px 1fr; }
+      .about-right { padding: 40px 36px 56px; }
       .statement { padding: 72px 32px; }
       .work-header { padding: 40px 32px 28px; }
       .work-grid { grid-template-columns: 1fr 1fr; }
@@ -586,6 +589,12 @@
       .about-strip { grid-template-columns: 1fr; }
       .about-cell { border-right: none; border-bottom: 1px solid var(--light); padding: 32px 20px; }
       .about-cell:last-child { border-bottom: none; }
+
+      /* About section: photo first, text below */
+      .about-section { grid-template-columns: 1fr; }
+      .about-left { border-right: none; border-bottom: 1px solid var(--light); }
+      .about-left > div:first-child { padding: 32px 20px 24px; }
+      .about-right { padding: 32px 20px 48px; }
 
       /* Statement */
       .statement { padding: 56px 20px; }
@@ -645,6 +654,21 @@
       outline: 2px solid var(--black);
       outline-offset: 3px;
       border-radius: 2px;
+    }
+
+    /* ── About Section Layout ───────────────────────────────── */
+    .about-section {
+      border-top: 1px solid var(--light);
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 0;
+      align-items: start;
+    }
+    .about-left {
+      border-right: 1px solid var(--light);
+    }
+    .about-right {
+      padding: 48px 48px 64px;
     }
 
     .statement-body {
@@ -757,9 +781,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@500&display=swap" rel="stylesheet" />
 
-  <div id="about" style="border-top: 1px solid var(--light); display: grid; grid-template-columns: 320px 1fr; gap: 0; align-items: start;">
+  <div id="about" class="about-section">
     <!-- Left column: Hi heading + profile photo -->
-    <div style="border-right: 1px solid var(--light);">
+    <div class="about-left">
       <div style="padding: 48px 32px 32px;">
         <h2 style="
           font-family: 'Inter Tight', 'Helvetica Neue', sans-serif;
@@ -783,7 +807,7 @@ Luke Jung</h2>
       />
     </div>
     <!-- Right column: body text -->
-    <div style="padding: 48px 48px 64px;">
+    <div class="about-right">
       <p style="font-size: clamp(15px, 1.5vw, 18px); font-weight: 400; line-height: 1.7; color: #1a1a1a; margin: 0 0 24px;">I’m a graphic designer specialising in visual communication, with <em>10+ years of experience</em> spanning branding, editorial, packaging, education, and UI/UX across <em>Toronto and Seoul</em>.</p>
       <p class="statement-body">My path runs from traditional craft to digital — trained first in ceramic art at <em>Kyung Hee University</em>, then graphic design at <em>OCAD University</em> — so I see beyond pixels to hand-crafted experiences. I thrive under pressure, know when to push and when to stop, and build long-lasting impressions through calm, considered design.</p>
       <p class="statement-body">I’m currently designing for kindergartens in South Korea, leading projects that help kids, parents, and teachers manage their daily routines and schedules — combining strategy and creative direction to make school enjoyable. The same end-to-end brand thinking I bring to every client project.</p>
