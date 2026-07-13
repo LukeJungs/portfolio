@@ -474,7 +474,7 @@
 <!-- Hero — dark background, RDA logo watermark -->
 <section class="hero">
   <div class="hero-logo-bg">
-    <img src="rda_logo.png" alt="RDA Logo" />
+    <img src="rda_logo.png" alt="RDA Logo" / loading="eager" decoding="async">
   </div>
   <div class="hero-overlay"></div>
   <div class="hero-content">
@@ -575,14 +575,14 @@
 <!-- Education — Photos -->
 <div class="edu-photo-grid">
   <img src="edu_poster.webp" alt="RDA 2019 call for portfolio academy poster" loading="lazy" />
-  <img src="edu_class1.jpg" alt="RDA students and teachers gathering" loading="lazy" />
+  <img src="edu_class1.jpg" alt="RDA students and teachers gathering" loading="lazy" / decoding="async">
   <img src="edu_review.webp" alt="Portfolio review session at RDA" loading="lazy" />
 </div>
 
 <!-- Education — Community photo -->
 <div class="stream-label">Student Community &amp; Mentoring Network</div>
 <div class="img-fullbleed">
-  <img src="edu_class2.png" alt="RDA student community gathering" loading="lazy" style="max-height:55vh; object-fit:cover; object-position:center;" />
+  <picture><source srcset="edu_class2.webp" type="image/webp"><img src="edu_class2.png" alt="RDA student community gathering" loading="lazy" style="max-height:55vh; object-fit:cover; object-position:center;" / decoding="async"></picture>
 </div>
 
 <!-- Education — Curriculum docs -->
@@ -636,10 +636,10 @@
 
 <!-- Credit images: 2+2 grid -->
 <div class="edu-credit-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 2px; border-top: 1px solid var(--light);">
-  <img src="edu_credit_3.png" alt="RDA curriculum reference materials — Workshop Tactics and RDA Yellow card" loading="lazy" style="width:100%; display:block; object-fit:cover; aspect-ratio:4/3;" />
-  <img src="edu_credit_1.png" alt="AccessAbility 2 — A Practical Handbook on Accessible Graphic Design (RGD)" loading="lazy" style="width:100%; display:block; object-fit:cover; aspect-ratio:4/3;" />
-  <img src="edu_credit_2.png" alt="AccessAbility handbook interior — contents and introduction spread" loading="lazy" style="width:100%; display:block; object-fit:cover; aspect-ratio:4/3;" />
-  <img src="edu_credit_4.png" alt="AccessAbility 2 — copyright and credits page (RGD / Government of Ontario)" loading="lazy" style="width:100%; display:block; object-fit:cover; aspect-ratio:4/3;" />
+  <picture><source srcset="edu_credit_3.webp" type="image/webp"><img src="edu_credit_3.png" alt="RDA curriculum reference materials — Workshop Tactics and RDA Yellow card" loading="lazy" style="width:100%; display:block; object-fit:cover; aspect-ratio:4/3;" / decoding="async"></picture>
+  <picture><source srcset="edu_credit_1.webp" type="image/webp"><img src="edu_credit_1.png" alt="AccessAbility 2 — A Practical Handbook on Accessible Graphic Design (RGD)" loading="lazy" style="width:100%; display:block; object-fit:cover; aspect-ratio:4/3;" / decoding="async"></picture>
+  <picture><source srcset="edu_credit_2.webp" type="image/webp"><img src="edu_credit_2.png" alt="AccessAbility handbook interior — contents and introduction spread" loading="lazy" style="width:100%; display:block; object-fit:cover; aspect-ratio:4/3;" / decoding="async"></picture>
+  <picture><source srcset="edu_credit_4.webp" type="image/webp"><img src="edu_credit_4.png" alt="AccessAbility 2 — copyright and credits page (RGD / Government of Ontario)" loading="lazy" style="width:100%; display:block; object-fit:cover; aspect-ratio:4/3;" / decoding="async"></picture>
 </div>
 <p style="font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--grey); padding: 16px 64px 48px; border-bottom: 1px solid var(--light);">Credit: <em>AccessAbility 2 — A Practical Handbook on Accessible Graphic Design</em>, RGD (Association of Registered Graphic Designers), 2019. Supported by the Government of Ontario. &nbsp;&nbsp;/&nbsp;&nbsp; Workshop Tactics®, Charles Ltd, 2020.</p>
 
@@ -673,7 +673,7 @@
 <div class="app-flow">
   <div class="app-flow-item">
     <p class="app-flow-label">Sketch — Hand-drawn</p>
-    <img src="app_sketch.png" alt="RDA App — hand-drawn sketch" loading="lazy" />
+    <picture><source srcset="app_sketch.webp" type="image/webp"><img src="app_sketch.png" alt="RDA App — hand-drawn sketch" loading="lazy" / decoding="async"></picture>
   </div>
   <div class="app-flow-item">
     <p class="app-flow-label">Wireframe — Adobe XD</p>
@@ -718,8 +718,8 @@
   <img src="bc_lb_08.webp" alt="LB Business Card — back" loading="lazy" />
 </div>
 <div class="bc-pair">
-  <img src="bc_exito_3.png" alt="The Exito — Business Card front" loading="lazy" />
-  <img src="bc_exito_4.png" alt="The Exito — Business Card back" loading="lazy" />
+  <picture><source srcset="bc_exito_3.webp" type="image/webp"><img src="bc_exito_3.png" alt="The Exito — Business Card front" loading="lazy" / decoding="async"></picture>
+  <picture><source srcset="bc_exito_4.webp" type="image/webp"><img src="bc_exito_4.png" alt="The Exito — Business Card back" loading="lazy" / decoding="async"></picture>
 </div>
 
 <!-- Back in layout for Art -->
@@ -744,10 +744,10 @@
 <!-- Art — Music album covers -->
 <div class="stream-label">Music Album Cover &amp; Poster Design — Adobe Photoshop, Illustrator</div>
 <div class="art-4col">
-  <img src="art_album_critical_act.jpg" alt="Critical Act — HANS ;ORACLE, album cover design" loading="lazy" />
-  <img src="art_album_2.jpg" alt="Music album cover design 2" loading="lazy" />
-  <img src="art_album_3.jpg" alt="Music album cover design 3" loading="lazy" />
-  <img src="art_album_4.jpg" alt="Music album cover design 4" loading="lazy" />
+  <img src="art_album_critical_act.jpg" alt="Critical Act — HANS ;ORACLE, album cover design" loading="lazy" / decoding="async">
+  <img src="art_album_2.jpg" alt="Music album cover design 2" loading="lazy" / decoding="async">
+  <img src="art_album_3.jpg" alt="Music album cover design 3" loading="lazy" / decoding="async">
+  <img src="art_album_4.jpg" alt="Music album cover design 4" loading="lazy" / decoding="async">
 </div>
 
 <!-- Art — Line drawing -->
@@ -756,7 +756,7 @@
   <p style="font-size: 15px; font-weight: 300; line-height: 1.8; color: #4a4a4a;">“I believe in the beauty of things made exactly as they are. On the spinning wheel, where my hands meet the clay, I love making small espresso cups — or tea cups — that keep the texture of that encounter just as it happened.”</p>
 </div>
 <div class="img-fullbleed">
-  <img src="art_linedrawing.jpg" alt="Wheel-thrown ceramic cups — espresso and tea cups, hand-made" loading="lazy" />
+  <img src="art_linedrawing.jpg" alt="Wheel-thrown ceramic cups — espresso and tea cups, hand-made" loading="lazy" / decoding="async">
 </div>
 
 <!-- Art — Line-hand drawing -->
@@ -773,9 +773,9 @@
 <!-- Art — Life drawing -->
 <div class="stream-label">Life Drawing — Figure Study, Ongoing Practice</div>
 <div class="art-3col">
-  <img src="art_life_1_clean.jpg" alt="Life drawing — figure study 1" loading="lazy" />
-  <img src="art_life_2_clean.jpg" alt="Life drawing — figure study 2" loading="lazy" />
-  <img src="art_life_3_clean.jpg" alt="Life drawing — figure study 3" loading="lazy" />
+  <picture><source srcset="art_life_1_clean.webp" type="image/webp"><img src="art_life_1_clean.jpg" alt="Life drawing — figure study 1" loading="lazy" / decoding="async"></picture>
+  <picture><source srcset="art_life_2_clean.webp" type="image/webp"><img src="art_life_2_clean.jpg" alt="Life drawing — figure study 2" loading="lazy" / decoding="async"></picture>
+  <picture><source srcset="art_life_3_clean.webp" type="image/webp"><img src="art_life_3_clean.jpg" alt="Life drawing — figure study 3" loading="lazy" / decoding="async"></picture>
 </div>
 
 <!-- Dark block — Printmaking + Visual Language -->
