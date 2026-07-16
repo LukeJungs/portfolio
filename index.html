@@ -963,7 +963,24 @@
     @media (prefers-reduced-motion: reduce) {
       .featured-hero-cta, .featured-hero-cta span, .featured-hero-image { transition: none; }
     }
-  </style>
+  
+  /* Resume modal button style */
+  #resume-link {
+    background: none;
+    border: none;
+    padding: 0;
+    font: inherit;
+    font-size: inherit;
+    letter-spacing: inherit;
+    text-transform: inherit;
+    color: inherit;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  #resume-link:hover {
+    color: var(--black, #000);
+  }
+</style>
   <link rel="icon" type="image/png" href="/favicon.png" />
   <link rel="shortcut icon" href="/favicon.ico" />
 </head>
@@ -1170,7 +1187,7 @@
     <div class="footer-right">
       <a href="https://www.linkedin.com/in/lukeheesunjung/" target="_blank">LinkedIn</a>
       <a href="mailto:lukeheesunjung@gmail.com">Email</a>
-      <a href="mailto:lukeheesunjung@gmail.com?subject=Resume%20Request%20%E2%80%94%20Luke%20Heesun%20Jung&body=Hi%20Luke%2C%0A%0AI%20came%20across%20your%20portfolio%20at%20lukejungs.github.io/portfolio%20and%20would%20love%20to%20receive%20your%20resume.%0A%0ACompany/Role%3A%20%5BPlease%20fill%20in%5D%0A%0A---%0A%0AWith%20a%20pen%20and%20paper%20already%20in%20hand%2C%20I%20find%20myself%20wondering%20%E2%80%94%20would%20you%20ever%20have%20a%20moment%20to%20meet%20in%20person%3F%20I%20would%20be%20genuinely%20honoured.%20There%27s%20no%20agenda%2C%20just%20a%20conversation%20I%27d%20love%20to%20have.%20And%20I%27d%20be%20glad%20to%20bring%20the%20coffee.%0A%0AP.S.%20This%20letter%20was%20written%20by%20hand%20first%20%E2%80%94%20crossed%20out%2C%20rewritten%2C%20and%20eventually%20typed.%20AI%20helped%20me%20carry%20the%20sincerity%20from%20the%20page%20to%20the%20screen%2C%20but%20the%20words%2C%20and%20the%20intention%20behind%20them%2C%20are%20entirely%20my%20own.%0A%0ALooking%20forward%20to%20connecting.%0A%0ABest%2C%0A%5BYour%20Name%5D" id="resume-link">Resume</a>
+      <button id="resume-link" onclick="openResumeModal()" type="button">Resume</button>
     </div>
   </footer>
 
@@ -1259,6 +1276,75 @@
       });
     });
   })();
+</script>
+
+<!-- Resume Request Modal -->
+<div id="resume-modal" role="dialog" aria-modal="true" aria-labelledby="modal-title" style="display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.5);z-index:9999;align-items:center;justify-content:center;">
+  <div style="background:#fff;padding:40px 36px;max-width:480px;width:90%;font-family:inherit;position:relative;">
+    <h2 id="modal-title" style="font-size:14px;letter-spacing:0.1em;text-transform:uppercase;margin:0 0 8px;font-weight:600;">Request Resume</h2>
+    <p style="font-size:13px;color:#555;margin:0 0 24px;line-height:1.6;">Please share your company and role so Luke can personalise his response.</p>
+    <label for="company-role-input" style="font-size:11px;letter-spacing:0.08em;text-transform:uppercase;color:#888;display:block;margin-bottom:6px;">Company &amp; Role</label>
+    <input id="company-role-input" type="text" placeholder="e.g. Klick Health — Art Director" autocomplete="organization" style="width:100%;box-sizing:border-box;border:1px solid #ccc;padding:10px 12px;font-size:14px;font-family:inherit;outline:none;margin-bottom:24px;" />
+    <div style="display:flex;gap:12px;justify-content:flex-end;">
+      <button onclick="closeResumeModal()" type="button" style="background:none;border:1px solid #ccc;padding:10px 20px;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;font-family:inherit;">Cancel</button>
+      <button onclick="submitResumeRequest()" type="button" style="background:#000;color:#fff;border:none;padding:10px 20px;font-size:12px;letter-spacing:0.08em;text-transform:uppercase;cursor:pointer;font-family:inherit;">Send Request</button>
+    </div>
+  </div>
+</div>
+
+<script>
+(function() {
+  var BASE_BODY = "Hi Luke,%0A%0AI came across your portfolio at lukejungs.github.io/portfolio and would love to receive your resume.%0A%0ACompany/Role: COMPANY_ROLE_PLACEHOLDER%0A%0A---%0A%0AWith a pen and paper already in hand, I find myself wondering %E2%80%94 would you ever have a moment to meet in person? I would be genuinely honoured. There%27s no agenda, just a conversation I%27d love to have. And I%27d be glad to bring the coffee.%0A%0AP.S. This letter was written by hand first %E2%80%94 crossed out, rewritten, and eventually typed. AI helped me carry the sincerity from the page to the screen, but the words, and the intention behind them, are entirely my own.%0A%0ALooking forward to connecting.%0A%0ABest,%0A[Your Name]";
+  var SUBJECT = "Resume%20Request%20%E2%80%94%20Luke%20Heesun%20Jung";
+  var EMAIL = "lukeheesunjung@gmail.com";
+
+  window.openResumeModal = function() {
+    var modal = document.getElementById('resume-modal');
+    modal.style.display = 'flex';
+    setTimeout(function() {
+      var input = document.getElementById('company-role-input');
+      if (input) input.focus();
+    }, 100);
+  };
+
+  window.closeResumeModal = function() {
+    var modal = document.getElementById('resume-modal');
+    modal.style.display = 'none';
+    var input = document.getElementById('company-role-input');
+    if (input) input.value = '';
+  };
+
+  window.submitResumeRequest = function() {
+    var input = document.getElementById('company-role-input');
+    var companyRole = input ? input.value.trim() : '';
+    var placeholder = companyRole ? encodeURIComponent(companyRole) : '%5BPlease%20fill%20in%5D';
+    var body = BASE_BODY.replace('COMPANY_ROLE_PLACEHOLDER', placeholder);
+    var mailtoLink = 'mailto:' + EMAIL + '?subject=' + SUBJECT + '&body=' + body;
+    window.location.href = mailtoLink;
+    closeResumeModal();
+  };
+
+  // Close modal on backdrop click
+  document.addEventListener('DOMContentLoaded', function() {
+    var modal = document.getElementById('resume-modal');
+    if (modal) {
+      modal.addEventListener('click', function(e) {
+        if (e.target === modal) closeResumeModal();
+      });
+    }
+    // Close on Escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') closeResumeModal();
+    });
+    // Enter key in input triggers submit
+    var input = document.getElementById('company-role-input');
+    if (input) {
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') submitResumeRequest();
+      });
+    }
+  });
+})();
 </script>
 </body>
 </html>
