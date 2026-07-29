@@ -917,8 +917,10 @@
       text-transform: uppercase;
     }
     .typewriter-section { padding-top: 72px; }
-    .work-item--featured { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr); }
+    .work-item--featured { grid-column: 1 / -1; display: grid; grid-template-columns: minmax(0, 2fr) minmax(260px, 1fr); border-right: none; }
     .work-item--featured .work-item-thumb { aspect-ratio: 16 / 8; }
+    .work-item--storybook .work-item-thumb img { object-position: center 58%; filter: brightness(0.9) saturate(0.82); }
+    .work-item--storybook:hover .work-item-thumb img { filter: brightness(0.74) saturate(0.88); }
     .work-item--featured .work-item-info {
       display: flex;
       flex-direction: column;
@@ -1086,15 +1088,15 @@
   </div>
 
   <div class="work-grid">
-    <!-- Featured Project — A Complete Balance -->
-    <a class="work-item work-item--featured" href="https://balancecase-nppyehfn.manus.space/">
+    <!-- Featured Project — The Day the Little White Bean Fell -->
+    <a class="work-item work-item--featured work-item--storybook" href="https://littlebean-mdty7zz3.manus.space/" aria-label="Open The Day the Little White Bean Fell interactive picturebook">
       <div class="work-item-thumb">
-        <img src="assets/a-complete-balance/hero.webp" alt="A Complete Balance — Bauhaus-inspired media-art stage" loading="lazy" decoding="async" />
+        <img src="assets/the-three-letters/hero.webp" alt="A tiny white bean rests in a paper-textured forest" loading="lazy" decoding="async" />
       </div>
       <div class="work-item-info">
-        <p class="work-item-tags">Media Art · Healthcare Storytelling · Generative AI</p>
-        <p class="work-item-title">A Complete Balance</p>
-        <p class="work-item-summary">A poetic moving-image case study where clinical data, machine intelligence, and lived experience meet.</p>
+        <p class="work-item-tags">Interactive Picturebook · Storytelling · Generative AI</p>
+        <p class="work-item-title">The Day the Little<br />White Bean Fell</p>
+        <p class="work-item-summary">A bilingual, nine-page interactive picturebook where he · He · HE marks a small fall, a moment of clarity, and the return to making.</p>
       </div>
     </a>
     <!-- Project 01 — LittleN × Sandeul -->
